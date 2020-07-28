@@ -16,7 +16,7 @@ class NotFoundError extends Error {
     super(...params);
 
     if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, ConflictError);
+      Error.captureStackTrace(this, NotFoundError);
     }
 
     this.name = "NotFoundError";
