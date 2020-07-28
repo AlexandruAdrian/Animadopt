@@ -10,15 +10,18 @@ const userRoutes = () => {
     "/register",
     validate([
       body("email")
+        .escape()
         .trim()
         .normalizeEmail()
         .isEmail()
         .withMessage("E-mail invalid"),
       body("firstName")
+        .escape()
         .trim()
         .notEmpty()
         .withMessage("Câmpul prenume este obligatoriu"),
       body("lastName")
+        .escape()
         .trim()
         .notEmpty()
         .withMessage("Câmpul nume este obligatoriu"),
@@ -51,8 +54,8 @@ const userRoutes = () => {
   router.post(
     "/login",
     validate([
-      body("email").trim().normalizeEmail().escape(),
-      body("password").trim().escape(),
+      body("email").escape().trim().normalizeEmail(),
+      body("password").escape().trim(),
     ]),
     async (req, res, next) => {
       try {
