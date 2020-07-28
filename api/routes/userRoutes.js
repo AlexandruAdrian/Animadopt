@@ -33,8 +33,10 @@ const userRoutes = () => {
       try {
         const user = await UserController.userRegister(req.body);
 
-        return res.status(200).json({
+        return res.status(201).json({
           user,
+          message:
+            "Contul a fost creat cu succes, un e-mail cu detalii despre activarea contului a fost trimis pe adresa dumneavoastră.",
         });
       } catch (err) {
         next(err);
