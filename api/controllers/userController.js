@@ -56,7 +56,6 @@ class UserController {
     if (!foundUser) {
       throw new NotFoundError("Email-ul sau parola sunt incorecte");
     }
-    console.log(foundUser);
     // Check password
     const passwordMatches = await bcrypt.compare(password, foundUser.password);
     if (!passwordMatches) {

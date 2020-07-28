@@ -9,7 +9,11 @@ const userRoutes = () => {
   router.post(
     "/register",
     validate([
-      body("email").normalizeEmail().isEmail().withMessage("E-mail invalid"),
+      body("email")
+        .trim()
+        .normalizeEmail()
+        .isEmail()
+        .withMessage("E-mail invalid"),
       body("firstName")
         .trim()
         .notEmpty()
@@ -46,7 +50,10 @@ const userRoutes = () => {
 
   router.post(
     "/login",
-    validate([body("email").normalizeEmail()]),
+    validate([
+      body("email").trim().normalizeEmail().escape(),
+      body("password").trim().escape(),
+    ]),
     async (req, res, next) => {
       try {
         const token = await UserController.userLogin(req.body);
