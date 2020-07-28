@@ -1,5 +1,6 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
+const { ConflictError } = require("../errors/index");
 
 class UserController {
   async userRegister(userData) {
@@ -7,9 +8,7 @@ class UserController {
     // Check if the user already exists
     const foundUser = await User.findOne({ email });
     if (foundUser) {
-      const err = new Error("Un utilizator cu acest e-mail există deja");
-      err.status = 409;
-      throw err;
+      throw new ConflictError("Un utilizator cu acest e-mail există deja");
     }
     // Hash password
     const saltRounds = 10;
