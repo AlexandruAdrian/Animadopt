@@ -44,6 +44,24 @@ const userRoutes = () => {
     }
   );
 
+  router.post(
+    "/login",
+    validate([body("email").normalizeEmail()]),
+    async (req, res, next) => {
+      try {
+        const token = await UserController.userLogin(req.body);
+
+        res
+          .cookie("access_token", token, {
+            httpOnly: true,
+          })
+          .sendStatus(200);
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
+
   return router;
 };
 

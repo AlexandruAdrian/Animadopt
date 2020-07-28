@@ -16,8 +16,9 @@ class UserController {
     const { email, firstName, lastName, password } = userData;
     // Check if the user already exists
     const foundUser = await User.findOne({ email });
+
     if (foundUser) {
-      throw new ConflictError("Un utilizator cu acest e-mail există deja");
+      throw new ConflictError("Un utilizator cu acest email există deja");
     }
     // Hash password
     const saltRounds = 10;
@@ -49,18 +50,20 @@ class UserController {
 
   async userLogin(userData) {
     const { email, password } = userData;
+
     // Check if the user exists
-    const foundUser = User.findOne({ email });
+    const foundUser = await User.findOne({ email });
     if (!foundUser) {
       throw new NotFoundError("Email-ul sau parola sunt incorecte");
     }
+    console.log(foundUser);
     // Check password
     const passwordMatches = await bcrypt.compare(password, foundUser.password);
     if (!passwordMatches) {
       throw new NotFoundError("Email-ul sau parola sunt incorecte");
     }
     // Sign token
-    const token = generateToken(foundUser._id);
+    const token = this.generateToken(foundUser._id);
 
     return token;
   }
