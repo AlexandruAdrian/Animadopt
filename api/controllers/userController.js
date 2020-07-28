@@ -45,7 +45,7 @@ class UserController {
     const activationLink = `https://${HOSTNAME}:${PORT}/api/${API_V}/users?confirmation=${activationCode._id}`;
     const subject = "Activare cont";
     const text = `Apăsați pe următorul link pentru a activa contul ${activationLink}`;
-    const url = await Mailer.send(newUser.email, subject, text);
+    await Mailer.send(newUser.email, subject, text);
 
     return newUser;
   }
