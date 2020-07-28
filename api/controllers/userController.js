@@ -67,6 +67,34 @@ class UserController {
     return token;
   }
 
+  async activateAccount(codeId) {
+    // Check if the code exists and if it is valid
+    const foundCode = await RandomCode.findOne({ _id: codeId });
+    if (!foundCode || !foundCode.isValid) {
+      throw new NotFoundError("Codul este invalid");
+    }
+    // Check for user data
+    const foundUser = await User.findOne({ _id: foundCode.forUserId });
+    if (!foundUser) {
+      foundCode.isValid = false;
+      await foundCode.save();
+      throw new NotFoundError("Codul este invalid");
+    }
+    // Check if the account has already been activated
+    if (foundUser.active) {
+      foundCode.isValid = false;
+      await foundCode.save();
+      throw new ConflictError("Contul este activ");
+    }
+    // Activate user account and invalidate the code
+    foundUser.isActive = true;
+    await foundUser.save();
+    foundCode.isValid = false;
+    await foundCode.save();
+
+    return foundUser;
+  }
+
   generateToken(userId) {
     const token = jwt.sign({ _id: userId }, SECRET, {
       expiresIn: "28d",

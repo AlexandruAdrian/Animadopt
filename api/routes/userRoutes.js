@@ -1,6 +1,6 @@
 const express = require("express");
 const UserController = require("../controllers/userController");
-const { body } = require("express-validator");
+const { body, query } = require("express-validator");
 const validate = require("../validators/index");
 
 const userRoutes = () => {
@@ -43,7 +43,7 @@ const userRoutes = () => {
         return res.status(201).json({
           user,
           message:
-            "Contul a fost creat cu succes, un email cu detalii despre activarea contului a fost trimis pe adresa dumneavoastră",
+            "Contul a fost creat cu succes, un email cu detalii pentru activarea contului a fost trimis pe adresa dumneavoastră",
         });
       } catch (err) {
         next(err);
@@ -55,7 +55,7 @@ const userRoutes = () => {
     "/login",
     validate([
       body("email").escape().trim().normalizeEmail(),
-      body("password").escape().trim(),
+      body("password").trim(),
     ]),
     async (req, res, next) => {
       try {
@@ -71,6 +71,19 @@ const userRoutes = () => {
       }
     }
   );
+
+  router.get("/activate", query("code").escape(), async (req, res, next) => {
+    try {
+      const activationCode = req.query.code;
+      const user = await UserController.activateAccount(activationCode);
+      const token = UserController.generateToken(user._id);
+      res.status(200).cookie("access_token", token, { httpOnly: true }).json({
+        response: `Contul dumneavoastră a fost activat cu succes`,
+      });
+    } catch (err) {
+      next(err);
+    }
+  });
 
   return router;
 };
