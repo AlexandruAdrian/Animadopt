@@ -1,5 +1,6 @@
 const express = require("express");
 const UserController = require("../controllers/userController");
+const isAuthorized = require("../middlewares/authorization");
 const { body, query } = require("express-validator");
 const validate = require("../validators/index");
 
@@ -88,8 +89,9 @@ const userRoutes = () => {
     }
   });
 
-  router.get("/request-code", async (req, res, next) => {
+  router.get("/request-code", isAuthorized, async (req, res, next) => {
     try {
+      res.end();
     } catch (err) {
       next(err);
     }
