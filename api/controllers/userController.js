@@ -1,5 +1,5 @@
 const User = require("../models/userModel");
-const RandomCode = require("../models/randomCodeModel");
+const ActivationCode = require("../models/activationCodeModel");
 const Mailer = require("../mailer/index");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -16,7 +16,6 @@ class UserController {
     const { email, firstName, lastName, password } = userData;
     // Check if the user already exists
     const foundUser = await User.findOne({ email });
-
     if (foundUser) {
       throw new ConflictError("Un utilizator cu acest email există deja");
     }
@@ -34,11 +33,12 @@ class UserController {
     await newUser.save();
     newUser = newUser.toJSON();
     delete newUser.password;
-    // Create a random code and save it
-    const activationCode = new RandomCode({
+    // Create an activation code and save it
+    const activationCode = new ActivationCode({
       forUserId: newUser._id,
+      issuedAt: Date.now(),
     });
-    activationCode.save();
+    await activationCode.save();
     // Send email for account activation with the generated code
     const activationLink = `https://${HOSTNAME}:${PORT}/api/${API_V}/users/activate?code=${activationCode._id}`;
     const subject = "Activare cont";
@@ -50,7 +50,6 @@ class UserController {
 
   async userLogin(userData) {
     const { email, password } = userData;
-
     // Check if the user exists
     const foundUser = await User.findOne({ email });
     if (!foundUser) {
@@ -62,15 +61,23 @@ class UserController {
       throw new NotFoundError("Email-ul sau parola sunt incorecte");
     }
     // Sign token
-    const token = this.generateToken(foundUser._id);
+    const token = this.signToken(foundUser._id);
 
     return token;
   }
 
   async activateAccount(codeId) {
     // Check if the code exists and if it is valid
-    const foundCode = await RandomCode.findOne({ _id: codeId });
+    const foundCode = await ActivationCode.findOne({ _id: codeId });
     if (!foundCode || !foundCode.isValid) {
+      throw new NotFoundError("Codul este invalid");
+    }
+    // Check if the code expired
+    const now = new Date().getTime();
+    const expTime = 60 * 10 * 1000;
+    if (now - foundCode.issuedAt > expTime) {
+      foundCode.isValid = false;
+      await foundCode.save();
       throw new NotFoundError("Codul este invalid");
     }
     // Check for user data
@@ -95,7 +102,7 @@ class UserController {
     return foundUser;
   }
 
-  generateToken(userId) {
+  signToken(userId) {
     const token = jwt.sign({ _id: userId }, SECRET, {
       expiresIn: "28d",
     });

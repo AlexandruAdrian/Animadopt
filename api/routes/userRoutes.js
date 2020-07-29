@@ -76,7 +76,7 @@ const userRoutes = () => {
     try {
       const activationCode = req.query.code;
       const user = await UserController.activateAccount(activationCode);
-      const token = UserController.generateToken(user._id);
+      const token = UserController.signToken(user._id);
       res.status(200).cookie("access_token", token, { httpOnly: true }).json({
         response: `Contul dumneavoastră a fost activat cu succes`,
       });
