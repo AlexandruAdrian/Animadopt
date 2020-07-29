@@ -3,6 +3,7 @@ const UserController = require("../controllers/userController");
 const isAuthorized = require("../middlewares/authorization");
 const { body, query } = require("express-validator");
 const validate = require("../validators/index");
+const User = require("../models/userModel");
 
 const userRoutes = () => {
   const router = express.Router();
@@ -82,7 +83,7 @@ const userRoutes = () => {
       await UserController.activateAccount(activationCode);
 
       res.status(200).json({
-        response: `Contul dumneavoastră a fost activat cu succes`,
+        message: `Contul dumneavoastră a fost activat cu succes`,
       });
     } catch (err) {
       next(err);
@@ -91,7 +92,13 @@ const userRoutes = () => {
 
   router.get("/request-code", isAuthorized, async (req, res, next) => {
     try {
-      res.end();
+      const userId = req.user._id;
+      await UserController.requestActivationCode(userId);
+
+      res.status(200).json({
+        message:
+          "Un email cu detalii privind activarea contului a fost trimis pe adresa dumneavoastră",
+      });
     } catch (err) {
       next(err);
     }
