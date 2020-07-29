@@ -26,6 +26,7 @@ const userRoutes = () => {
         .notEmpty()
         .withMessage("Câmpul nume este obligatoriu"),
       body("password")
+        .escape()
         .trim()
         .isLength({
           min: 6,
@@ -33,6 +34,8 @@ const userRoutes = () => {
         })
         .withMessage("Parola trebuie să conțină cel puțin 6 caractere"),
       body("passwordConfirmation")
+        .escape()
+        .trim()
         .custom((value, { req }) => value === req.body.password)
         .withMessage("Parola și confirmarea parolei nu sunt identice"),
     ]),
@@ -43,7 +46,7 @@ const userRoutes = () => {
         return res.status(201).json({
           user,
           message:
-            "Contul a fost creat cu succes, un email cu detalii pentru activarea contului a fost trimis pe adresa dumneavoastră",
+            "Contul a fost creat cu succes, un email cu detalii privind activarea contului a fost trimis pe adresa dumneavoastră",
         });
       } catch (err) {
         next(err);
@@ -55,7 +58,7 @@ const userRoutes = () => {
     "/login",
     validate([
       body("email").escape().trim().normalizeEmail(),
-      body("password").trim(),
+      body("password").trim().escape(),
     ]),
     async (req, res, next) => {
       try {
@@ -75,11 +78,18 @@ const userRoutes = () => {
   router.get("/activate", query("code").escape(), async (req, res, next) => {
     try {
       const activationCode = req.query.code;
-      const user = await UserController.activateAccount(activationCode);
-      const token = UserController.signToken(user._id);
-      res.status(200).cookie("access_token", token, { httpOnly: true }).json({
+      await UserController.activateAccount(activationCode);
+
+      res.status(200).json({
         response: `Contul dumneavoastră a fost activat cu succes`,
       });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.get("/request-code", async (req, res, next) => {
+    try {
     } catch (err) {
       next(err);
     }

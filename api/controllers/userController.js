@@ -3,7 +3,11 @@ const ActivationCode = require("../models/activationCodeModel");
 const Mailer = require("../mailer/index");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { ConflictError, NotFoundError } = require("../errors/index");
+const {
+  ConflictError,
+  NotFoundError,
+  InvalidError,
+} = require("../errors/index");
 require("dotenv").config();
 
 const HOSTNAME = process.env.HOSTNAME;
@@ -33,17 +37,8 @@ class UserController {
     await newUser.save();
     newUser = newUser.toJSON();
     delete newUser.password;
-    // Create an activation code and save it
-    const activationCode = new ActivationCode({
-      forUserId: newUser._id,
-      issuedAt: Date.now(),
-    });
-    await activationCode.save();
-    // Send email for account activation with the generated code
-    const activationLink = `https://${HOSTNAME}:${PORT}/api/${API_V}/users/activate?code=${activationCode._id}`;
-    const subject = "Activare cont";
-    const text = `Apăsați pe următorul link pentru a activa contul ${activationLink}`;
-    await Mailer.send(newUser.email, subject, text);
+
+    await this.requestActivationCode(newUser._id);
 
     return newUser;
   }
@@ -78,28 +73,48 @@ class UserController {
     if (now - foundCode.issuedAt > expTime) {
       foundCode.isValid = false;
       await foundCode.save();
-      throw new NotFoundError("Codul este invalid");
+      throw new InvalidError(
+        "Codul de activare a expirat, va rugăm să solicitați alt cod"
+      );
     }
     // Check for user data
     const foundUser = await User.findOne({ _id: foundCode.forUserId });
     if (!foundUser) {
       foundCode.isValid = false;
       await foundCode.save();
-      throw new NotFoundError("Codul este invalid");
-    }
-    // Check if the account has already been activated
-    if (foundUser.active) {
-      foundCode.isValid = false;
-      await foundCode.save();
-      throw new ConflictError("Contul este activ");
+      throw new InvalidError(
+        "Pentru a putea solicita un cod de activare este nevoie de un cont"
+      );
     }
     // Activate user account and invalidate the code
     foundUser.isActive = true;
     await foundUser.save();
     foundCode.isValid = false;
     await foundCode.save();
+  }
 
-    return foundUser;
+  async requestActivationCode(userId) {
+    // Check user data
+    const foundUser = await User.findOne({ _id: userId });
+    if (!foundUser) {
+      throw new InvalidError(
+        "Pentru a putea solicita un cod de activare este nevoie de un cont"
+      );
+    }
+    // Check if the account has already been activated
+    if (foundUser.isActive) {
+      throw new ConflictError("Contul este activ");
+    }
+    // Create an activation code and save it
+    const activationCode = new ActivationCode({
+      forUserId: foundUser._id,
+    });
+    await activationCode.save();
+    // Send email for account activation with the generated code
+    const activationLink = `https://${HOSTNAME}:${PORT}/api/${API_V}/users/activate?code=${activationCode._id}`;
+    const subject = "Activare cont";
+    const text = `Apăsați pe următorul link pentru a activa contul ${activationLink}`;
+    await Mailer.send(foundUser.email, subject, text);
   }
 
   signToken(userId) {

@@ -24,7 +24,21 @@ class NotFoundError extends Error {
   }
 }
 
+class InvalidError extends Error {
+  constructor(...params) {
+    super(...params);
+
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, InvalidError);
+    }
+
+    this.name = "InvalidError";
+    this.date = new Date();
+  }
+}
+
 module.exports = {
   ConflictError,
   NotFoundError,
+  InvalidError,
 };

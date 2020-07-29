@@ -1,4 +1,4 @@
-const { ConflictError, NotFoundError } = require("../errors/index");
+const { ConflictError, NotFoundError, InvalidError } = require("../errors/index");
 
 const errorHandler = (err, req, res, next) => {
   console.error(err.stack);
@@ -13,6 +13,12 @@ const errorHandler = (err, req, res, next) => {
     return res.status(404).json({
       error: err.message,
     });
+  }
+
+  if (err instanceof InvalidError) {
+    return res.status(400).json({
+      error: err.message
+    })
   }
 
   return res.status(err.status || 500).json({
