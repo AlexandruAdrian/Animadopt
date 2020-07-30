@@ -127,6 +127,48 @@ const userRoutes = () => {
     }
   );
 
+  router.get("/reset", query("code").escape(), async (req, res, next) => {
+    try {
+      const code = req.query.code;
+      res.status(307).redirect(`/users/reset?code=${code}`);
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.put(
+    "/reset",
+    query("code").escape(),
+    validate([
+      body("newPassword")
+        .escape()
+        .trim()
+        .isLength({
+          min: 6,
+          max: 100,
+        })
+        .withMessage("Parola trebuie să conțină cel puțin 6 caractere"),
+      body("passwordConfirmation")
+        .escape()
+        .trim()
+        .custom((value, { req }) => value === req.body.newPassword)
+        .withMessage("Parola și confirmarea parolei nu sunt identice"),
+    ]),
+    async (req, res, next) => {
+      try {
+        const code = req.query.code;
+        const newPassword = req.body.newPassword;
+        await UserController.resetPassword(newPassword, code);
+
+        res.status(200).json({
+          message: "Parola a fost actualizata cu succes",
+        });
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
+
   return router;
 };
 

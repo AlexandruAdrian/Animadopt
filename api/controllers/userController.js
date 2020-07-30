@@ -5,6 +5,7 @@ const Mailer = require("../mailer/index");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const ErrorsFactory = require("../factories/errorsFactory");
+const { InvalidError } = require("../errors");
 require("dotenv").config();
 
 const HOSTNAME = process.env.HOSTNAME;
@@ -70,6 +71,36 @@ class UserController {
     return token;
   }
 
+  async requestActivationCode(userId) {
+    // Check user data
+    const foundUser = await User.findOne({ _id: userId });
+    if (!foundUser) {
+      throw new ErrorsFactory(
+        "invalid",
+        "InvalidError",
+        "Pentru a putea solicita un cod de activare este nevoie de un cont"
+      );
+    }
+    // Check if the account has already been activated
+    if (foundUser.isActive) {
+      throw new ErrorsFactory(
+        "conflict",
+        "ConflictError",
+        "Contul este activat"
+      );
+    }
+    // Create an activation code and save it
+    const activationCode = new ActivationCode({
+      forUserId: foundUser._id,
+    });
+    await activationCode.save();
+    // Send email for account activation with the generated code
+    const activationLink = `https://${HOSTNAME}:${PORT}/api/${API_V}/users/activate?code=${activationCode._id}`;
+    const subject = "Activare cont";
+    const text = `Apăsați pe următorul link pentru a activa contul ${activationLink}`;
+    await Mailer.send(foundUser.email, subject, text);
+  }
+
   async activateAccount(codeId) {
     // Check if the code exists and if it is valid
     const foundCode = await ActivationCode.findOne({ _id: codeId });
@@ -118,38 +149,8 @@ class UserController {
     await foundCode.save();
   }
 
-  async requestActivationCode(userId) {
-    // Check user data
-    const foundUser = await User.findOne({ _id: userId });
-    if (!foundUser) {
-      throw new ErrorsFactory(
-        "invalid",
-        "InvalidError",
-        "Pentru a putea solicita un cod de activare este nevoie de un cont"
-      );
-    }
-    // Check if the account has already been activated
-    if (foundUser.isActive) {
-      throw new ErrorsFactory(
-        "conflict",
-        "ConflictError",
-        "Contul este activat"
-      );
-    }
-    // Create an activation code and save it
-    const activationCode = new ActivationCode({
-      forUserId: foundUser._id,
-    });
-    await activationCode.save();
-    // Send email for account activation with the generated code
-    const activationLink = `https://${HOSTNAME}:${PORT}/api/${API_V}/users/activate?code=${activationCode._id}`;
-    const subject = "Activare cont";
-    const text = `Apăsați pe următorul link pentru a activa contul ${activationLink}`;
-    await Mailer.send(foundUser.email, subject, text);
-  }
-
   async requestPassResetCode(email) {
-    // Check if the user exists
+    // Check for user data
     const foundUser = await User.findOne({ email });
     if (!foundUser) {
       throw new ErrorsFactory(
@@ -168,6 +169,37 @@ class UserController {
     const subject = "Resetare parola";
     const text = `Apăsați pe următorul link pentru a reseta parola ${passResetLink}`;
     await Mailer.send(foundUser.email, subject, text);
+  }
+
+  async resetPassword(newPassword, resetCodeId) {
+    // Check the code
+    const foundCode = await PassResetCode.findOne({ _id: resetCodeId });
+    if (!foundCode) {
+      throw new ErrorsFactory(
+        "authorization",
+        "AuthorizationError",
+        "Nu sunteți autorizat pentru această acțiune"
+      );
+    }
+    if (!foundCode.isValid) {
+      throw new ErrorsFactory(
+        "invalid",
+        "InvalidError",
+        "Codul nu mai este valid, încercați din nou"
+      );
+    }
+    // Check user data
+    const foundUser = await User.findOne({ _id: foundCode.forUserId });
+    if (!foundUser) {
+      throw new ErrorsFactory("notfound", "NotFoundError", "Email invalid");
+    }
+
+    // Hash password
+    const saltRounds = 10;
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+    foundUser.password = hashedPassword;
+    await foundUser.save();
   }
 
   signToken(userId) {
