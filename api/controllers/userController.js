@@ -158,7 +158,7 @@ class UserController {
         "Emailul este incorect"
       );
     }
-
+    // Create a password reset code and save it
     const passResetCode = new PassResetCode({
       forUserId: foundUser.id,
     });
@@ -192,7 +192,6 @@ class UserController {
     if (!foundUser) {
       throw new ErrorsFactory("notfound", "NotFoundError", "Email invalid");
     }
-
     // Hash password
     const saltRounds = 10;
     const salt = await bcrypt.genSalt(saltRounds);

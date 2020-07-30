@@ -16,7 +16,6 @@ const isAuthorized = (req, res, next) => {
       error: "Nu sunteti autorizat pentru aceasta actiune",
     });
   }
-
   jwt.verify(token, SECRET, (err, decodedToken) => {
     if (err) {
       return res.status(401).json({
