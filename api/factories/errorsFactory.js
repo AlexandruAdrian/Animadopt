@@ -2,6 +2,7 @@ const {
   ConflictError,
   NotFoundError,
   InvalidError,
+  AuthorizationError,
 } = require("../errors/index");
 
 let registeredErrorFactories = {};
@@ -9,6 +10,7 @@ let registeredErrorFactories = {};
 registeredErrorFactories["conflict"] = ConflictError;
 registeredErrorFactories["notfound"] = NotFoundError;
 registeredErrorFactories["invalid"] = InvalidError;
+registeredErrorFactories["authorization"] = AuthorizationError;
 
 class ErrorsFactory {
   constructor(type, name, params) {

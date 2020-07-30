@@ -29,8 +29,15 @@ class InvalidError extends CustomError {
   }
 }
 
+class AuthorizationError extends CustomError {
+  constructor(name, params) {
+    super(name, params);
+  }
+}
+
 module.exports = {
   ConflictError,
   NotFoundError,
   InvalidError,
+  AuthorizationError,
 };
