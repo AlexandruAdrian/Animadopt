@@ -1,39 +1,31 @@
-class ConflictError extends Error {
-  constructor(...params) {
+class CustomError extends Error {
+  constructor(name, ...params) {
     super(...params);
 
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, ConflictError);
-    }
-
-    this.name = "ConflictError";
+    this.name = name;
     this.date = new Date();
+
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, this.name);
+    }
   }
 }
 
-class NotFoundError extends Error {
-  constructor(...params) {
-    super(...params);
-
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, NotFoundError);
-    }
-
-    this.name = "NotFoundError";
-    this.date = new Date();
+class ConflictError extends CustomError {
+  constructor(name, params) {
+    super(name, params);
   }
 }
 
-class InvalidError extends Error {
-  constructor(...params) {
-    super(...params);
+class NotFoundError extends CustomError {
+  constructor(name, params) {
+    super(name, params);
+  }
+}
 
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, InvalidError);
-    }
-
-    this.name = "InvalidError";
-    this.date = new Date();
+class InvalidError extends CustomError {
+  constructor(name, params) {
+    super(name, params);
   }
 }
 

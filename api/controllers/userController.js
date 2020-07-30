@@ -3,11 +3,7 @@ const ActivationCode = require("../models/activationCodeModel");
 const Mailer = require("../mailer/index");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const {
-  ConflictError,
-  NotFoundError,
-  InvalidError,
-} = require("../errors/index");
+const ErrorsFactory = require("../factories/errorsFactory");
 require("dotenv").config();
 
 const HOSTNAME = process.env.HOSTNAME;
@@ -21,7 +17,11 @@ class UserController {
     // Check if the user already exists
     const foundUser = await User.findOne({ email });
     if (foundUser) {
-      throw new ConflictError("Un utilizator cu acest email există deja");
+      throw new ErrorsFactory(
+        "conflict",
+        "ConflictError",
+        "Un utilizator cu acest email există deja"
+      );
     }
     // Hash password
     const saltRounds = 10;
@@ -48,12 +48,20 @@ class UserController {
     // Check if the user exists
     const foundUser = await User.findOne({ email });
     if (!foundUser) {
-      throw new NotFoundError("Email-ul sau parola sunt incorecte");
+      throw new ErrorsFactory(
+        "notfound",
+        "NotFoundError",
+        "Email-ul sau parola sunt incorecte"
+      );
     }
     // Check password
     const passwordMatches = await bcrypt.compare(password, foundUser.password);
     if (!passwordMatches) {
-      throw new NotFoundError("Email-ul sau parola sunt incorecte");
+      throw new ErrorsFactory(
+        "notfound",
+        "NotFoundError",
+        "Email-ul sau parola sunt incorecte"
+      );
     }
     // Sign token
     const token = this.signToken(foundUser._id);
@@ -65,7 +73,11 @@ class UserController {
     // Check if the code exists and if it is valid
     const foundCode = await ActivationCode.findOne({ _id: codeId });
     if (!foundCode || !foundCode.isValid) {
-      throw new NotFoundError("Codul este invalid");
+      throw new ErrorsFactory(
+        "notfound",
+        "NotFoundError",
+        "Codul este invalid"
+      );
     }
     // Check if the code expired
     const now = new Date().getTime();
@@ -73,7 +85,9 @@ class UserController {
     if (now - foundCode.issuedAt > expTime) {
       foundCode.isValid = false;
       await foundCode.save();
-      throw new InvalidError(
+      throw new ErrorsFactory(
+        "invalid",
+        "InvalidError",
         "Codul de activare a expirat, va rugăm să solicitați alt cod"
       );
     }
@@ -82,8 +96,18 @@ class UserController {
     if (!foundUser) {
       foundCode.isValid = false;
       await foundCode.save();
-      throw new InvalidError(
-        "Pentru a putea solicita un cod de activare este nevoie de un cont"
+      throw new ErrorsFactory(
+        "invalid",
+        "InvalidError",
+        "Activarea a eșuat, vă rugăm să solicitați alt cod de activare sau să vă asigurați că aveți un cont"
+      );
+    }
+    // Check if the account has already been activated
+    if (foundUser.isActive) {
+      throw new ErrorsFactory(
+        "conflict",
+        "ConflictError",
+        "Contul este activat"
       );
     }
     // Activate user account and invalidate the code
@@ -97,13 +121,19 @@ class UserController {
     // Check user data
     const foundUser = await User.findOne({ _id: userId });
     if (!foundUser) {
-      throw new InvalidError(
+      throw new ErrorsFactory(
+        "invalid",
+        "InvalidError",
         "Pentru a putea solicita un cod de activare este nevoie de un cont"
       );
     }
     // Check if the account has already been activated
     if (foundUser.isActive) {
-      throw new ConflictError("Contul este activ");
+      throw new ErrorsFactory(
+        "conflict",
+        "ConflictError",
+        "Contul este activat"
+      );
     }
     // Create an activation code and save it
     const activationCode = new ActivationCode({
