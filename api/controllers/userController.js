@@ -192,7 +192,37 @@ class UserController {
     if (!foundUser) {
       throw new ErrorsFactory("notfound", "NotFoundError", "Email invalid");
     }
-    // Hash password
+    // Hash new password
+    const saltRounds = 10;
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+    foundUser.password = hashedPassword;
+    await foundUser.save();
+  }
+
+  async changePassword(userId, oldPassword, newPassword) {
+    // Check for user data
+    const foundUser = await User.findOne({ _id: userId });
+    if (!foundUser) {
+      throw new ErrorsFactory(
+        "notfound",
+        "NotFoundError",
+        "Emailul este invalid"
+      );
+    }
+    // Check old password
+    const passwordMatches = await bcrypt.compare(
+      oldPassword,
+      foundUser.password
+    );
+    if (!passwordMatches) {
+      throw new ErrorsFactory(
+        "invalid",
+        "InvalidError",
+        "Parola veche este incorecta"
+      );
+    }
+    // Hash new password
     const saltRounds = 10;
     const salt = await bcrypt.genSalt(saltRounds);
     const hashedPassword = await bcrypt.hash(newPassword, salt);

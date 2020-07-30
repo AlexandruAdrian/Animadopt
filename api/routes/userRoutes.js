@@ -37,8 +37,15 @@ const userRoutes = () => {
       body("passwordConfirmation")
         .escape()
         .trim()
-        .custom((value, { req }) => value === req.body.password)
-        .withMessage("Parola si confirmarea parolei nu sunt identice"),
+        .custom((value, { req }) => {
+          if (value !== req.body.password) {
+            throw new Error(
+              "Parola si confirmarea parolei trebuie sa fie identice"
+            );
+          }
+
+          return true;
+        }),
     ]),
     async (req, res, next) => {
       try {
@@ -158,6 +165,58 @@ const userRoutes = () => {
         const code = req.query.code;
         const newPassword = req.body.newPassword;
         await UserController.resetPassword(newPassword, code);
+
+        res.status(200).json({
+          message: "Parola a fost actualizata cu succes",
+        });
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
+
+  router.put(
+    "/change-password",
+    isAuthorized,
+    validate([
+      body("newPassword")
+        .escape()
+        .trim()
+        .isLength({
+          min: 6,
+          max: 100,
+        })
+        .withMessage("Parola trebuie sa contina cel putin 6 caractere"),
+      body("oldPassword")
+        .escape()
+        .trim()
+        .custom((value, { req }) => {
+          if (value === req.body.newPassword) {
+            throw new Error(
+              "Parola noua trebuie sa fie diferita de parola veche"
+            );
+          }
+
+          return true;
+        }),
+      body("passwordConfirmation")
+        .escape()
+        .trim()
+        .custom((value, { req }) => {
+          if (value !== req.body.newPassword) {
+            throw new Error(
+              "Parola si confirmarea parolei trebuie sa fie identice"
+            );
+          }
+
+          return true;
+        }),
+    ]),
+    async (req, res, next) => {
+      try {
+        const { newPassword, oldPassword } = req.body;
+        const userId = req.user._id;
+        await UserController.changePassword(userId, oldPassword, newPassword);
 
         res.status(200).json({
           message: "Parola a fost actualizata cu succes",
