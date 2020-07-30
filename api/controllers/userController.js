@@ -1,5 +1,6 @@
 const User = require("../models/userModel");
 const ActivationCode = require("../models/activationCodeModel");
+const PassResetCode = require("../models/passResetCodeModel");
 const Mailer = require("../mailer/index");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -141,9 +142,31 @@ class UserController {
     });
     await activationCode.save();
     // Send email for account activation with the generated code
-    const activationLink = `https://${HOSTNAME}:${PORT}/api/${API_V}/users/activate?code=${activationCode._id}`;
+    const activationLink = `https://${HOSTNAME}:${PORT}/users/activate?code=${activationCode._id}`;
     const subject = "Activare cont";
     const text = `Apăsați pe următorul link pentru a activa contul ${activationLink}`;
+    await Mailer.send(foundUser.email, subject, text);
+  }
+
+  async requestPassResetCode(email) {
+    // Check if the user exists
+    const foundUser = await User.findOne({ email });
+    if (!foundUser) {
+      throw new ErrorsFactory(
+        "notfound",
+        "NotFoundError",
+        "Emailul este incorect"
+      );
+    }
+
+    const passResetCode = new PassResetCode({
+      forUserId: foundUser.id,
+    });
+    await passResetCode.save();
+    // Send email for password reset with the generated code
+    const passResetLink = `https://${HOSTNAME}:${PORT}/users/reset?code=${passResetCode._id}`;
+    const subject = "Resetare parola";
+    const text = `Apăsați pe următorul link pentru a reseta parola ${passResetLink}`;
     await Mailer.send(foundUser.email, subject, text);
   }
 
