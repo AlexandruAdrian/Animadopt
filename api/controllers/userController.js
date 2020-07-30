@@ -142,7 +142,7 @@ class UserController {
     });
     await activationCode.save();
     // Send email for account activation with the generated code
-    const activationLink = `https://${HOSTNAME}:${PORT}/users/activate?code=${activationCode._id}`;
+    const activationLink = `https://${HOSTNAME}:${PORT}/api/${API_V}/users/activate?code=${activationCode._id}`;
     const subject = "Activare cont";
     const text = `Apăsați pe următorul link pentru a activa contul ${activationLink}`;
     await Mailer.send(foundUser.email, subject, text);
@@ -164,7 +164,7 @@ class UserController {
     });
     await passResetCode.save();
     // Send email for password reset with the generated code
-    const passResetLink = `https://${HOSTNAME}:${PORT}/users/reset?code=${passResetCode._id}`;
+    const passResetLink = `https://${HOSTNAME}:${PORT}/api/${API_V}/users/reset?code=${passResetCode._id}`;
     const subject = "Resetare parola";
     const text = `Apăsați pe următorul link pentru a reseta parola ${passResetLink}`;
     await Mailer.send(foundUser.email, subject, text);
