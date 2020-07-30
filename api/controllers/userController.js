@@ -185,7 +185,7 @@ class UserController {
       throw new ErrorsFactory(
         "invalid",
         "InvalidError",
-        "Codul nu mai este valid, încercați din nou"
+        "Codul nu mai este valid, vă rugăm încercați din nou"
       );
     }
     // Check user data
