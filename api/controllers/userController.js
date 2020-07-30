@@ -5,7 +5,6 @@ const Mailer = require("../mailer/index");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const ErrorsFactory = require("../factories/errorsFactory");
-const { InvalidError } = require("../errors");
 require("dotenv").config();
 
 const HOSTNAME = process.env.HOSTNAME;
@@ -22,7 +21,7 @@ class UserController {
       throw new ErrorsFactory(
         "conflict",
         "ConflictError",
-        "Un utilizator cu acest email există deja"
+        "Un utilizator cu acest email exista deja"
       );
     }
     // Hash password
@@ -78,7 +77,7 @@ class UserController {
       throw new ErrorsFactory(
         "invalid",
         "InvalidError",
-        "Pentru a putea solicita un cod de activare este nevoie de un cont"
+        "Pentru a putea solicita un cod de activare asigurati-va ca sunteti inregistrat"
       );
     }
     // Check if the account has already been activated
@@ -97,7 +96,7 @@ class UserController {
     // Send email for account activation with the generated code
     const activationLink = `https://${HOSTNAME}:${PORT}/api/${API_V}/users/activate?code=${activationCode._id}`;
     const subject = "Activare cont";
-    const text = `Apăsați pe următorul link pentru a activa contul ${activationLink}`;
+    const text = `Apasati pe urmatorul link pentru a activa contul ${activationLink}`;
     await Mailer.send(foundUser.email, subject, text);
   }
 
@@ -120,7 +119,7 @@ class UserController {
       throw new ErrorsFactory(
         "invalid",
         "InvalidError",
-        "Codul de activare a expirat, va rugăm să solicitați alt cod"
+        "Codul de activare a expirat, va rugam sa solicitati alt cod"
       );
     }
     // Check for user data
@@ -131,7 +130,7 @@ class UserController {
       throw new ErrorsFactory(
         "invalid",
         "InvalidError",
-        "Activarea a eșuat, vă rugăm să solicitați alt cod de activare sau să vă asigurați că aveți un cont"
+        "Activarea a esuat, va rugam sa solicitati alt cod de activare sau sa va asigurati ca sunteti inregistrat"
       );
     }
     // Check if the account has already been activated
@@ -167,7 +166,7 @@ class UserController {
     // Send email for password reset with the generated code
     const passResetLink = `https://${HOSTNAME}:${PORT}/api/${API_V}/users/reset?code=${passResetCode._id}`;
     const subject = "Resetare parola";
-    const text = `Apăsați pe următorul link pentru a reseta parola ${passResetLink}`;
+    const text = `Apasati pe urmatorul link pentru a reseta parola ${passResetLink}`;
     await Mailer.send(foundUser.email, subject, text);
   }
 
@@ -178,14 +177,14 @@ class UserController {
       throw new ErrorsFactory(
         "authorization",
         "AuthorizationError",
-        "Nu sunteți autorizat pentru această acțiune"
+        "Nu sunteti autorizat pentru aceasta actiune"
       );
     }
     if (!foundCode.isValid) {
       throw new ErrorsFactory(
         "invalid",
         "InvalidError",
-        "Codul nu mai este valid, vă rugăm încercați din nou"
+        "Codul nu mai este valid, va rugam incercati din nou"
       );
     }
     // Check user data

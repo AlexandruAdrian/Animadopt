@@ -3,7 +3,6 @@ const UserController = require("../controllers/userController");
 const isAuthorized = require("../middlewares/authorization");
 const { body, query } = require("express-validator");
 const validate = require("../validators/index");
-const User = require("../models/userModel");
 
 const userRoutes = () => {
   const router = express.Router();
@@ -21,12 +20,12 @@ const userRoutes = () => {
         .escape()
         .trim()
         .notEmpty()
-        .withMessage("Câmpul prenume este obligatoriu"),
+        .withMessage("Campul prenume este obligatoriu"),
       body("lastName")
         .escape()
         .trim()
         .notEmpty()
-        .withMessage("Câmpul nume este obligatoriu"),
+        .withMessage("Campul nume este obligatoriu"),
       body("password")
         .escape()
         .trim()
@@ -34,12 +33,12 @@ const userRoutes = () => {
           min: 6,
           max: 100,
         })
-        .withMessage("Parola trebuie să conțină cel puțin 6 caractere"),
+        .withMessage("Parola trebuie sa contina cel putin 6 caractere"),
       body("passwordConfirmation")
         .escape()
         .trim()
         .custom((value, { req }) => value === req.body.password)
-        .withMessage("Parola și confirmarea parolei nu sunt identice"),
+        .withMessage("Parola si confirmarea parolei nu sunt identice"),
     ]),
     async (req, res, next) => {
       try {
@@ -48,7 +47,7 @@ const userRoutes = () => {
         return res.status(201).json({
           user,
           message:
-            "Contul a fost creat cu succes, un email cu detalii privind activarea contului a fost trimis pe adresa dumneavoastră",
+            "Contul a fost creat cu succes, un email cu detalii privind activarea contului a fost trimis pe adresa dumneavoastra",
         });
       } catch (err) {
         next(err);
@@ -95,7 +94,7 @@ const userRoutes = () => {
 
       res.status(200).json({
         message:
-          "Un email cu detalii privind activarea contului a fost trimis pe adresa dumneavoastră",
+          "Un email cu detalii privind activarea contului a fost trimis pe adresa dumneavoastra",
       });
     } catch (err) {
       next(err);
@@ -119,7 +118,7 @@ const userRoutes = () => {
 
         res.status(200).json({
           message:
-            "Un email cu detalii privind resetarea parolei a fost trimis pe adresa dumneavoastră",
+            "Un email cu detalii privind resetarea parolei a fost trimis pe adresa dumneavoastra",
         });
       } catch (err) {
         next(err);
@@ -147,12 +146,12 @@ const userRoutes = () => {
           min: 6,
           max: 100,
         })
-        .withMessage("Parola trebuie să conțină cel puțin 6 caractere"),
+        .withMessage("Parola trebuie sa contina cel putin 6 caractere"),
       body("passwordConfirmation")
         .escape()
         .trim()
         .custom((value, { req }) => value === req.body.newPassword)
-        .withMessage("Parola și confirmarea parolei nu sunt identice"),
+        .withMessage("Parola si confirmarea parolei nu sunt identice"),
     ]),
     async (req, res, next) => {
       try {
