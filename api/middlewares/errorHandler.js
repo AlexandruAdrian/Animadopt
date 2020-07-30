@@ -2,6 +2,7 @@ const {
   ConflictError,
   NotFoundError,
   InvalidError,
+  AuthorizationError,
 } = require("../errors/index");
 
 const errorHandler = (err, req, res, next) => {
@@ -21,6 +22,12 @@ const errorHandler = (err, req, res, next) => {
 
   if (err instanceof InvalidError) {
     return res.status(400).json({
+      error: err.message,
+    });
+  }
+
+  if (err instanceof AuthorizationError) {
+    return res.status(401).json({
       error: err.message,
     });
   }
