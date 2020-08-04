@@ -58,6 +58,14 @@ class UserController {
         "Email-ul sau parola sunt incorecte"
       );
     }
+    // Check if the account is confirmed
+    if (!foundUser.isActive) {
+      throw new ErrorsFactory(
+        "invalid",
+        "InvalidError",
+        "Pentru autentificare este necesara confirmarea contului"
+      );
+    }
     // Check password
     const passwordMatches = await bcrypt.compare(password, foundUser.password);
     if (!passwordMatches) {
