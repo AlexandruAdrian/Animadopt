@@ -2,6 +2,7 @@ const express = require("express");
 const UserController = require("../controllers/userController");
 const isAuthorized = require("../middlewares/authorization");
 const { query } = require("express-validator");
+const upload = require("../middlewares/multer");
 const validate = require("../validators/index");
 const validateRegister = require("../validators/validateRegister");
 const validateLogin = require("../validators/validateLogin");
@@ -130,6 +131,24 @@ const userRoutes = () => {
 
         res.status(200).json({
           message: "Parola a fost actualizata cu succes",
+        });
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
+
+  router.put(
+    "/avatar",
+    isAuthorized,
+    upload.single("avatar"),
+    async (req, res, next) => {
+      try {
+        const userId = req.user._id;
+        await UserController.updateAvatar(userId, req.file);
+
+        res.status(200).json({
+          message: "Imaginea a fost incarcata cu succes",
         });
       } catch (err) {
         next(err);

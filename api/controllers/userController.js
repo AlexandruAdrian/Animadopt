@@ -17,7 +17,7 @@ const nanoid = customAlphabet("0123456789", 6);
 
 class UserController {
   async userRegister(userData) {
-    const { email, firstName, lastName, password } = userData;
+    const { email, firstName, lastName, password, gender } = userData;
     // Check if the user already exists
     const foundUser = await User.findOne({ email });
     if (foundUser) {
@@ -37,6 +37,7 @@ class UserController {
       firstName,
       lastName,
       password: hashedPassword,
+      gender: gender.toUpperCase(),
     });
     await newUser.save();
     newUser = newUser.toJSON();
@@ -248,6 +249,23 @@ class UserController {
     const salt = await bcrypt.genSalt(saltRounds);
     const hashedPassword = await bcrypt.hash(newPassword, salt);
     foundUser.password = hashedPassword;
+    await foundUser.save();
+  }
+
+  async updateAvatar(userId, file) {
+    if (!file) {
+      throw new ErrorsFactory("notfound", "NotFound", "File not found");
+    }
+
+    const foundUser = await User.findOne({ _id: userId });
+    if (!foundUser) {
+      throw new ErrorsFactory(
+        "notfound",
+        "NotFoundError",
+        "Ooops! Se pare ca nu am reusit sa gasim contul asociat acestui email"
+      );
+    }
+    foundUser.avatar = file.path;
     await foundUser.save();
   }
 
