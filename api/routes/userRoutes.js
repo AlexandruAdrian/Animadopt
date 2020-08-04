@@ -47,7 +47,7 @@ const userRoutes = () => {
   router.put("/confirm/:id", async (req, res, next) => {
     try {
       const userId = req.params.id;
-      const confirmationCode = req.body.code;
+      const confirmationCode = req.body.code.trim();
       await UserController.confirmAccount(userId, confirmationCode);
 
       res.status(200).json({
@@ -58,14 +58,14 @@ const userRoutes = () => {
     }
   });
 
-  router.get("/request-activation", isAuthorized, async (req, res, next) => {
+  router.get("/request-confirmation/:id", async (req, res, next) => {
     try {
-      const userId = req.user._id;
-      await UserController.requestActivationCode(userId);
+      const userId = req.params.id;
+      await UserController.requestConfirmationCode(userId);
 
       res.status(200).json({
         message:
-          "Un email cu detalii privind activarea contului a fost trimis pe adresa dumneavoastra",
+          "Un email cu detalii privind confirmarea contului a fost trimis pe adresa dumneavoastra",
       });
     } catch (err) {
       next(err);
