@@ -1,9 +1,10 @@
-const User = require("../models/userModel");
-const ActivationCode = require("../models/activationCodeModel");
-const PassResetCode = require("../models/passResetCodeModel");
-const Mailer = require("../mailer/index");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { customAlphabet } = require("nanoid");
+const User = require("../models/userModel");
+const ConfirmationCode = require("../models/confirmationCodeModel");
+const PassResetCode = require("../models/passResetCodeModel");
+const Mailer = require("../mailer/index");
 const ErrorsFactory = require("../factories/errorsFactory");
 require("dotenv").config();
 
@@ -11,6 +12,8 @@ const HOSTNAME = process.env.HOSTNAME;
 const PORT = process.env.PORT;
 const API_V = process.env.API_V;
 const SECRET = process.env.SECRET;
+
+const nanoid = customAlphabet("0123456789", 6);
 
 class UserController {
   async userRegister(userData) {
@@ -39,7 +42,7 @@ class UserController {
     newUser = newUser.toJSON();
     delete newUser.password;
 
-    await this.requestActivationCode(newUser._id);
+    await this.requestConfirmationCode(newUser._id);
 
     return newUser;
   }
@@ -70,14 +73,14 @@ class UserController {
     return token;
   }
 
-  async requestActivationCode(userId) {
+  async requestConfirmationCode(userId) {
     // Check user data
     const foundUser = await User.findOne({ _id: userId });
     if (!foundUser) {
       throw new ErrorsFactory(
         "invalid",
         "InvalidError",
-        "Pentru a putea solicita un cod de activare asigurati-va ca sunteti inregistrat"
+        "Pentru a putea solicita un cod de confirmare asigurati-va ca sunteti inregistrat"
       );
     }
     // Check if the account has already been activated
@@ -85,24 +88,34 @@ class UserController {
       throw new ErrorsFactory(
         "conflict",
         "ConflictError",
-        "Contul este activat"
+        "Contul este confirmat"
       );
     }
     // Create an activation code and save it
-    const activationCode = new ActivationCode({
+    const confirmationCode = new ConfirmationCode({
       forUserId: foundUser._id,
+      code: nanoid(),
     });
-    await activationCode.save();
+    await confirmationCode.save();
     // Send email for account activation with the generated code
-    const activationLink = `https://${HOSTNAME}:${PORT}/api/${API_V}/users/activate?code=${activationCode._id}`;
-    const subject = "Activare cont";
-    const text = `Apasati pe urmatorul link pentru a activa contul ${activationLink}`;
+    const confirmationLink = `https://${HOSTNAME}:${PORT}/users/confirm`;
+    const subject = `${confirmationCode.code} este codul de confirmare Animadopt`;
+    const text = `
+    Salutare ${foundUser.firstName},
+
+    Te-ai inscris recent pe Animadopt. Pentru a termina inregistrarea, te rugam sa efectuezi confirmarea contului.
+    Confirma-ti contul aici: ${confirmationLink}
+    Este posibil sa ti se ceara sa introduci acest cod de confirmare ${confirmationCode.code}.
+    `;
     await Mailer.send(foundUser.email, subject, text);
   }
 
-  async activateAccount(codeId) {
+  async confirmAccount(userId, code) {
     // Check if the code exists and if it is valid
-    const foundCode = await ActivationCode.findOne({ _id: codeId });
+    const foundCode = await ConfirmationCode.findOne({
+      forUserId: userId,
+      code: code,
+    });
     if (!foundCode || !foundCode.isValid) {
       throw new ErrorsFactory(
         "notfound",
@@ -112,14 +125,14 @@ class UserController {
     }
     // Check if the code expired
     const now = new Date().getTime();
-    const expTime = 60 * 10 * 1000;
+    const expTime = 60 * 1440 * 1000; // 1 DAY
     if (now - foundCode.issuedAt > expTime) {
       foundCode.isValid = false;
       await foundCode.save();
       throw new ErrorsFactory(
         "invalid",
         "InvalidError",
-        "Codul de activare a expirat, va rugam sa solicitati alt cod"
+        "Codul de confirmare a expirat, va rugam sa solicitati alt cod"
       );
     }
     // Check for user data
@@ -130,7 +143,7 @@ class UserController {
       throw new ErrorsFactory(
         "invalid",
         "InvalidError",
-        "Activarea a esuat, va rugam sa solicitati alt cod de activare sau sa va asigurati ca sunteti inregistrat"
+        "Confirmarea a esuat, va rugam sa solicitati alt cod de confirmare sau sa va asigurati ca sunteti inregistrat"
       );
     }
     // Check if the account has already been activated
@@ -138,7 +151,7 @@ class UserController {
       throw new ErrorsFactory(
         "conflict",
         "ConflictError",
-        "Contul este activat"
+        "Contul este confirmat"
       );
     }
     // Activate user account and invalidate the code
