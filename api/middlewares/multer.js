@@ -2,24 +2,15 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
-const dir = "./uploads/avatars";
+const avatarsDir = "./uploads/avatars";
+const postsDir = "./uploads/posts";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     if (req.originalUrl.includes("avatar")) {
-      fs.access(dir, (err) => {
-        // Check if the folder exists and if it doesn't
-        if (err) {
-          // Create the folder
-          fs.mkdir(dir, (err) => {
-            // Save the file
-            cb(null, "./uploads/avatars");
-          });
-        } else {
-          // If the folder already exists
-          cb(null, "./uploads/avatars"); // save the file
-        }
-      });
+      checkDirAndCreate(avatarsDir, cb);
+    } else if (req.originalUrl.includes("posts")) {
+      checkDirAndCreate(postsDir, cb);
     }
   },
   filename: (req, file, cb) => {
@@ -47,22 +38,20 @@ function checkFileType(file, cb) {
   }
 }
 
+function checkDirAndCreate(dir, cb) {
+  fs.access(dir, (err) => {
+    // Check if the folder exists and if it doesn't
+    if (err) {
+      // Create the folder
+      fs.mkdir(dir, (err) => {
+        // Save the file
+        cb(null, dir);
+      });
+    } else {
+      // If the folder already exists
+      cb(null, dir); // save the file
+    }
+  });
+}
+
 module.exports = upload;
-
-// if (err) {
-//   fs.mkdir("avatars", (err) => {
-//     console.log(err);
-//   });
-
-//   if (req.originalUrl.includes("avatar")) {
-//     cb(null, "./uploads/avatars");
-//   } else {
-//     cb(null, "./uploads/posts");
-//   }
-// } else {
-//   if (req.originalUrl.includes("avatar")) {
-//     cb(null, "./uploads/avatars");
-//   } else {
-//     cb(null, "./uploads/posts");
-//   }
-// }
