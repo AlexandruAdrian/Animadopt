@@ -18,9 +18,9 @@ const UserSchema = new Schema({
     type: String,
     default: function () {
       if (this.gender === Genders.male) {
-        return "../uploads/male-placeholder.png";
+        return "../uploads/placeholders/male-placeholder.png";
       } else {
-        return "../uploads/female-placeholder.png";
+        return "../uploads/placeholders/female-placeholder.png";
       }
     },
   },
