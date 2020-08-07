@@ -36,6 +36,16 @@ const postRoutes = () => {
     }
   );
 
+  router.get("/:postId", isAuthorized, async (req, res, next) => {
+    try {
+      const post = await PostController.getPostById(req.params.postId);
+
+      res.status(200).json(post);
+    } catch (err) {
+      next(err);
+    }
+  });
+
   return router;
 };
 

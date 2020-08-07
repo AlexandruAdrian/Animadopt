@@ -1,4 +1,5 @@
 const Post = require("../models/postModel");
+const ErrorsFactory = require("../factories/errorsFactory");
 
 class PostController {
   async createPost(pictures, postData, userId) {
@@ -14,6 +15,20 @@ class PostController {
     await newPost.save();
 
     return newPost;
+  }
+
+  async getPostById(postId) {
+    const foundPost = await Post.findOne({ _id: postId });
+
+    if (!foundPost) {
+      throw new ErrorsFactory(
+        "notfound",
+        "NotFound",
+        "Postarea nu a fost gasita"
+      );
+    }
+
+    return foundPost;
   }
 }
 
