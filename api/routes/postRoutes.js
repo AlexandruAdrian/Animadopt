@@ -46,6 +46,16 @@ const postRoutes = () => {
     }
   });
 
+  router.delete("/:postId", isAuthorized, async (req, res, next) => {
+    try {
+      await PostController.deletePost(req.params.postId);
+
+      res.status(200).json({ message: "Postarea a fost stearsa cu succes" });
+    } catch (err) {
+      next(err);
+    }
+  });
+
   return router;
 };
 

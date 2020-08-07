@@ -30,6 +30,10 @@ class PostController {
 
     return foundPost;
   }
+
+  async deletePost(postId) {
+    await Post.deleteOne({ _id: postId });
+  }
 }
 
 module.exports = new PostController();
