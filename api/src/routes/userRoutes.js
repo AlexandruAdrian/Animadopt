@@ -156,6 +156,17 @@ const userRoutes = () => {
     }
   );
 
+  router.get("/:id", isAuthorized, async (req, res, next) => {
+    try {
+      const userId = req.params.id;
+      const user = await UserController.getUserById(userId);
+
+      res.status(200).json({ user });
+    } catch (err) {
+      next(err);
+    }
+  });
+
   return router;
 };
 

@@ -269,6 +269,23 @@ class UserController {
     await foundUser.save();
   }
 
+  async getUserById(userId) {
+    // Check for user data
+    const foundUser = await User.findOne({ _id: userId });
+    if (!foundUser) {
+      throw new ErrorsFactory(
+        "notfound",
+        "NotFoundError",
+        "Utilizatorul nu a fost gasit"
+      );
+    }
+
+    const user = foundUser.toJSON();
+    delete user.password;
+
+    return user;
+  }
+
   signToken(userId) {
     const token = jwt.sign({ _id: userId }, SECRET, {
       expiresIn: "28d",
