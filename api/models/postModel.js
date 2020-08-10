@@ -2,18 +2,18 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const Animals = Object.freeze({
-  dog: "Dog",
-  cat: "Cat",
-  bird: "Bird",
-  fish: "Fish",
-  farm: "Farm",
+  dog: "Caini",
+  cat: "Pisici",
+  bird: "Pasari",
+  fish: "Pesti",
+  farm: "Animale de ferma",
 });
 
 const Counties = Object.freeze({
   ab: "Alba",
   ar: "Arad",
   ag: "Arges",
-  bc: "Bacu",
+  bc: "Bacau",
   bh: "Bihor",
   bn: "Bistrita-Nasaud",
   bt: "Botosani",
@@ -58,11 +58,12 @@ const PostSchema = new Schema({
   postedBy: { type: mongoose.Types.ObjectId, required: true },
   title: { type: String, required: true },
   description: { type: String, required: true },
+  breed: { type: String, default: "Necunoscut" },
   postedAt: { type: Date, default: Date.now },
-  type: { type: String, enum: Object.values(Animals), required: true },
+  category: { type: String, enum: Object.values(Animals), required: true },
   location: { type: String, enum: Object.values(Counties), required: true },
   isAdopted: { type: Boolean, default: false },
-  pictures: { type: [String] },
+  pictures: { type: [String], default: [] },
 });
 
 Object.assign(PostSchema.statics, { Animals });
