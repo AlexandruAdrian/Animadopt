@@ -12,16 +12,12 @@ const postRoutes = () => {
     upload.array("pictures", 5),
     async (req, res, next) => {
       try {
-        const picturesPath = [];
+        const pictures = req.files;
         const userId = req.user._id;
         const postData = req.body;
 
-        req.files.forEach((picture) => {
-          picturesPath.push(picture.path);
-        });
-
         const newPost = await PostController.createPost(
-          picturesPath,
+          pictures,
           postData,
           userId
         );
