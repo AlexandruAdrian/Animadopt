@@ -47,12 +47,10 @@ const postRoutes = () => {
           postId
         );
 
-        res
-          .status(200)
-          .json({
-            message: "Postarea a fost actualizata cu succes",
-            post: updatedPost,
-          });
+        res.status(200).json({
+          message: "Postarea a fost actualizata cu succes",
+          post: updatedPost,
+        });
       } catch (err) {
         next(err);
       }
@@ -80,7 +78,16 @@ const postRoutes = () => {
   });
 
   router.put("/adopted/:postId", isAuthorized, async (req, res, next) => {
-    // mark as adopted logic
+    try {
+      const postId = req.params.postId;
+      await PostController.markAsAdopted(postId);
+
+      res.status(200).json({
+        message: "Postarea a fost actualizata cu succes",
+      });
+    } catch (err) {
+      next(err);
+    }
   });
 
   return router;

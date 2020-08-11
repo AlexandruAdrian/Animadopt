@@ -63,6 +63,20 @@ class PostController {
     await Post.deleteOne({ _id: postId });
   }
 
+  async markAsAdopted(postId) {
+    const foundPost = await Post.findOne({ _id: postId });
+    if (!foundPost) {
+      throw new ErrorsFactory(
+        "notfound",
+        "NotFound",
+        "Aceasta postare nu exista"
+      );
+    }
+
+    foundPost.isAdopted = true;
+    await foundPost.save();
+  }
+
   computePicturesPath(pictures, postId) {
     const picturesPath = [];
 
