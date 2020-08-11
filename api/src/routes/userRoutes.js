@@ -48,7 +48,7 @@ const userRoutes = () => {
   router.put("/confirm/:id", async (req, res, next) => {
     try {
       const userId = req.params.id;
-      const confirmationCode = req.body.code.trim();
+      const confirmationCode = req.body.code;
       await UserController.confirmAccount(userId, confirmationCode);
 
       res.status(200).json({

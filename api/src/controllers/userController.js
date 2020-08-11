@@ -120,10 +120,13 @@ class UserController {
   }
 
   async confirmAccount(userId, code) {
+    if (!code) {
+      throw new ErrorsFactory("invalid", "InvalidError", "Codul este invalid");
+    }
     // Check if the code exists and if it is valid
     const foundCode = await ConfirmationCode.findOne({
       forUserId: userId,
-      code: code,
+      code: code.trim(),
     });
     if (!foundCode || !foundCode.isValid) {
       throw new ErrorsFactory(
