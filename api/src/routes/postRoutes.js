@@ -32,6 +32,33 @@ const postRoutes = () => {
     }
   );
 
+  router.put(
+    "/:postId",
+    isAuthorized,
+    upload.array("pictures", 5),
+    async (req, res, next) => {
+      try {
+        const pictures = req.files;
+        const postData = req.body;
+        const postId = req.params.postId;
+        const updatedPost = await PostController.updatePost(
+          pictures,
+          postData,
+          postId
+        );
+
+        res
+          .status(200)
+          .json({
+            message: "Postarea a fost actualizata cu succes",
+            post: updatedPost,
+          });
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
+
   router.get("/:postId", isAuthorized, async (req, res, next) => {
     try {
       const post = await PostController.getPostById(req.params.postId);
@@ -50,6 +77,10 @@ const postRoutes = () => {
     } catch (err) {
       next(err);
     }
+  });
+
+  router.put("/adopted/:postId", isAuthorized, async (req, res, next) => {
+    // mark as adopted logic
   });
 
   return router;
