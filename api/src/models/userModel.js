@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const path = require("path");
 
 const Genders = Object.freeze({
   male: "M",
@@ -18,9 +19,9 @@ const UserSchema = new Schema({
     type: String,
     default: function () {
       if (this.gender === Genders.male) {
-        return "../uploads/placeholders/male-placeholder.png";
+        return path.join(__dirname, "../placeholders/male-placeholder.png");
       } else {
-        return "../uploads/placeholders/female-placeholder.png";
+        return path.join(__dirname, "../placeholders/female-placeholder.png");
       }
     },
   },
