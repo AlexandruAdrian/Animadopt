@@ -46,6 +46,17 @@ function checkFileType(file, cb) {
 }
 
 function checkDirAndCreate(dir, cb) {
+  // Check for uploads folder first
+  const uploadsDir = path.join(__dirname, "../../uploads/");
+  fs.access(uploadsDir, (err) => {
+    if (err) {
+      fs.mkdir(uploadsDir, (err) => {
+        return;
+      });
+    }
+    return;
+  });
+
   fs.access(dir, (err) => {
     // Check if the folder exists and if it doesn't
     if (err) {
