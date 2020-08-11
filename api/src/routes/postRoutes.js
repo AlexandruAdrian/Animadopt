@@ -90,6 +90,17 @@ const postRoutes = () => {
     }
   });
 
+  router.get("/user/:userId", isAuthorized, async (req, res, next) => {
+    try {
+      const userId = req.params.userId;
+      const userPosts = await PostController.fetchUserPosts(userId);
+
+      res.status(200).json({ posts: userPosts });
+    } catch (err) {
+      next(err);
+    }
+  });
+
   return router;
 };
 

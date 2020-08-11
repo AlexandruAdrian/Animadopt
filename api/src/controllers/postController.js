@@ -77,6 +77,12 @@ class PostController {
     await foundPost.save();
   }
 
+  async fetchUserPosts(userId) {
+    const posts = await Post.find({ postedBy: userId, isAdopted: false });
+
+    return posts;
+  }
+
   computePicturesPath(pictures, postId) {
     const picturesPath = [];
 
