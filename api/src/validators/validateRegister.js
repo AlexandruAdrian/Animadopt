@@ -2,12 +2,7 @@ const { body } = require("express-validator");
 
 const validateRegister = () => {
   return [
-    body("email")
-      .escape()
-      .trim()
-      .normalizeEmail()
-      .isEmail()
-      .withMessage("E-mail invalid"),
+    body("email").escape().trim().isEmail().withMessage("E-mail invalid"),
     body("firstName")
       .escape()
       .trim()
