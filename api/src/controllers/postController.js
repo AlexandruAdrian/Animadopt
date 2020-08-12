@@ -63,7 +63,7 @@ class PostController {
     await Post.deleteOne({ _id: postId });
   }
 
-  async getPosts(page, limit) {
+  async getPosts(page, limit, category, location) {
     if (page < 1) {
       throw new ErrorsFactory(
         "invalid",
@@ -77,7 +77,16 @@ class PostController {
 
     const results = {};
 
-    if (endIndex < (await Post.countDocuments())) {
+    const query = { isAdopted: false };
+    if (category) {
+      query.category = { $in: category };
+    }
+
+    if (location) {
+      query.location = { $in: location };
+    }
+
+    if (endIndex < (await Post.countDocuments(query))) {
       results.next = {
         page: page + 1,
       };
@@ -89,9 +98,7 @@ class PostController {
       };
     }
 
-    results.results = await Post.find({ isAdopted: false })
-      .limit(limit)
-      .skip(startIndex);
+    results.results = await Post.find(query).limit(limit).skip(startIndex);
 
     return results;
   }

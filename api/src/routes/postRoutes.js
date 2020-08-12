@@ -104,8 +104,21 @@ const postRoutes = () => {
   router.get("/", isAuthorized, async (req, res, next) => {
     try {
       const page = parseInt(req.query.page);
+      let category;
+      let location;
+      if (req.query.category) {
+        category = req.query.category.split(",");
+      }
+      if (req.query.location) {
+        location = req.query.location.split(",");
+      }
       const limit = 3;
-      const results = await PostController.getPosts(page, limit);
+      const results = await PostController.getPosts(
+        page,
+        limit,
+        category,
+        location
+      );
 
       res.status(200).json(results);
     } catch (err) {
