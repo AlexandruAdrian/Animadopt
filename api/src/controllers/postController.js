@@ -63,6 +63,39 @@ class PostController {
     await Post.deleteOne({ _id: postId });
   }
 
+  async getPosts(page, limit) {
+    if (page < 1) {
+      throw new ErrorsFactory(
+        "invalid",
+        "InvalidError",
+        "Numarul paginii trebuie sa aiba o valoare pozitiva"
+      );
+    }
+
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+
+    const results = {};
+
+    if (endIndex < (await Post.countDocuments())) {
+      results.next = {
+        page: page + 1,
+      };
+    }
+
+    if (startIndex > 0) {
+      results.previous = {
+        page: page - 1,
+      };
+    }
+
+    results.results = await Post.find({ isAdopted: false })
+      .limit(limit)
+      .skip(startIndex);
+
+    return results;
+  }
+
   async markAsAdopted(postId) {
     const foundPost = await Post.findOne({ _id: postId });
     if (!foundPost) {

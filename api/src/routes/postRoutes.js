@@ -101,6 +101,18 @@ const postRoutes = () => {
     }
   });
 
+  router.get("/", isAuthorized, async (req, res, next) => {
+    try {
+      const page = parseInt(req.query.page);
+      const limit = 3;
+      const results = await PostController.getPosts(page, limit);
+
+      res.status(200).json(results);
+    } catch (err) {
+      next(err);
+    }
+  });
+
   return router;
 };
 
