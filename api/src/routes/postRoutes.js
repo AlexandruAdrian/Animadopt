@@ -112,7 +112,7 @@ const postRoutes = () => {
       if (req.query.location) {
         location = req.query.location.split(",");
       }
-      const limit = 3;
+      const limit = 10;
       const results = await PostController.getPosts(
         page,
         limit,
