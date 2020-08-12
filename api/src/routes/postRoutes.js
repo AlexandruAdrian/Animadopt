@@ -2,6 +2,9 @@ const express = require("express");
 const PostController = require("../controllers/postController");
 const upload = require("../middlewares/multer");
 const isAuthorized = require("../middlewares/authorization");
+const { query } = require("express-validator");
+const validate = require("../validators/index");
+const validatePost = require("../validators/validatePost");
 
 const postRoutes = () => {
   const router = express.Router();
@@ -10,6 +13,7 @@ const postRoutes = () => {
     "/",
     isAuthorized,
     upload.array("pictures", 5),
+    validate(validatePost()),
     async (req, res, next) => {
       try {
         const pictures = req.files;
@@ -36,6 +40,7 @@ const postRoutes = () => {
     "/:postId",
     isAuthorized,
     upload.array("pictures", 5),
+    validate(validatePost()),
     async (req, res, next) => {
       try {
         const pictures = req.files;
@@ -101,30 +106,37 @@ const postRoutes = () => {
     }
   });
 
-  router.get("/", isAuthorized, async (req, res, next) => {
-    try {
-      const page = parseInt(req.query.page);
-      let category;
-      let location;
-      if (req.query.category) {
-        category = req.query.category.split(",");
-      }
-      if (req.query.location) {
-        location = req.query.location.split(",");
-      }
-      const limit = 10;
-      const results = await PostController.getPosts(
-        page,
-        limit,
-        category,
-        location
-      );
+  router.get(
+    "/",
+    isAuthorized,
+    query("page").escape(),
+    query("category").escape(),
+    query("location").escape(),
+    async (req, res, next) => {
+      try {
+        const page = parseInt(req.query.page);
+        let category;
+        let location;
+        if (req.query.category) {
+          category = req.query.category.split(",");
+        }
+        if (req.query.location) {
+          location = req.query.location.split(",");
+        }
+        const limit = 10;
+        const results = await PostController.getPosts(
+          page,
+          limit,
+          category,
+          location
+        );
 
-      res.status(200).json(results);
-    } catch (err) {
-      next(err);
+        res.status(200).json(results);
+      } catch (err) {
+        next(err);
+      }
     }
-  });
+  );
 
   return router;
 };
