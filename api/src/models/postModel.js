@@ -41,7 +41,7 @@ const Counties = Object.freeze({
   ms: "Mures",
   nt: "Neamt",
   ot: "Olt",
-  ph: "Prahvoa",
+  ph: "Prahova",
   sm: "Satu Mare",
   sj: "Salaj",
   sb: "Sibiu",
