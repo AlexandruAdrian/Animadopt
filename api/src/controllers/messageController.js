@@ -32,6 +32,14 @@ class MessageController {
   async deleteMessage(messageId) {
     await Message.deleteOne({ _id: messageId });
   }
+
+  async deleteMessages(messageIds) {
+    await Message.deleteMany({
+      _id: {
+        $in: messageIds,
+      },
+    });
+  }
 }
 
 module.exports = new MessageController();

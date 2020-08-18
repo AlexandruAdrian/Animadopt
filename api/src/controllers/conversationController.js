@@ -62,6 +62,10 @@ class ConversationController {
     conversation.messages.splice(indexOfMessage, 1);
     await conversation.save();
   }
+
+  async deleteConversation(conversationId) {
+    await Conversation.deleteOne({ _id: conversationId });
+  }
 }
 
 module.exports = new ConversationController();

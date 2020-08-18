@@ -45,6 +45,25 @@ const messageRoutes = () => {
     }
   });
 
+  router.delete(
+    "/delete-conversation/:conversationId",
+    isAuthorized,
+    async (req, res, next) => {
+      try {
+        const conversationId = req.params.conversationId;
+        const conversation = await ConversationController.findConversationById(
+          conversationId
+        );
+        await MessageController.deleteMessages(conversation.messages);
+        await ConversationController.deleteConversation(conversationId);
+
+        res.sendStatus(200);
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
+
   return router;
 };
 
