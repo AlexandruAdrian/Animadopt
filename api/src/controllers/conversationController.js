@@ -1,4 +1,5 @@
 const Conversation = require("../models/conversationModel");
+const ErrorsFactory = require("../factories/errorsFactory");
 
 class ConversationController {
   async findConversation(userId, receiverId) {
@@ -14,6 +15,22 @@ class ConversationController {
     }
 
     return null;
+  }
+
+  async findConversationById(conversationId) {
+    const foundConversation = await Conversation.findOne({
+      _id: conversationId,
+    });
+
+    if (!foundConversation) {
+      throw new ErrorsFactory(
+        "notfound",
+        "NotFound",
+        "Conversatia nu a fost gasita"
+      );
+    }
+
+    return foundConversation;
   }
 
   async createConversation(userId, receiverId) {
@@ -36,6 +53,14 @@ class ConversationController {
     conversation.messages.push(messageId);
     await conversation.save();
     return conversation;
+  }
+
+  async removeMessage(conversationId, messageId) {
+    const conversation = await this.findConversationById(conversationId);
+    const indexOfMessage = conversation.messages.indexOf(messageId);
+
+    conversation.messages.splice(indexOfMessage, 1);
+    await conversation.save();
   }
 }
 
