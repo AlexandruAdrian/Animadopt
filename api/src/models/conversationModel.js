@@ -13,8 +13,8 @@ const ConversationSchema = new Schema({
   messages: {
     type: [
       {
-        typ: mongoose.Types.ObjectId,
-        required: true,
+        type: mongoose.Types.ObjectId,
+        default: [],
       },
     ],
   },
