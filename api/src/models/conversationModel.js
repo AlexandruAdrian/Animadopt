@@ -10,6 +10,13 @@ const ConversationSchema = new Schema({
       },
     ],
   },
+  showFor: {
+    type: [
+      {
+        type: mongoose.Types.ObjectId,
+      },
+    ],
+  },
   messages: {
     type: [
       {

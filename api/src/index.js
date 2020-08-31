@@ -1,7 +1,4 @@
 const express = require("express");
-const https = require("https");
-const fs = require("fs");
-const path = require("path");
 const mongoose = require("mongoose");
 const initMiddlewares = require("./middlewares/index");
 const initRoutes = require("./routes/index");
@@ -25,12 +22,7 @@ const app = express();
     initRoutes(app);
     app.use(errorHandler);
 
-    const httpsOptions = {
-      key: fs.readFileSync(path.join(__dirname, "./https/server.key")),
-      cert: fs.readFileSync(path.join(__dirname, "./https/server.cert")),
-    };
-
-    https.createServer(httpsOptions, app).listen(PORT, () => {
+    app.listen(PORT, () => {
       console.log(`Listening on port ${PORT}`);
     });
   } catch (err) {

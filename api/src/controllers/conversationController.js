@@ -2,7 +2,42 @@ const Conversation = require("../models/conversationModel");
 const ErrorsFactory = require("../factories/errorsFactory");
 
 class ConversationController {
-  async findConversation(userId, receiverId) {
+  async findUserConversations(userId) {
+    const conversations = await Conversation.find({
+      $and: [
+        {
+          participants: {
+            $in: userId,
+          },
+        },
+        {
+          showFor: {
+            $in: userId,
+          },
+        },
+      ],
+    });
+
+    return conversations;
+  }
+
+  async findConversationById(conversationId) {
+    const conversation = await Conversation.findOne({
+      _id: conversationId,
+    });
+
+    if (!conversation) {
+      throw new ErrorsFactory(
+        "notfound",
+        "NotFound",
+        "Conversatia nu a fost gasita"
+      );
+    }
+
+    return conversation;
+  }
+
+  async createConversation(userId, receiverId) {
     const foundConversation = await Conversation.findOne({
       $or: [
         { participants: [userId, receiverId] },
@@ -11,60 +46,31 @@ class ConversationController {
     });
 
     if (foundConversation) {
-      return foundConversation;
-    }
-
-    return null;
-  }
-
-  async findConversationById(conversationId) {
-    const foundConversation = await Conversation.findOne({
-      _id: conversationId,
-    });
-
-    if (!foundConversation) {
-      throw new ErrorsFactory(
-        "notfound",
-        "NotFound",
-        "Conversatia nu a fost gasita"
-      );
-    }
-
-    return foundConversation;
-  }
-
-  async createConversation(userId, receiverId) {
-    const foundConversation = await this.findConversation(userId, receiverId);
-
-    if (foundConversation) {
+      foundConversation.showFor = [userId, receiverId];
+      await foundConversation.save();
       return foundConversation;
     }
 
     const newConversation = new Conversation({
       participants: [userId, receiverId],
+      showFor: [userId, receiverId],
     });
 
+    await newConversation.save();
     return newConversation;
   }
 
-  async sendMessage(userId, receiverId, messageId) {
-    const conversation = await this.createConversation(userId, receiverId);
+  async deleteConversation(conversationId, userId) {
+    const foundConversation = await this.findConversationById(conversationId);
+    foundConversation.showFor = foundConversation.showFor.filter(
+      (id) => id != userId
+    );
 
-    conversation.messages.push(messageId);
-    await conversation.save();
-    return conversation;
-  }
-
-  async removeMessage(conversationId, messageId) {
-    const conversation = await this.findConversationById(conversationId);
-    const indexOfMessage = conversation.messages.indexOf(messageId);
-
-    conversation.messages.splice(indexOfMessage, 1);
-    await conversation.save();
-  }
-
-  async deleteConversation(conversationId) {
-    await Conversation.deleteOne({ _id: conversationId });
+    if (foundConversation.showFor.length < 1) {
+      await Conversation.deleteOne({ _id: conversationId });
+    } else {
+      await foundConversation.save();
+    }
   }
 }
 

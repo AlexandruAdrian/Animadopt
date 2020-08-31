@@ -6,6 +6,14 @@ const MessageSchema = new Schema({
   message: { type: String, required: true },
   sentAt: { type: Date, default: Date.now },
   seen: { type: Boolean, default: false },
+  showHistory: {
+    type: [
+      {
+        type: mongoose.Types.ObjectId,
+        default: [],
+      },
+    ],
+  },
 });
 
 const MessageModel = new mongoose.model("Message", MessageSchema);
