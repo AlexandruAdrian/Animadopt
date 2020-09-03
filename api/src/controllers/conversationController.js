@@ -63,7 +63,7 @@ class ConversationController {
   async deleteConversation(conversationId, userId) {
     const foundConversation = await this.findConversationById(conversationId);
     foundConversation.showFor = foundConversation.showFor.filter(
-      (id) => id != userId
+      (id) => id.toString() !== userId.toString()
     );
 
     if (foundConversation.showFor.length < 1) {
@@ -71,6 +71,20 @@ class ConversationController {
     } else {
       await foundConversation.save();
     }
+  }
+
+  async addMessageToConv(messageId, conversationId) {
+    const foundConversation = await this.findConversationById(conversationId);
+    foundConversation.messages.push(messageId);
+    await foundConversation.save();
+  }
+
+  async removeMessageFromConv(messageId, conversationId) {
+    const foundConversation = await this.findConversationById(conversationId);
+    foundConversation.messages = foundConversation.messages.filter(
+      (id) => id.toString() !== messageId.toString()
+    );
+    await foundConversation.save();
   }
 }
 

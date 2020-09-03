@@ -3,9 +3,8 @@ const Schema = mongoose.Schema;
 
 const MessageSchema = new Schema({
   sender: { type: mongoose.Types.ObjectId, required: true },
+  receiver: { type: mongoose.Types.ObjectId, required: true },
   message: { type: String, required: true },
-  sentAt: { type: Date, default: Date.now },
-  seen: { type: Boolean, default: false },
   showFor: {
     type: [
       {
@@ -14,6 +13,8 @@ const MessageSchema = new Schema({
       },
     ],
   },
+  sentAt: { type: Date, default: Date.now },
+  seen: { type: Boolean, default: false },
 });
 
 const MessageModel = new mongoose.model("Message", MessageSchema);
