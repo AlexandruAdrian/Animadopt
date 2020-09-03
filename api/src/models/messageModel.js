@@ -6,7 +6,7 @@ const MessageSchema = new Schema({
   message: { type: String, required: true },
   sentAt: { type: Date, default: Date.now },
   seen: { type: Boolean, default: false },
-  showHistory: {
+  showFor: {
     type: [
       {
         type: mongoose.Types.ObjectId,
