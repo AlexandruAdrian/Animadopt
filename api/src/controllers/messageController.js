@@ -59,6 +59,24 @@ class MessageController {
 
     return foundMessage;
   }
+
+  async markAsSeen(receiverId) {
+    const filter = {
+      $and: [
+        {
+          receiver: receiverId,
+        },
+        {
+          seen: false,
+        },
+      ],
+    };
+
+    const update = {
+      seen: true,
+    };
+    await Message.updateMany(filter, update);
+  }
 }
 
 module.exports = new MessageController();

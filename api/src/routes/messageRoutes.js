@@ -76,6 +76,17 @@ const messageRoutes = () => {
     }
   );
 
+  router.put("/seen", isAuthorized, async (req, res, next) => {
+    try {
+      const userId = req.user._id;
+      await MessageController.markAsSeen(userId);
+      console.log(userId);
+      res.sendStatus(200);
+    } catch (err) {
+      next(err);
+    }
+  });
+
   return router;
 };
 
