@@ -35,11 +35,9 @@ const userRoutes = () => {
     try {
       const token = await UserController.userLogin(req.body);
 
-      res
-        .cookie("access_token", token, {
-          httpOnly: true,
-        })
-        .sendStatus(200);
+      res.status(200).json({
+        token
+      });
     } catch (err) {
       next(err);
     }
@@ -162,6 +160,16 @@ const userRoutes = () => {
       const user = await UserController.getUserById(userId);
 
       res.status(200).json({ user });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.delete("/:id", isAuthorized, async (req, res, next) => {
+    try {
+      await UserController.deleteUser(req.params.id);
+
+      res.status(200).json({ message: 'User-ul a fost sters cu succes' });
     } catch (err) {
       next(err);
     }

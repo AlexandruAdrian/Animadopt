@@ -1,7 +1,9 @@
 const bcrypt = require("bcrypt");
+const fs = require('fs');
 const jwt = require("jsonwebtoken");
 const { customAlphabet } = require("nanoid");
 const User = require("../models/userModel");
+const Post = require("../models/postModel");
 const ConfirmationCode = require("../models/confirmationCodeModel");
 const PassResetCode = require("../models/passResetCodeModel");
 const Mailer = require("../mailer/index");
@@ -268,7 +270,10 @@ class UserController {
         "Ooops! Se pare ca nu am reusit sa gasim contul asociat acestui email"
       );
     }
-    foundUser.avatar = file.path;
+
+    const filePath = file.path.split('Animadopt\\')[1];
+
+    foundUser.avatar = filePath;
     await foundUser.save();
   }
 
@@ -295,6 +300,20 @@ class UserController {
     });
 
     return token;
+  }
+
+  async deleteUser(userId) {
+    console.log('userId: ', userId);
+    const user = await User.findOne({_id : userId});
+    if (!user) {
+      throw new ErrorsFactory(
+        "notfound",
+        "NotFound",
+        "User-ul nu a fost gasit"
+      );
+    }
+
+    await user.delete();
   }
 }
 

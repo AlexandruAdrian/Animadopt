@@ -95,7 +95,7 @@ const postRoutes = () => {
     }
   });
 
-  router.get("/user", isAuthorized, async (req, res, next) => {
+  router.get("/p/user", isAuthorized, async (req, res, next) => {
     try {
       const userId = req.user._id;
       const userPosts = await PostController.fetchUserPosts(userId);

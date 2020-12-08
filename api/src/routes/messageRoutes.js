@@ -80,7 +80,7 @@ const messageRoutes = () => {
     try {
       const userId = req.user._id;
       await MessageController.markAsSeen(userId);
-      console.log(userId);
+
       res.sendStatus(200);
     } catch (err) {
       next(err);

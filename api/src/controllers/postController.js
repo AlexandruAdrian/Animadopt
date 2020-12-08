@@ -13,9 +13,7 @@ class PostController {
       location: postData.location,
     });
 
-    const picturesPath = this.computePicturesPath(pictures, newPost._id);
-
-    newPost.pictures = picturesPath;
+    newPost.pictures = this.computePicturesPath(pictures, newPost._id);
     await newPost.save();
 
     return newPost;
@@ -60,7 +58,9 @@ class PostController {
   }
 
   async deletePost(postId) {
-    await Post.deleteOne({ _id: postId });
+    const post = await Post.findOne({ _id: postId});
+
+    await post.remove();
   }
 
   async getPosts(page, limit, category, location) {
@@ -118,9 +118,7 @@ class PostController {
   }
 
   async fetchUserPosts(userId) {
-    const posts = await Post.find({ postedBy: userId, isAdopted: false });
-
-    return posts;
+    return await Post.find({ postedBy: userId, isAdopted: false });
   }
 
   computePicturesPath(pictures, postId) {
@@ -139,7 +137,9 @@ class PostController {
       );
 
       const splitPath = picture.path.split("post-");
-      const newPath = `${splitPath[0]}${postId}-${splitFileName[1]}`;
+      const relativePath = splitPath[0].split('Animadopt\\')[1];
+      const newPath = `${relativePath}${postId}-${splitFileName[1]}`;
+
       picturesPath.push(newPath);
     });
 
