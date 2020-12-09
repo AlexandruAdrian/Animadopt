@@ -1,6 +1,7 @@
 const fs = require("fs");
-const Post = require("../models/postModel");
+const { difference } = require('lodash');
 const ErrorsFactory = require("../factories/errorsFactory");
+const { Post, POST_PICTURES_PATH } = require("../models/postModel");
 
 class PostController {
   async createPost(pictures, postData, userId) {
@@ -30,6 +31,17 @@ class PostController {
     }
 
     const picturesPath = this.computePicturesPath(pictures, foundPost._id);
+    const diff = difference(foundPost.pictures, picturesPath);
+
+    diff.forEach(picture => {
+      const filename = picture.split('posts\\')[1];
+
+      fs.unlink(`${POST_PICTURES_PATH}/${filename}`, err => {
+        if (err) {
+          throw new ErrorsFactory('notfound', 'NotFound', 'File not found.');
+        }
+      });
+    });
 
     const { title, description, breed, category, location } = postData;
     foundPost.title = title;

@@ -1,9 +1,9 @@
+const fs = require("fs");
 const bcrypt = require("bcrypt");
-const fs = require('fs');
 const jwt = require("jsonwebtoken");
+const { difference } = require('lodash');
 const { customAlphabet } = require("nanoid");
-const User = require("../models/userModel");
-const Post = require("../models/postModel");
+const { User, AVATAR_PICTURES_PATH } = require("../models/userModel");
 const ConfirmationCode = require("../models/confirmationCodeModel");
 const PassResetCode = require("../models/passResetCodeModel");
 const Mailer = require("../mailer/index");
@@ -273,6 +273,15 @@ class UserController {
 
     const filePath = file.path.split('Animadopt\\')[1];
 
+    if (!foundUser.avatar.includes('placeholder')) {
+      const filename = foundUser.avatar.split('avatars\\')[1];
+      fs.unlink(`${AVATAR_PICTURES_PATH}/${filename}`, err => {
+        if (err) {
+          throw new ErrorsFactory('notfound', 'NotFound', 'File not found.');
+        }
+      });
+    }
+
     foundUser.avatar = filePath;
     await foundUser.save();
   }
@@ -303,7 +312,6 @@ class UserController {
   }
 
   async deleteUser(userId) {
-    console.log('userId: ', userId);
     const user = await User.findOne({_id : userId});
     if (!user) {
       throw new ErrorsFactory(

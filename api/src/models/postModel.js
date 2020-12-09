@@ -1,8 +1,9 @@
-// System
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-// Utilities
-const { deletePostPictures } = require("../utilities/deletePictures");
+const path = require("path");
+const deletePictures  = require("../utilities/deletePictures");
+
+const POST_PICTURES_PATH = path.join(__dirname, "../../uploads/posts");
 
 const PostSchema = new Schema({
   postedBy: { type: mongoose.Types.ObjectId, required: true },
@@ -17,10 +18,14 @@ const PostSchema = new Schema({
 });
 
 PostSchema.pre('remove', function (next) {
-  deletePostPictures(this._id);
+  deletePictures(this._id, POST_PICTURES_PATH);
+
   next();
 });
 
 const Post = new mongoose.model("Post", PostSchema);
 
-module.exports = Post;
+module.exports = {
+  Post,
+  POST_PICTURES_PATH,
+};

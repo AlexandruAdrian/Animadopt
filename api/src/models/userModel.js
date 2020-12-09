@@ -1,8 +1,10 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const Post = require("./postModel");
-const { deleteUserPictures } = require("../utilities/deletePictures");
+const path = require("path");
+const { Post } = require("./postModel");
+const deletePictures = require("../utilities/deletePictures");
 const asyncForEach = require("../utilities/asyncForEach");
+const AVATAR_PICTURES_PATH = path.join(__dirname, "../../uploads/avatars");
 
 const Genders = Object.freeze({
   male: "M",
@@ -36,10 +38,13 @@ UserSchema.pre('remove', async function(next) {
   await asyncForEach(userPosts, async (post) => {
     await post.delete();
   });
-  deleteUserPictures(this._id);
+  deletePictures(this._id, AVATAR_PICTURES_PATH);
   next();
 });
 
 const User = new mongoose.model("User", UserSchema);
 
-module.exports = User;
+module.exports = {
+  User,
+  AVATAR_PICTURES_PATH,
+};
