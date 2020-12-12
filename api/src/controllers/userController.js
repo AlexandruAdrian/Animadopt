@@ -1,3 +1,4 @@
+require("dotenv").config();
 const fs = require("fs");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -9,11 +10,12 @@ const { AVATAR_PICTURES_PATH } = require("../models/user/constants");
 const { CONFIRMATION_CODE, PASSWORD_RESET_CODE } = require("../models/code/constants");
 const formatPhoneNumber = require("../utilities/formatPhoneNumber");
 const ErrorsFactory = require("../factories/errorsFactory");
-require("dotenv").config();
+const hash = require("../utilities/hash");
 
 const HOSTNAME = process.env.HOSTNAME;
 const PORT = process.env.PORT;
 const SECRET = process.env.SECRET;
+const SALT_ROUNDS = process.env.SALT_ROUNDS;
 
 const nanoid = customAlphabet("0123456789", 6);
 
@@ -32,11 +34,8 @@ class UserController {
     }
 
     const formattedPhone = formatPhoneNumber(phone);
+    const hashedPassword = await hash(password, parseInt(SALT_ROUNDS));
 
-    // Hash password
-    const saltRounds = 10;
-    const salt = await bcrypt.genSalt(saltRounds);
-    const hashedPassword = await bcrypt.hash(password, salt);
     // Create a new user and save it
     let newUser = new User({
       email,
@@ -50,7 +49,7 @@ class UserController {
     newUser = newUser.toJSON();
     delete newUser.password;
 
-    await this.requestConfirmationCode(newUser._id);
+    await this.requestConfirmationCode(newUser.email);
 
     return newUser;
   }
@@ -89,9 +88,9 @@ class UserController {
     return token;
   }
 
-  async requestConfirmationCode(userEmail) {
+  async requestConfirmationCode(email) {
     // Check user data
-    const foundUser = await User.findOne({ email: userEmail });
+    const foundUser = await User.findOne({ email });
     if (!foundUser) {
       throw new ErrorsFactory(
         "invalid",
@@ -115,22 +114,23 @@ class UserController {
     });
     await confirmationCode.save();
     // Send email for account activation with the generated code
-    const subject = `${confirmationCode.code} este codul de confirmare Animadopt`;
+    const subject = `Confirmare cont Animadopt`;
+    const confirmationLink = `http://${HOSTNAME}:${PORT}/users/password-reset/${confirmationCode._id}`;
     const text = `
     Salutare ${foundUser.firstName},
 
     Te-ai inscris recent pe Animadopt. Pentru a finaliza inregistrarea, te rugam sa efectuezi confirmarea contului.
-    Codul tau de confirmare este ${confirmationCode.code}.
+    Aceeseaza link-ul urmator pentru a confirma contul ${confirmationLink}
     `;
     await Mailer.send(foundUser.email, subject, text);
   }
 
-  async confirmAccount(code) {
-    if (!code) {
+  async confirmAccount(codeId) {
+    if (!codeId) {
       throw new ErrorsFactory("invalid", "InvalidError", "Codul este invalid");
     }
     // Check if the code exists and if it is valid
-    const foundCode = await this.checkCode(code, CONFIRMATION_CODE);
+    const foundCode = await this.checkCode(codeId, CONFIRMATION_CODE);
     // Check if the code expired
     const now = new Date().getTime();
     const expTime = 60 * 1440 * 1000; // 1 DAY
@@ -189,7 +189,7 @@ class UserController {
 
     await passResetCode.save();
     // Send email for password reset with the generated code
-    const passResetLink = `https://${HOSTNAME}:${PORT}/users/password-reset/${passResetCode._id}`;
+    const passResetLink = `http://${HOSTNAME}:${PORT}/users/password-reset/${passResetCode._id}`;
     const subject = "Resetare parola";
     const text = `
     Salutare ${foundUser.firstName},
@@ -200,10 +200,10 @@ class UserController {
     await Mailer.send(foundUser.email, subject, text);
   }
 
-  async checkCode(resetCode, type) {
+  async checkCode(codeId, type) {
     // Check the code
     const foundCode = await Code.findOne({
-      code: resetCode,
+      _id: codeId,
       type
     });
 
@@ -219,8 +219,7 @@ class UserController {
   }
 
   async resetPassword(newPassword, codeId) {
-    let foundCode = await Code.findOne({ _id: codeId });
-    foundCode = await this.checkCode(foundCode.code, PASSWORD_RESET_CODE);
+    const foundCode = await this.checkCode(codeId, PASSWORD_RESET_CODE);
     foundCode.isValid = false;
     foundCode.save();
 
@@ -234,10 +233,7 @@ class UserController {
       );
     }
 
-    // Hash new password
-    const saltRounds = 10;
-    const salt = await bcrypt.genSalt(saltRounds);
-    const hashedPassword = await bcrypt.hash(newPassword, salt);
+    const hashedPassword = await hash(newPassword, parseInt(SALT_ROUNDS));
     foundUser.password = hashedPassword;
     await foundUser.save();
   }
@@ -264,10 +260,8 @@ class UserController {
         "Parola veche este incorecta"
       );
     }
-    // Hash new password
-    const saltRounds = 10;
-    const salt = await bcrypt.genSalt(saltRounds);
-    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    const hashedPassword = await hash(newPassword, parseInt(SALT_ROUNDS));
     foundUser.password = hashedPassword;
     await foundUser.save();
   }

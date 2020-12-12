@@ -42,10 +42,10 @@ const userRoutes = () => {
     }
   });
 
-  router.put("/confirm/", async (req, res, next) => {
+  router.put("/confirm/:codeId", async (req, res, next) => {
     try {
-      const confirmationCode = req.body.code;
-      await UserController.confirmAccount(confirmationCode);
+      const confirmationCodeId = req.params.codeId;
+      await UserController.confirmAccount(confirmationCodeId);
 
       res.status(200).json({
         message: "Contul a fost confirmat cu succes",
