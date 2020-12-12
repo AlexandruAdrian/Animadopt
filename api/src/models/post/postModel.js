@@ -1,9 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const path = require("path");
-const deletePictures  = require("../utilities/deletePictures");
-
-const POST_PICTURES_PATH = path.join(__dirname, "../../uploads/posts");
+const deletePictures  = require("../../utilities/deletePictures");
+const { POST_PICTURES_PATH } = require("./constants");
 
 const PostSchema = new Schema({
   postedBy: { type: mongoose.Types.ObjectId, required: true },
@@ -19,7 +17,6 @@ const PostSchema = new Schema({
 
 PostSchema.pre('remove', function (next) {
   deletePictures(this._id, POST_PICTURES_PATH);
-
   next();
 });
 

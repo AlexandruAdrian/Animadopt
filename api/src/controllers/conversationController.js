@@ -1,4 +1,4 @@
-const Conversation = require("../models/conversationModel");
+const Conversation = require("../models/conversation/conversationModel");
 const ErrorsFactory = require("../factories/errorsFactory");
 
 class ConversationController {

@@ -1,25 +1,26 @@
 const fs = require("fs");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { difference } = require('lodash');
 const { customAlphabet } = require("nanoid");
-const { User, AVATAR_PICTURES_PATH } = require("../models/userModel");
-const ConfirmationCode = require("../models/confirmationCodeModel");
-const PassResetCode = require("../models/passResetCodeModel");
+const User = require("../models/user/userModel");
+const Code = require("../models/code/code");
 const Mailer = require("../mailer/index");
+const { AVATAR_PICTURES_PATH } = require("../models/user/constants");
+const { CONFIRMATION_CODE, PASSWORD_RESET_CODE } = require("../models/code/constants");
+const formatPhoneNumber = require("../utilities/formatPhoneNumber");
 const ErrorsFactory = require("../factories/errorsFactory");
 require("dotenv").config();
 
 const HOSTNAME = process.env.HOSTNAME;
 const PORT = process.env.PORT;
-const API_V = process.env.API_V;
 const SECRET = process.env.SECRET;
 
 const nanoid = customAlphabet("0123456789", 6);
 
 class UserController {
   async userRegister(userData) {
-    const { email, firstName, lastName, password, gender } = userData;
+    const { email, firstName, lastName, password, gender, phone } = userData;
+
     // Check if the user already exists
     const foundUser = await User.findOne({ email });
     if (foundUser) {
@@ -29,6 +30,9 @@ class UserController {
         "Un utilizator cu acest email exista deja"
       );
     }
+
+    const formattedPhone = formatPhoneNumber(phone);
+
     // Hash password
     const saltRounds = 10;
     const salt = await bcrypt.genSalt(saltRounds);
@@ -39,6 +43,7 @@ class UserController {
       firstName,
       lastName,
       password: hashedPassword,
+      phone: formattedPhone,
       gender: gender.toUpperCase(),
     });
     await newUser.save();
@@ -84,14 +89,14 @@ class UserController {
     return token;
   }
 
-  async requestConfirmationCode(userId) {
+  async requestConfirmationCode(userEmail) {
     // Check user data
-    const foundUser = await User.findOne({ _id: userId });
+    const foundUser = await User.findOne({ email: userEmail });
     if (!foundUser) {
       throw new ErrorsFactory(
         "invalid",
         "InvalidError",
-        "Pentru a putea solicita un cod de confirmare asigurati-va ca sunteti inregistrat"
+        "Pentru a putea solicita un cod de confirmare asigurati-va ca ati incerca sa va inregistrati inainte"
       );
     }
     // Check if the account has already been activated
@@ -103,40 +108,29 @@ class UserController {
       );
     }
     // Create an activation code and save it
-    const confirmationCode = new ConfirmationCode({
+    const confirmationCode = new Code({
       forUserId: foundUser._id,
+      type: CONFIRMATION_CODE,
       code: nanoid(),
     });
     await confirmationCode.save();
     // Send email for account activation with the generated code
-    const confirmationLink = `https://${HOSTNAME}:${PORT}/users/confirm`;
     const subject = `${confirmationCode.code} este codul de confirmare Animadopt`;
     const text = `
     Salutare ${foundUser.firstName},
 
-    Te-ai inscris recent pe Animadopt. Pentru a termina inregistrarea, te rugam sa efectuezi confirmarea contului.
-    Confirma-ti contul aici: ${confirmationLink}
-    Este posibil sa ti se ceara sa introduci acest cod de confirmare ${confirmationCode.code}.
+    Te-ai inscris recent pe Animadopt. Pentru a finaliza inregistrarea, te rugam sa efectuezi confirmarea contului.
+    Codul tau de confirmare este ${confirmationCode.code}.
     `;
     await Mailer.send(foundUser.email, subject, text);
   }
 
-  async confirmAccount(userId, code) {
+  async confirmAccount(code) {
     if (!code) {
       throw new ErrorsFactory("invalid", "InvalidError", "Codul este invalid");
     }
     // Check if the code exists and if it is valid
-    const foundCode = await ConfirmationCode.findOne({
-      forUserId: userId,
-      code: code.trim(),
-    });
-    if (!foundCode || !foundCode.isValid) {
-      throw new ErrorsFactory(
-        "notfound",
-        "NotFoundError",
-        "Codul este invalid"
-      );
-    }
+    const foundCode = await this.checkCode(code, CONFIRMATION_CODE);
     // Check if the code expired
     const now = new Date().getTime();
     const expTime = 60 * 1440 * 1000; // 1 DAY
@@ -186,39 +180,60 @@ class UserController {
       );
     }
     // Create a password reset code and save it
-    const passResetCode = new PassResetCode({
+    const generatedCode = nanoid();
+    const passResetCode = new Code({
       forUserId: foundUser.id,
+      type: PASSWORD_RESET_CODE,
+      code: generatedCode,
     });
+
     await passResetCode.save();
     // Send email for password reset with the generated code
-    const passResetLink = `https://${HOSTNAME}:${PORT}/api/${API_V}/users/reset?code=${passResetCode._id}`;
+    const passResetLink = `https://${HOSTNAME}:${PORT}/users/password-reset/${passResetCode._id}`;
     const subject = "Resetare parola";
-    const text = `Apasati pe urmatorul link pentru a reseta parola ${passResetLink}`;
+    const text = `
+    Salutare ${foundUser.firstName},
+    
+    Cineva a solicitat resetarea parolei, daca nu ai fost tu cel care a initiat aceasta operatiune, te rugam sa ne contactezi la adresa de e-mail roanimadopt@gmail.com.
+    Pentru a reseta parola te rugam sa accesezi urmatorul link ${passResetLink}`;
+
     await Mailer.send(foundUser.email, subject, text);
   }
 
-  async resetPassword(newPassword, resetCodeId) {
+  async checkCode(resetCode, type) {
     // Check the code
-    const foundCode = await PassResetCode.findOne({ _id: resetCodeId });
-    if (!foundCode) {
-      throw new ErrorsFactory(
-        "authorization",
-        "AuthorizationError",
-        "Nu sunteti autorizat pentru aceasta actiune"
-      );
-    }
-    if (!foundCode.isValid) {
+    const foundCode = await Code.findOne({
+      code: resetCode,
+      type
+    });
+
+    if (!foundCode || !foundCode.isValid) {
       throw new ErrorsFactory(
         "invalid",
         "InvalidError",
         "Codul nu mai este valid, va rugam incercati din nou"
       );
     }
-    // Check user data
+
+    return foundCode;
+  }
+
+  async resetPassword(newPassword, codeId) {
+    let foundCode = await Code.findOne({ _id: codeId });
+    foundCode = await this.checkCode(foundCode.code, PASSWORD_RESET_CODE);
+    foundCode.isValid = false;
+    foundCode.save();
+
+    // Check for user data
     const foundUser = await User.findOne({ _id: foundCode.forUserId });
     if (!foundUser) {
-      throw new ErrorsFactory("notfound", "NotFoundError", "Email invalid");
+      throw new ErrorsFactory(
+        "notfound",
+        "NotFoundError",
+        "Emailul este invalid"
+      );
     }
+
     // Hash new password
     const saltRounds = 10;
     const salt = await bcrypt.genSalt(saltRounds);
@@ -273,7 +288,7 @@ class UserController {
 
     const filePath = file.path.split('Animadopt\\')[1];
 
-    if (!foundUser.avatar.includes('placeholder')) {
+    if (!foundUser.avatar.includes('placeholders')) {
       const filename = foundUser.avatar.split('avatars\\')[1];
       fs.unlink(`${AVATAR_PICTURES_PATH}/${filename}`, err => {
         if (err) {

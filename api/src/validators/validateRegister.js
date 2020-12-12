@@ -33,6 +33,20 @@ const validateRegister = () => {
 
         return true;
       }),
+    body("phone")
+      .escape()
+      .trim()
+      .custom(value => {
+        const regexp = new RegExp(/^(\+4|)?(07[0-8]{1}[0-9]{1}|02[0-9]{2}|03[0-9]{2}){1}?(\s|)?([0-9]{3}(\s|)){2}$/igm);
+        const isValid = regexp.test(value);
+        if (!isValid) {
+          throw new Error(
+            "Numarul de telefon este invalid"
+          );
+        }
+
+        return true;
+      })
   ];
 };
 

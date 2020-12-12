@@ -1,4 +1,4 @@
-const Counties = require("../models/countiesModel");
+const Counties = require("../models/counties/countiesModel");
 const { counties: countiesData } = require("./data");
 
 function seedCounties() {

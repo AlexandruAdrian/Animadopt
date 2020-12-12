@@ -1,10 +1,13 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const path = require("path");
-const { Post } = require("./postModel");
-const deletePictures = require("../utilities/deletePictures");
-const asyncForEach = require("../utilities/asyncForEach");
-const AVATAR_PICTURES_PATH = path.join(__dirname, "../../uploads/avatars");
+const { Post } = require("../post/postModel");
+const deletePictures = require("../../utilities/deletePictures");
+const asyncForEach = require("../../utilities/asyncForEach");
+const {
+  AVATAR_MALE_PLACEHOLDER,
+  AVATAR_FEMALE_PLACEHOLDER,
+  AVATAR_PICTURES_PATH,
+} = require('./constants');
 
 const Genders = Object.freeze({
   male: "M",
@@ -16,6 +19,7 @@ const UserSchema = new Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   password: { type: String, required: true },
+  phone: { type: String },
   gender: { type: String, enum: Object.values(Genders), required: true },
   isActive: { type: Boolean, default: false },
   joinedDate: { type: Date, default: Date.now },
@@ -23,9 +27,9 @@ const UserSchema = new Schema({
     type: String,
     default: function () {
       if (this.gender === Genders.male) {
-        return "../../uploads/male-placeholder.png";
+        return AVATAR_MALE_PLACEHOLDER;
       } else {
-        return "../../uploads/female-placeholder.png";
+        return AVATAR_FEMALE_PLACEHOLDER;
       }
     },
   },
@@ -44,7 +48,4 @@ UserSchema.pre('remove', async function(next) {
 
 const User = new mongoose.model("User", UserSchema);
 
-module.exports = {
-  User,
-  AVATAR_PICTURES_PATH,
-};
+module.exports = User;

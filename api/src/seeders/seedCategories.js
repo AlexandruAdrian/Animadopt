@@ -1,4 +1,4 @@
-const AnimalCategories = require("../models/animalCategoriesModel");
+const AnimalCategories = require("../models/animalCategories/animalCategoriesModel");
 const { animals } = require("./data");
 
 function seedAnimalCategories() {

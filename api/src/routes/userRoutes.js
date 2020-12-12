@@ -1,14 +1,13 @@
 const express = require("express");
 const UserController = require("../controllers/userController");
 const isAuthorized = require("../middlewares/authorization");
-const { query } = require("express-validator");
 const upload = require("../middlewares/multer");
 const validate = require("../validators/index");
 const validateRegister = require("../validators/validateRegister");
 const validateLogin = require("../validators/validateLogin");
 const validatePassResetRequest = require("../validators/validatePassResetRequest");
-const validatePassReset = require("../validators/validatePassReset");
 const validatePassChange = require("../validators/validatePassChange");
+const validatePassChangeReset = require("../validators/validatePassChangeReset");
 
 const userRoutes = () => {
   const router = express.Router();
@@ -43,11 +42,10 @@ const userRoutes = () => {
     }
   });
 
-  router.put("/confirm/:id", async (req, res, next) => {
+  router.put("/confirm/", async (req, res, next) => {
     try {
-      const userId = req.params.id;
       const confirmationCode = req.body.code;
-      await UserController.confirmAccount(userId, confirmationCode);
+      await UserController.confirmAccount(confirmationCode);
 
       res.status(200).json({
         message: "Contul a fost confirmat cu succes",
@@ -57,10 +55,10 @@ const userRoutes = () => {
     }
   });
 
-  router.get("/request-confirmation/:id", async (req, res, next) => {
+  router.post("/request-confirmation/", async (req, res, next) => {
     try {
-      const userId = req.params.id;
-      await UserController.requestConfirmationCode(userId);
+      const userEmail = req.body.email;
+      await UserController.requestConfirmationCode(userEmail);
 
       res.status(200).json({
         message:
@@ -89,33 +87,22 @@ const userRoutes = () => {
     }
   );
 
-  router.get("/reset", query("code").escape(), async (req, res, next) => {
+  router.post(
+    "/password-reset/:codeId",
+    validate(validatePassChangeReset()),
+    async (req, res, next) => {
     try {
-      const code = req.query.code;
-      res.status(307).redirect(`/users/reset?code=${code}`);
+      const { newPassword } = req.body;
+      const codeId = req.params.codeId;
+      await UserController.resetPassword(newPassword, codeId);
+
+      res.status(200).json({
+        message: "Parola a fost actualizata cu succes"
+      })
     } catch (err) {
       next(err);
     }
-  });
-
-  router.put(
-    "/reset",
-    query("code").escape(),
-    validate(validatePassReset()),
-    async (req, res, next) => {
-      try {
-        const code = req.query.code;
-        const newPassword = req.body.newPassword;
-        await UserController.resetPassword(newPassword, code);
-
-        res.status(200).json({
-          message: "Parola a fost actualizata cu succes",
-        });
-      } catch (err) {
-        next(err);
-      }
-    }
-  );
+  })
 
   router.put(
     "/change-password",

@@ -1,7 +1,7 @@
 const fs = require("fs");
 const { difference } = require('lodash');
 const ErrorsFactory = require("../factories/errorsFactory");
-const { Post, POST_PICTURES_PATH } = require("../models/postModel");
+const { Post, POST_PICTURES_PATH } = require("../models/post/postModel");
 
 class PostController {
   async createPost(pictures, postData, userId) {
