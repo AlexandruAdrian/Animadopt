@@ -1,7 +1,12 @@
+// System
 const fs = require("fs");
+// Models
+const Post = require("../models/post/postModel");
+// Constants
+const { POST_PICTURES_PATH, STATUS_PENDING, STATUS_APPROVED } = require("../models/post/constants");
+// Utilities
 const { difference } = require('lodash');
 const ErrorsFactory = require("../factories/errorsFactory");
-const { Post, POST_PICTURES_PATH } = require("../models/post/postModel");
 
 class PostController {
   async createPost(pictures, postData, userId) {
@@ -12,6 +17,7 @@ class PostController {
       breed: postData.breed,
       category: postData.category,
       location: postData.location,
+      status: STATUS_PENDING,
     });
 
     newPost.pictures = this.computePicturesPath(pictures, newPost._id);
@@ -89,7 +95,10 @@ class PostController {
 
     const results = {};
 
-    const query = { isAdopted: false };
+    const query = {
+      isAdopted: false,
+      status: STATUS_APPROVED,
+    };
     if (category) {
       query.category = { $in: category };
     }

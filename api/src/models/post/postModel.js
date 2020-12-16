@@ -11,6 +11,7 @@ const PostSchema = new Schema({
   postedAt: { type: Date, default: Date.now },
   category: { type: String, required: true },
   location: { type: String, required: true },
+  status: { type: Number, required: true},
   isAdopted: { type: Boolean, default: false },
   pictures: { type: [String], default: [] },
 });
@@ -22,7 +23,4 @@ PostSchema.pre('remove', function (next) {
 
 const Post = new mongoose.model("Post", PostSchema);
 
-module.exports = {
-  Post,
-  POST_PICTURES_PATH,
-};
+module.exports = Post;
