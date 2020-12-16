@@ -1,23 +1,27 @@
+// System
 require("dotenv").config();
 const fs = require("fs");
-const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { customAlphabet } = require("nanoid");
+const bcrypt = require("bcrypt");
+// Models
 const User = require("../models/user/userModel");
 const Code = require("../models/code/code");
+const Role = require("../models/role/roleModel");
+// Services
 const Mailer = require("../mailer/index");
+// Constants
 const { AVATAR_PICTURES_PATH } = require("../models/user/constants");
 const { CONFIRMATION_CODE, PASSWORD_RESET_CODE } = require("../models/code/constants");
-const formatPhoneNumber = require("../utilities/formatPhoneNumber");
+const { USER_ROLE_USER } = require("../models/role/constants");
+// Utilities
 const ErrorsFactory = require("../factories/errorsFactory");
+const formatPhoneNumber = require("../utilities/formatPhoneNumber");
 const hash = require("../utilities/hash");
 
 const HOSTNAME = process.env.HOSTNAME;
 const PORT = process.env.PORT;
 const SECRET = process.env.SECRET;
 const SALT_ROUNDS = process.env.SALT_ROUNDS;
-
-const nanoid = customAlphabet("0123456789", 6);
 
 class UserController {
   async userRegister(userData) {
@@ -34,8 +38,8 @@ class UserController {
     }
 
     const formattedPhone = formatPhoneNumber(phone);
-    const hashedPassword = await hash(password, parseInt(SALT_ROUNDS));
-
+    const hashedPassword = await hash(password, SALT_ROUNDS);
+    const role = await Role.findOne({type: USER_ROLE_USER});
     // Create a new user and save it
     let newUser = new User({
       email,
@@ -44,6 +48,7 @@ class UserController {
       password: hashedPassword,
       phone: formattedPhone,
       gender: gender.toUpperCase(),
+      role_id: role._id,
     });
     await newUser.save();
     newUser = newUser.toJSON();
@@ -82,10 +87,8 @@ class UserController {
         "Email-ul sau parola sunt incorecte"
       );
     }
-    // Sign token
-    const token = this.signToken(foundUser._id);
 
-    return token;
+    return this.signToken(foundUser._id);
   }
 
   async requestConfirmationCode(email) {
@@ -110,7 +113,6 @@ class UserController {
     const confirmationCode = new Code({
       forUserId: foundUser._id,
       type: CONFIRMATION_CODE,
-      code: nanoid(),
     });
     await confirmationCode.save();
     // Send email for account activation with the generated code
@@ -180,11 +182,9 @@ class UserController {
       );
     }
     // Create a password reset code and save it
-    const generatedCode = nanoid();
     const passResetCode = new Code({
       forUserId: foundUser.id,
       type: PASSWORD_RESET_CODE,
-      code: generatedCode,
     });
 
     await passResetCode.save();
@@ -233,8 +233,7 @@ class UserController {
       );
     }
 
-    const hashedPassword = await hash(newPassword, parseInt(SALT_ROUNDS));
-    foundUser.password = hashedPassword;
+    foundUser.password = await hash(newPassword, SALT_ROUNDS);
     await foundUser.save();
   }
 
@@ -261,8 +260,7 @@ class UserController {
       );
     }
 
-    const hashedPassword = await hash(newPassword, parseInt(SALT_ROUNDS));
-    foundUser.password = hashedPassword;
+    foundUser.password = await hash(newPassword, SALT_ROUNDS);
     await foundUser.save();
   }
 
@@ -313,11 +311,10 @@ class UserController {
   }
 
   signToken(userId) {
-    const token = jwt.sign({ _id: userId }, SECRET, {
+
+    return jwt.sign({ _id: userId }, SECRET, {
       expiresIn: "28d",
     });
-
-    return token;
   }
 
   async deleteUser(userId) {

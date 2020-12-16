@@ -1,11 +1,13 @@
-const seedAnimalCategories = require('./seedCategories');
-const seedCounties = require('./seedCounties');
+const seedAnimalCategories = require('./categories/seedCategories');
+const seedCounties = require('./counties/seedCounties');
+const seedUsersAndRoles = require('./users/seedUsers');
 
 function initSeeding() {
-    console.log('Initializing seeders...');
+    console.log('* Initializing seeders');
     seedAnimalCategories();
     seedCounties();
-    console.log('Seeding initialized');
+    seedUsersAndRoles();
+    console.log('* Seeding initialized \n');
 }
 
 module.exports = initSeeding;

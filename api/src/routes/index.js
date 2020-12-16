@@ -7,7 +7,7 @@ const messageRoutes = require("./messageRoutes");
 const API_V = process.env.API_V;
 
 const initRoutes = (app) => {
-  console.log("Initializing routes...");
+  console.log("* Initializing routes");
   const api = `/api/${API_V}`;
 
   app.use(`${api}/users`, userRoutes);
@@ -15,7 +15,7 @@ const initRoutes = (app) => {
   app.use(`${api}/conversations`, conversationRoutes);
   app.use(`${api}/messages`, messageRoutes);
 
-  console.log("Routes initialized");
+  console.log("* Routes initialized \n");
 };
 
 module.exports = initRoutes;

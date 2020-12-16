@@ -2,10 +2,10 @@ const removeCodeService = require("./removeCodeService");
 const removeInactiveUsersService = require("./removeInactiveUsersService");
 
 function initServices() {
-  console.log('Initializing cron jobs...');
+  console.log('* Initializing services');
   removeCodeService();
   removeInactiveUsersService();
-  console.log('Cron jobs initialized');
+  console.log('* Services initialized \n');
 }
 
 module.exports = initServices;
