@@ -2,6 +2,7 @@
 const fs = require("fs");
 // Models
 const Post = require("../models/post/postModel");
+const AnimalCategories = require("../models/animalCategories/animalCategoriesModel");
 // Constants
 const { POST_PICTURES_PATH, STATUS_PENDING, STATUS_APPROVED } = require("../models/post/constants");
 // Utilities
@@ -22,6 +23,9 @@ class PostController {
 
     newPost.pictures = this.computePicturesPath(pictures, newPost._id);
     await newPost.save();
+    const category = await AnimalCategories.findOne({ category: newPost.category });
+    category.numberOfPosts += 1;
+    await category.save();
 
     return newPost;
   }
@@ -77,7 +81,9 @@ class PostController {
 
   async deletePost(postId) {
     const post = await Post.findOne({ _id: postId});
-
+    const category = await AnimalCategories.findOne({ category: post.category });
+    category.numberOfPosts -= 1;
+    await category.save();
     await post.remove();
   }
 
@@ -136,6 +142,10 @@ class PostController {
 
     foundPost.isAdopted = true;
     await foundPost.save();
+  }
+
+  async getTotalPostsLength() {
+    return await Post.countDocuments({});
   }
 
   async fetchUserPosts(userId) {

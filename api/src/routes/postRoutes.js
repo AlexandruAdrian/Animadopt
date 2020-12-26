@@ -1,7 +1,11 @@
+// System
 const express = require("express");
+// Controllers
 const PostController = require("../controllers/postController");
-const upload = require("../middlewares/multer");
+// Middleware
 const isAuthorized = require("../middlewares/authorization");
+const upload = require("../middlewares/multer");
+// Validators
 const { query } = require("express-validator");
 const validate = require("../validators/index");
 const validatePost = require("../validators/validatePost");
@@ -62,7 +66,10 @@ const postRoutes = () => {
     }
   );
 
-  router.get("/:postId", isAuthorized, async (req, res, next) => {
+  router.get(
+    "/:postId",
+    isAuthorized,
+    async (req, res, next) => {
     try {
       const post = await PostController.getPostById(req.params.postId);
 
@@ -132,6 +139,22 @@ const postRoutes = () => {
         );
 
         res.status(200).json(results);
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
+
+  router.get(
+    "/poststotal",
+    isAuthorized,
+    async (req, res, next) => {
+      try {
+        const totalPosts = await PostController.getTotalPostsLength();
+
+        res.status(200).json({
+          totalPosts,
+        });
       } catch (err) {
         next(err);
       }

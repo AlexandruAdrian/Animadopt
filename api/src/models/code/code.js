@@ -9,9 +9,6 @@ const CodeSchema = new Schema({
   issuedAt: { type: Date, default: Date.now },
 });
 
-const Code = new mongoose.model(
-  "Code",
-  CodeSchema
-);
+const Code = new mongoose.model("Code", CodeSchema);
 
 module.exports = Code;

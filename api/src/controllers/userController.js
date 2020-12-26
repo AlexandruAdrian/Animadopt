@@ -7,6 +7,7 @@ const bcrypt = require("bcrypt");
 const User = require("../models/user/userModel");
 const Code = require("../models/code/code");
 const Role = require("../models/role/roleModel");
+const Ban = require("../models/ban/banModel");
 // Services
 const Mailer = require("../mailer/index");
 // Constants
@@ -78,6 +79,21 @@ class UserController {
         "Pentru autentificare este necesara confirmarea contului"
       );
     }
+
+    // Check if the user is banned
+    const ban = await Ban.findOne({ forUserId: foundUser._id });
+
+    if (ban && ban.isValid) {
+        if (new Date() < new Date(ban.endTime)) {
+          return {
+            isBanned: true,
+            reason: ban.reason,
+            endTime: ban.endTime,
+          }
+        }
+    }
+
+
     // Check password
     const passwordMatches = await bcrypt.compare(password, foundUser.password);
     if (!passwordMatches) {
@@ -88,7 +104,9 @@ class UserController {
       );
     }
 
-    return this.signToken(foundUser._id);
+    return {
+      token: this.signToken(foundUser._id),
+    };
   }
 
   async requestConfirmationCode(email) {

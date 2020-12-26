@@ -20,7 +20,6 @@ function seedUsersAndRoles() {
     }
   })
 
-
    User.countDocuments({}, (err, count) => {
     try {
       if (count <= 0) {
