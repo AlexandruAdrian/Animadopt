@@ -145,10 +145,10 @@ class AdminController {
     const { key, category } = data;
 
     // Check if category has already been created
-    const foundCategory = await AnimalCategories.find({ key, category });
+    const foundCategory = await AnimalCategories.findOne({ key, category });
 
     if (foundCategory) {
-      throw new Error(
+      throw new ErrorsFactory(
         "conflict",
         "ConflictError",
         "Categoria exista deja"
@@ -169,6 +169,14 @@ class AdminController {
         "notfound",
         "NotFoundError",
         "Categoria a fost deja eliminata"
+      )
+    }
+
+    if (foundCategory.isDefault) {
+      throw new ErrorsFactory(
+        "invalid",
+        "InvalidError",
+        "Categoriile implicite nu se pot sterge"
       )
     }
 
@@ -194,12 +202,21 @@ class AdminController {
       )
     }
 
+    if (foundCategory.isDefault) {
+      throw new ErrorsFactory(
+        "invalid",
+        "InvalidError",
+        "Categoriile implicite nu se pot modifica"
+      );
+    }
+
+    const posts = await Post.find({ category: foundCategory.category});
+
     const { key, category } = data;
     foundCategory.key = key;
     foundCategory.category = category;
     await foundCategory.save();
 
-    const posts = await Post.find({ category: foundCategory.category });
     await asyncForEach(posts, async (post) => {
       post.category = foundCategory.category;
       await post.save();

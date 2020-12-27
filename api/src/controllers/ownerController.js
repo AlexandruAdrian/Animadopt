@@ -1,12 +1,12 @@
 // Models
 const User = require("../models/user/userModel");
+const Role = require("../models/role/roleModel");
 // Constants
 const { USER_ROLE_USER, USER_ROLE_ADMIN, USER_ROLE_OWNER } = require("../models/role/constants");
 // Utilities
 const ErrorsFactory = require("../factories/errorsFactory");
 
 class OwnerController {
-
   async promoteUser(userId) {
     const foundUser = await User.findOne({ _id: userId });
     if (!foundUser) {
@@ -28,11 +28,11 @@ class OwnerController {
 
     switch (userRole.type) {
       case USER_ROLE_USER:
-        const adminRole = await Role.find({ type: USER_ROLE_ADMIN });
+        const adminRole = await Role.findOne({ type: USER_ROLE_ADMIN });
         foundUser.role_id = adminRole._id;
         break;
       case USER_ROLE_ADMIN:
-        const ownerRole = await Role.find({ type: USER_ROLE_OWNER });
+        const ownerRole = await Role.findOne({ type: USER_ROLE_OWNER });
         foundUser.role_id = ownerRole._id;
         break;
       case USER_ROLE_OWNER:
@@ -44,7 +44,7 @@ class OwnerController {
     return foundUser;
   }
 
-  async demoteUser() {
+  async demoteUser(userId) {
     const foundUser = await User.findOne({ _id: userId });
     if (!foundUser) {
       throw new ErrorsFactory(
@@ -55,7 +55,7 @@ class OwnerController {
     }
 
     const userRole = await Role.findOne({ _id: foundUser.role_id });
-    if (!foundRole) {
+    if (!userRole) {
       throw new ErrorsFactory(
         'notfound',
         'NotFound',
@@ -65,11 +65,11 @@ class OwnerController {
 
     switch (userRole.type) {
       case USER_ROLE_OWNER:
-        const adminRole = await Role.find({ type: USER_ROLE_ADMIN });
+        const adminRole = await Role.findOne({ type: USER_ROLE_ADMIN });
         foundUser.role_id = adminRole._id;
         break;
       case USER_ROLE_ADMIN:
-        const userRole = await Role.find({ type: USER_ROLE_USER });
+        const userRole = await Role.findOne({ type: USER_ROLE_USER });
         foundUser.role_id = userRole._id;
         break;
       case USER_ROLE_USER:

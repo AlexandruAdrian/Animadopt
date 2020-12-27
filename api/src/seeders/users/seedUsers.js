@@ -40,7 +40,7 @@ function seedUsersAndRoles() {
     }
   });
 
-  console.log('** Created fake user');
+  console.log('** Created fake users');
 }
 
 module.exports = seedUsersAndRoles;
