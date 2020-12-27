@@ -1,6 +1,7 @@
 // Models
 const User = require("../models/user/userModel");
 const Role = require("../models/role/roleModel");
+const Notification = require("../models/notification/notificationModel");
 // Constants
 const { USER_ROLE_USER, USER_ROLE_ADMIN, USER_ROLE_OWNER } = require("../models/role/constants");
 // Utilities
@@ -26,21 +27,31 @@ class OwnerController {
       );
     }
 
+    let notification;
     switch (userRole.type) {
       case USER_ROLE_USER:
         const adminRole = await Role.findOne({ type: USER_ROLE_ADMIN });
+        notification = new Notification({
+          forUserId: foundUser._id,
+          message: "Ati fost promovat la rolul de Admin, va rugam sa va relogati"
+        });
         foundUser.role_id = adminRole._id;
         break;
       case USER_ROLE_ADMIN:
         const ownerRole = await Role.findOne({ type: USER_ROLE_OWNER });
         foundUser.role_id = ownerRole._id;
+        notification = new Notification({
+          forUserId: foundUser._id,
+          message: "Ati fost promovat la rolul de Owner, va rugam sa va relogati"
+        });
         break;
       case USER_ROLE_OWNER:
       default:
         break;
     }
 
-    foundUser.save();
+    await foundUser.save();
+    await notification.save();
     return foundUser;
   }
 
@@ -63,21 +74,31 @@ class OwnerController {
       );
     }
 
+    let notification;
     switch (userRole.type) {
       case USER_ROLE_OWNER:
         const adminRole = await Role.findOne({ type: USER_ROLE_ADMIN });
         foundUser.role_id = adminRole._id;
+        notification = new Notification({
+          forUserId: foundUser._id,
+          message: "Ati fost retrogradat la rolul de admin, va rugam sa va relogati"
+        });
         break;
       case USER_ROLE_ADMIN:
         const userRole = await Role.findOne({ type: USER_ROLE_USER });
         foundUser.role_id = userRole._id;
+        notification = new Notification({
+          forUserId: foundUser._id,
+          message: "Ati fost retrogradat la rolul de user, va rugam sa va relogati"
+        });
         break;
       case USER_ROLE_USER:
       default:
         break;
     }
 
-    foundUser.save();
+    await foundUser.save();
+    await notification.save();
     return foundUser;
   }
 }

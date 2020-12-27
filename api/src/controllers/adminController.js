@@ -4,6 +4,7 @@ const User = require("../models/user/userModel");
 const Role = require("../models/role/roleModel");
 const Ban = require("../models/ban/banModel");
 const AnimalCategories = require("../models/animalCategories/animalCategoriesModel");
+const Notification = require("../models/notification/notificationModel");
 // Constants
 const { USER_ROLE_USER } = require("../models/role/constants");
 const { STATUS_APPROVED, STATUS_PENDING, STATUS_REJECTED } = require("../models/post/constants");
@@ -12,7 +13,7 @@ const ErrorsFactory = require("../factories/errorsFactory");
 const asyncForEach = require("../utilities/asyncForEach");
 
 class AdminController {
-  async updatePostStatus(postId, status) {
+  async updatePostStatus(postId, status, message) {
     const foundPost = await Post.findOne({ _id: postId });
 
     if (!foundPost) {
@@ -32,16 +33,37 @@ class AdminController {
       );
     }
 
+    let notification;
+    if (status === STATUS_APPROVED) {
+      notification = new Notification({
+        forUserId: foundPost.postedBy,
+        itemId: foundPost._id,
+        message: "Postarea a fost aprobata",
+      });
+     await notification.save();
+    } else if (status === STATUS_REJECTED) {
+      notification = new Notification({
+        forUserId: foundPost.postedBy,
+        itemId: foundPost._id,
+        message,
+      });
+      await notification.save();
+    }
+
     foundPost.status = status;
-    foundPost.save();
+    await foundPost.save();
 
     return foundPost;
   }
 
-  async deletePost(postId) {
+  async deletePost(postId, message) {
     const post = await Post.findOne({ _id: postId });
-    // TODO: add reasons for deletion and create new notification
-    // TODO: create some entity e.g. Action, Notification etc..
+    const notification = new Notification({
+      forUserId: post.postedBy,
+      itemId: post._id,
+      message,
+    });
+    await notification.save();
     await post.remove();
   }
 

@@ -6,6 +6,7 @@ const postRoutes = require("./postRoutes");
 const categoryRoutes = require("./categoryRoutes");
 const adminRoutes = require("./adminRoutes");
 const ownerRoutes = require("./ownerRoutes");
+const notificationRoutes = require("./notificationRoutes");
 
 const API_V = process.env.API_V;
 
@@ -18,6 +19,7 @@ const initRoutes = (app) => {
   app.use(`${api}/categories`, categoryRoutes);
   app.use(`${api}/admin`, adminRoutes);
   app.use(`${api}/owner`, ownerRoutes);
+  app.use(`${api}/notifications`, notificationRoutes);
 
   console.log("* Routes initialized \n");
 };
