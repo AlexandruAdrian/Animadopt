@@ -2,8 +2,9 @@
 const express = require("express");
 // Controllers
 const PostController = require("../controllers/postController");
-// Middleware
+// Middlewares
 const isAuthorized = require("../middlewares/authorization");
+const isBanned = require("../middlewares/isBanned");
 const upload = require("../middlewares/multer");
 // Validators
 const { query } = require("express-validator");
@@ -16,6 +17,7 @@ const postRoutes = () => {
   router.post(
     "/",
     isAuthorized,
+    isBanned,
     upload.array("pictures", 5),
     validate(validatePost()),
     async (req, res, next) => {
@@ -43,6 +45,7 @@ const postRoutes = () => {
   router.put(
     "/:postId",
     isAuthorized,
+    isBanned,
     upload.array("pictures", 5),
     validate(validatePost()),
     async (req, res, next) => {
@@ -69,6 +72,7 @@ const postRoutes = () => {
   router.get(
     "/:postId",
     isAuthorized,
+    isBanned,
     async (req, res, next) => {
     try {
       const post = await PostController.getPostById(req.params.postId);
@@ -79,7 +83,11 @@ const postRoutes = () => {
     }
   });
 
-  router.delete("/:postId", isAuthorized, async (req, res, next) => {
+  router.delete(
+    "/:postId",
+    isAuthorized,
+    isBanned,
+    async (req, res, next) => {
     try {
       await PostController.deletePost(req.params.postId);
 
@@ -89,7 +97,11 @@ const postRoutes = () => {
     }
   });
 
-  router.put("/adopted/:postId", isAuthorized, async (req, res, next) => {
+  router.put(
+    "/adopted/:postId",
+    isAuthorized,
+    isBanned,
+    async (req, res, next) => {
     try {
       const postId = req.params.postId;
       await PostController.markAsAdopted(postId);
@@ -102,7 +114,11 @@ const postRoutes = () => {
     }
   });
 
-  router.get("/p/user", isAuthorized, async (req, res, next) => {
+  router.get(
+    "/p/user",
+    isAuthorized,
+    isBanned,
+    async (req, res, next) => {
     try {
       const userId = req.user._id;
       const userPosts = await PostController.fetchUserPosts(userId);
@@ -116,6 +132,7 @@ const postRoutes = () => {
   router.get(
     "/",
     isAuthorized,
+    isBanned,
     query("page").escape(),
     query("category").escape(),
     query("location").escape(),
@@ -148,6 +165,7 @@ const postRoutes = () => {
   router.get(
     "/poststotal",
     isAuthorized,
+    isBanned,
     async (req, res, next) => {
       try {
         const totalPosts = await PostController.getTotalPostsLength();

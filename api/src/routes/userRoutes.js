@@ -1,7 +1,11 @@
+// System
 const express = require("express");
+// Controllers
 const UserController = require("../controllers/userController");
+// Middlewares
 const isAuthorized = require("../middlewares/authorization");
 const upload = require("../middlewares/multer");
+// Validators
 const validate = require("../validators/index");
 const validateRegister = require("../validators/validateRegister");
 const validateLogin = require("../validators/validateLogin");
