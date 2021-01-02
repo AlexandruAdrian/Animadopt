@@ -1,0 +1,30 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100vh;
+  width: 100%;
+}
+
+body {
+  font-family: 'Rubik', sans-serif;
+  background-color: #f4ebe8;
+}
+
+body,
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+#root {
+  display: flex;
+}

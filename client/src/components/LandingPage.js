@@ -1,19 +1,39 @@
+// System
 import React from 'react';
-import auth from '../utils/auth';
+// Material UI
+import { makeStyles } from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+// Styles
+import styles from '../styles/LandingPageStyles';
 
-const LandingPage = (props) => {
+const LandingPage = () => {
+  const classes = makeStyles(styles)();
+
   return (
-    <div>
-      <h1>Landing page</h1>
-      <button
-        onClick={() => {
-          auth.login(() => {
-            props.history.push('/app');
-          });
-        }}
-      >
-        Login
-      </button>
+    <div className={classes.container}>
+      <Box className={classes.logoPets}>
+        <div className={classes.pets}></div>
+        <div className={classes.logo}></div>
+      </Box>
+
+      <Box className={classes.promoButtons}>
+        <Box className={classes.promo}>
+          <Typography variant="h1">
+            Un prieten nou in casa ta va fi un membru nou in viata ta
+          </Typography>
+        </Box>
+
+        <Box className={classes.login}>
+          <div className={classes.logoRight}></div>
+
+          <Box className={classes.buttons}>
+            <Button>Autentificare</Button>
+            <Button>Inregistrare</Button>
+          </Box>
+        </Box>
+      </Box>
     </div>
   );
 };
