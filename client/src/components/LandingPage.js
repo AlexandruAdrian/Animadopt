@@ -1,9 +1,11 @@
 // System
 import React from 'react';
+// Components
+import { Link } from 'react-router-dom';
+import CustomButton from './CustomButton';
 // Material UI
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 // Styles
 import styles from '../styles/LandingPageStyles';
@@ -29,8 +31,12 @@ const LandingPage = () => {
           <div className={classes.logoRight}></div>
 
           <Box className={classes.buttons}>
-            <Button>Autentificare</Button>
-            <Button>Inregistrare</Button>
+            <Link to="/login">
+              <CustomButton text="Autentificare" primary />
+            </Link>
+            <Link to="/register">
+              <CustomButton text="Inregistrare" />
+            </Link>
           </Box>
         </Box>
       </Box>

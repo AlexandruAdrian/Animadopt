@@ -88,9 +88,9 @@ const styles = {
       alignItems: 'center',
       justifyContent: 'center',
       width: '350px',
-      borderRadius: '15px',
+      borderRadius: '5px',
       padding: '10px 5px 30px 5px',
-      backgroundColor: colors.isabelline,
+      backgroundColor: colors.white,
       marginTop: '35px',
     },
   },
@@ -102,18 +102,11 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: '20px',
-    '& > button': {
-      textTransform: 'capitalize',
-      width: '200px',
+    '& > a': {
+      textDecoration: 'none',
+    },
+    '& > a > button': {
       marginLeft: '10px',
-    },
-    '& > button:first-child': {
-      backgroundColor: colors.pacificBlue,
-      color: colors.isabelline,
-    },
-    '& > button:last-child': {
-      border: `1px solid ${colors.pacificBlue}`,
-      color: colors.pacificBlue,
     },
   },
 };

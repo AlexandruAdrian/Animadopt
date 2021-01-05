@@ -6,9 +6,6 @@ const theme = createMuiTheme({
     primary: {
       main: colors.pacificBlue,
     },
-    secondary: {
-      main: colors.orange,
-    },
   },
   typography: {
     fontFamily: `"Rubik", sans-serif`,
