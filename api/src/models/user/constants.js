@@ -1,8 +1,11 @@
 const path = require("path");
 
-const AVATAR_MALE_PLACEHOLDER = "resources/uploads/placeholders/male-placeholder.jpg"
-const AVATAR_FEMALE_PLACEHOLDER = "resources/uploads/placeholders/female-placeholder.jpg"
-const AVATAR_PICTURES_PATH = path.join(__dirname, "../../../resources/uploads/avatars");
+const AVATAR_MALE_PLACEHOLDER = "placeholders/male-placeholder.png";
+const AVATAR_FEMALE_PLACEHOLDER = "placeholders/female-placeholder.png";
+const AVATAR_PICTURES_PATH = path.join(
+  __dirname,
+  "../../public/uploads/avatars"
+);
 
 module.exports = {
   AVATAR_MALE_PLACEHOLDER,

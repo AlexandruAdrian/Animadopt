@@ -1,13 +1,13 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const { Post } = require("../post/postModel");
-const deletePictures = require("../../utilities/deletePictures");
+const { deletePictures } = require("../../utilities/deletePictures");
 const asyncForEach = require("../../utilities/asyncForEach");
 const {
   AVATAR_MALE_PLACEHOLDER,
   AVATAR_FEMALE_PLACEHOLDER,
   AVATAR_PICTURES_PATH,
-} = require('./constants');
+} = require("./constants");
 
 const Genders = Object.freeze({
   male: "M",
@@ -21,6 +21,7 @@ const UserSchema = new Schema({
   password: { type: String, required: true },
   phone: { type: String },
   gender: { type: String, enum: Object.values(Genders), required: true },
+  ban_id: { type: mongoose.Types.ObjectId, default: null },
   role_id: { type: mongoose.Types.ObjectId, required: true },
   isActive: { type: Boolean, default: false },
   joinedDate: { type: Date, default: Date.now },
@@ -38,7 +39,7 @@ const UserSchema = new Schema({
 
 Object.assign(UserSchema.statics, { Genders });
 
-UserSchema.pre('remove', async function(next) {
+UserSchema.pre("remove", async function (next) {
   const userPosts = await Post.find({ postedBy: this._id });
   await asyncForEach(userPosts, async (post) => {
     await post.delete();

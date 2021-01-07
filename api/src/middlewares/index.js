@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const morgan = require("morgan");
 const cors = require("cors");
 const helmet = require("helmet");
@@ -11,6 +12,7 @@ function initMiddlewares(app) {
   app.use(helmet());
   app.use(cookieParser());
   app.use(express.json());
+  app.use(express.static(path.join(__dirname, "../public")));
   console.log("* Middleware initialized \n");
 }
 

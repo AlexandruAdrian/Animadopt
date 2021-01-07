@@ -18,15 +18,34 @@ const userRoutes = () => {
 
   router.post(
     "/register",
+    upload.single("avatar"),
     validate(validateRegister()),
     async (req, res, next) => {
       try {
-        const user = await UserController.userRegister(req.body);
+        const user = await UserController.userRegister(req.body, req.file);
 
         return res.status(201).json({
           user,
           message:
             "Contul a fost creat cu succes, un email cu detalii privind confirmarea contului a fost trimis pe adresa dumneavoastra",
+        });
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
+
+  router.put(
+    "/avatar",
+    isAuthorized,
+    upload.single("avatar"),
+    async (req, res, next) => {
+      try {
+        const userId = req.user._id;
+        await UserController.updateAvatar(userId, req.file);
+
+        res.status(200).json({
+          message: "Imaginea a fost incarcata cu succes",
         });
       } catch (err) {
         next(err);
@@ -103,18 +122,19 @@ const userRoutes = () => {
     "/password-reset/:codeId",
     validate(validatePassChangeReset()),
     async (req, res, next) => {
-    try {
-      const { newPassword } = req.body;
-      const codeId = req.params.codeId;
-      await UserController.resetPassword(newPassword, codeId);
+      try {
+        const { newPassword } = req.body;
+        const codeId = req.params.codeId;
+        await UserController.resetPassword(newPassword, codeId);
 
-      res.status(200).json({
-        message: "Parola a fost actualizata cu succes"
-      })
-    } catch (err) {
-      next(err);
+        res.status(200).json({
+          message: "Parola a fost actualizata cu succes",
+        });
+      } catch (err) {
+        next(err);
+      }
     }
-  })
+  );
 
   router.put(
     "/change-password",
@@ -128,24 +148,6 @@ const userRoutes = () => {
 
         res.status(200).json({
           message: "Parola a fost actualizata cu succes",
-        });
-      } catch (err) {
-        next(err);
-      }
-    }
-  );
-
-  router.put(
-    "/avatar",
-    isAuthorized,
-    upload.single("avatar"),
-    async (req, res, next) => {
-      try {
-        const userId = req.user._id;
-        await UserController.updateAvatar(userId, req.file);
-
-        res.status(200).json({
-          message: "Imaginea a fost incarcata cu succes",
         });
       } catch (err) {
         next(err);
@@ -168,7 +170,7 @@ const userRoutes = () => {
     try {
       await UserController.deleteUser(req.params.id);
 
-      res.status(200).json({ message: 'User-ul a fost sters cu succes' });
+      res.status(200).json({ message: "User-ul a fost sters cu succes" });
     } catch (err) {
       next(err);
     }

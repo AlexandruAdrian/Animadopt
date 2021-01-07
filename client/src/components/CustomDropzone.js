@@ -68,11 +68,10 @@ function CustomDropzone(props) {
 
       <div className={classes.previewContainer}>
         {addedImages &&
-          addedImages.map((image) => (
-            <div className={classes.previewImageWrapper}>
+          addedImages.map((image, index) => (
+            <div className={classes.previewImageWrapper} key={index}>
               <img
                 alt="Preview"
-                key={image.preview}
                 className={classes.previewImage}
                 src={URL.createObjectURL(image)}
               />

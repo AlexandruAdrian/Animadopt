@@ -1,6 +1,7 @@
 // System
 require("dotenv").config();
 const fs = require("fs");
+const path = require("path");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 // Models
@@ -12,22 +13,25 @@ const Ban = require("../models/ban/banModel");
 const Mailer = require("../mailer/index");
 // Constants
 const { AVATAR_PICTURES_PATH } = require("../models/user/constants");
-const { CONFIRMATION_CODE, PASSWORD_RESET_CODE } = require("../models/code/constants");
+const {
+  CONFIRMATION_CODE,
+  PASSWORD_RESET_CODE,
+} = require("../models/code/constants");
 const { USER_ROLE_USER } = require("../models/role/constants");
 // Utilities
 const ErrorsFactory = require("../factories/errorsFactory");
+const { renamePicture } = require("../utilities/deletePictures");
 const formatPhoneNumber = require("../utilities/formatPhoneNumber");
 const hash = require("../utilities/hash");
 
 const HOSTNAME = process.env.HOSTNAME;
-const PORT = process.env.PORT;
+const FRONT_PORT = process.env.FRONT_PORT;
 const SECRET = process.env.SECRET;
 const SALT_ROUNDS = process.env.SALT_ROUNDS;
 
 class UserController {
-  async userRegister(userData) {
+  async userRegister(userData, avatar) {
     const { email, firstName, lastName, password, gender, phone } = userData;
-
     // Check if the user already exists
     const foundUser = await User.findOne({ email });
     if (foundUser) {
@@ -40,7 +44,7 @@ class UserController {
 
     const formattedPhone = formatPhoneNumber(phone);
     const hashedPassword = await hash(password, SALT_ROUNDS);
-    const role = await Role.findOne({type: USER_ROLE_USER});
+    const role = await Role.findOne({ type: USER_ROLE_USER });
     // Create a new user and save it
     let newUser = new User({
       email,
@@ -51,6 +55,18 @@ class UserController {
       gender: gender.toUpperCase(),
       role_id: role._id,
     });
+
+    if (avatar) {
+      // Rename the avatar since the user has and id now to preserve the naming convention
+      const newAvatarFileName = `${AVATAR_PICTURES_PATH}\\${
+        newUser._id
+      }-${Date.now()}${path.extname(avatar.originalname)}`;
+      renamePicture(avatar.path, newAvatarFileName);
+      const splitName = newAvatarFileName.split("public\\")[1];
+      const newAvatarName = splitName.replace(/\\/g, "/");
+      newUser.avatar = newAvatarName;
+    }
+
     await newUser.save();
     newUser = newUser.toJSON();
     delete newUser.password;
@@ -84,15 +100,14 @@ class UserController {
     const ban = await Ban.findOne({ forUserId: foundUser._id });
 
     if (ban && ban.isValid) {
-        if (new Date() < new Date(ban.endTime)) {
-          return {
-            isBanned: true,
-            reason: ban.reason,
-            endTime: ban.endTime,
-          }
-        }
+      if (new Date() < new Date(ban.endTime)) {
+        return {
+          isBanned: true,
+          reason: ban.reason,
+          endTime: ban.endTime,
+        };
+      }
     }
-
 
     // Check password
     const passwordMatches = await bcrypt.compare(password, foundUser.password);
@@ -135,7 +150,7 @@ class UserController {
     await confirmationCode.save();
     // Send email for account activation with the generated code
     const subject = `Confirmare cont Animadopt`;
-    const confirmationLink = `http://${HOSTNAME}:${PORT}/users/password-reset/${confirmationCode._id}`;
+    const confirmationLink = `http://${HOSTNAME}:${FRONT_PORT}/users/activate/${confirmationCode._id}`;
     const text = `
     Salutare ${foundUser.firstName},
 
@@ -207,7 +222,7 @@ class UserController {
 
     await passResetCode.save();
     // Send email for password reset with the generated code
-    const passResetLink = `http://${HOSTNAME}:${PORT}/users/password-reset/${passResetCode._id}`;
+    const passResetLink = `http://${HOSTNAME}:${FRONT_PORT}/users/password-reset/${passResetCode._id}`;
     const subject = "Resetare parola";
     const text = `
     Salutare ${foundUser.firstName},
@@ -222,7 +237,7 @@ class UserController {
     // Check the code
     const foundCode = await Code.findOne({
       _id: codeId,
-      type
+      type,
     });
 
     if (!foundCode || !foundCode.isValid) {
@@ -296,13 +311,13 @@ class UserController {
       );
     }
 
-    const filePath = file.path.split('Animadopt\\')[1];
+    const filePath = file.path.split("Animadopt\\")[1];
 
-    if (!foundUser.avatar.includes('placeholders')) {
-      const filename = foundUser.avatar.split('avatars\\')[1];
-      fs.unlink(`${AVATAR_PICTURES_PATH}/${filename}`, err => {
+    if (!foundUser.avatar.includes("placeholders")) {
+      const filename = foundUser.avatar.split("avatars\\")[1];
+      fs.unlink(`${AVATAR_PICTURES_PATH}/${filename}`, (err) => {
         if (err) {
-          throw new ErrorsFactory('notfound', 'NotFound', 'File not found.');
+          throw new ErrorsFactory("notfound", "NotFound", "File not found.");
         }
       });
     }
@@ -329,14 +344,13 @@ class UserController {
   }
 
   signToken(userId) {
-
     return jwt.sign({ _id: userId }, SECRET, {
       expiresIn: "28d",
     });
   }
 
   async deleteUser(userId) {
-    const user = await User.findOne({_id : userId});
+    const user = await User.findOne({ _id: userId });
     if (!user) {
       throw new ErrorsFactory(
         "notfound",

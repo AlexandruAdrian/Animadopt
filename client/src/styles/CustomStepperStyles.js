@@ -46,8 +46,8 @@ const styles = {
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
-    marginTop: '5px',
-    padding: '0 5px 10px 5px',
+    marginTop: '10px',
+    padding: '5px',
     '& button': {
       width: '120px',
       marginRight: '10px',

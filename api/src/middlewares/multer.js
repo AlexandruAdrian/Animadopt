@@ -2,12 +2,15 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
-const AVATARS_DIR = path.join(__dirname, "../../../resources/uploads/avatars");
-const POSTS_DIR = path.join(__dirname, "../../../resources/uploads/posts");
+const AVATARS_DIR = path.join(__dirname, "../public/uploads/avatars");
+const POSTS_DIR = path.join(__dirname, "../public/uploads/posts");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    if (req.originalUrl.includes("avatar")) {
+    if (
+      req.originalUrl.includes("avatar") ||
+      req.originalUrl.includes("register")
+    ) {
       checkDirAndCreate(AVATARS_DIR, cb);
     } else if (req.originalUrl.includes("posts")) {
       checkDirAndCreate(POSTS_DIR, cb);
@@ -21,6 +24,11 @@ const storage = multer.diskStorage({
       );
     } else if (req.originalUrl.includes("posts")) {
       cb(null, "post-" + Date.now() + path.extname(file.originalname));
+    } else if (req.originalUrl.includes("register")) {
+      cb(
+        null,
+        req.body.email + "-" + Date.now() + path.extname(file.originalname)
+      );
     }
   },
 });
@@ -47,10 +55,11 @@ function checkFileType(file, cb) {
 
 function checkDirAndCreate(dir, cb) {
   // Check for uploads folder first
-  const UPLOADS_DIR = path.join(__dirname, "../../../resources/uploads/");
+  const UPLOADS_DIR = path.join(__dirname, "../public/uploads/");
+
   fs.access(UPLOADS_DIR, (err) => {
     if (err) {
-      fs.mkdir(UPLOADS_DIR,(err) => {
+      fs.mkdir(UPLOADS_DIR, (err) => {
         return;
       });
     }

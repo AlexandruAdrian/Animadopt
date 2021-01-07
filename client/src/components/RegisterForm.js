@@ -259,13 +259,13 @@ const RegisterForm = ({
             >
               <FormControlLabel
                 value="F"
-                control={<Radio color="primary" />}
+                control={<Radio size="small" />}
                 label="Feminin"
                 classes={{ label: classes.inputLabelRoot }}
               />
               <FormControlLabel
                 value="M"
-                control={<Radio color="primary" />}
+                control={<Radio size="small" />}
                 label="Masculin"
                 classes={{ label: classes.inputLabelRoot }}
               />

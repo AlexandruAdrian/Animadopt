@@ -5,6 +5,8 @@ const colors = {
   white: '#FFFFFF',
   whiteSmoke: '#F5F5F5',
   gray: '#D8D8D8',
+  background: 'linear-gradient(135deg, #B3DDE5, #41A9BD)',
+  reverseBackground: 'linear-gradient(135deg, #41A9BD, #B3DDE5)',
 };
 
 export default colors;
