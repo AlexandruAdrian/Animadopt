@@ -18,8 +18,8 @@ const styles = {
   stepperRoot: {
     backgroundColor: 'gray',
     color: colors.white,
-    width: '40px',
-    height: '40px',
+    width: '50px',
+    height: '50px',
     zIndex: 1,
     display: 'flex',
     justifyContent: 'center',
@@ -48,6 +48,7 @@ const styles = {
     justifyContent: 'center',
     marginTop: '10px',
     padding: '5px',
+    paddingBottom: '10px',
     '& button': {
       width: '120px',
       marginRight: '10px',

@@ -22,8 +22,8 @@ function StepIcon(props) {
   const { active, completed } = props;
 
   const icons = {
-    1: <ListAltIcon fontSize="small" />,
-    2: <PersonIcon fontSize="small" />,
+    1: <ListAltIcon />,
+    2: <PersonIcon />,
   };
 
   return (

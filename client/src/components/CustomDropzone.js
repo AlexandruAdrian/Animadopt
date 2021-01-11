@@ -15,9 +15,12 @@ function CustomDropzone(props) {
   const { setFieldValue, multipleFiles, addedImages } = props;
   const MAX_SIZE = 50000000;
   const classes = makeStyles(styles)();
-  const onDrop = useCallback((acceptedFiles) => {
-    setFieldValue('avatar', acceptedFiles);
-  }, []);
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      setFieldValue('avatar', acceptedFiles);
+    },
+    [setFieldValue]
+  );
 
   const {
     getRootProps,

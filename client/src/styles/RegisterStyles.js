@@ -27,9 +27,7 @@ const styles = {
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center center',
     backgroundSize: 'contain',
-    width: '100%',
-    maxHeight: '45px',
-    minHeight: '35px',
+    height: '45px',
     marginTop: '10px',
   },
   successWrapper: {

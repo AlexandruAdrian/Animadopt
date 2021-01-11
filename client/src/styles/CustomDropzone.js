@@ -50,8 +50,8 @@ const styles = {
     marginTop: '25px',
   },
   previewImage: {
-    width: '60px',
-    height: '60px',
+    width: '100px',
+    height: '100px',
     objectFit: 'cover',
   },
   previewImageWrapper: {

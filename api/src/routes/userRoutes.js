@@ -58,13 +58,16 @@ const userRoutes = () => {
       const response = await UserController.userLogin(req.body);
 
       if (response.isBanned) {
-        return res.status(403).json({
-          isBanned: response.isBanned,
-          reason: response.reason,
-          endTime: response.endTime,
-        });
+        return res
+          .json({
+            isBanned: response.isBanned,
+            reason: response.reason,
+            endTime: response.endTime,
+          })
+          .status(403);
       } else {
         res.status(200).json({
+          isBanned: false,
           token: response.token,
         });
       }
@@ -76,10 +79,10 @@ const userRoutes = () => {
   router.put("/confirm/:codeId", async (req, res, next) => {
     try {
       const confirmationCodeId = req.params.codeId;
-      await UserController.confirmAccount(confirmationCodeId);
+      const message = await UserController.confirmAccount(confirmationCodeId);
 
       res.status(200).json({
-        message: "Contul a fost confirmat cu succes",
+        message,
       });
     } catch (err) {
       next(err);

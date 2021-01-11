@@ -155,7 +155,7 @@ class UserController {
     Salutare ${foundUser.firstName},
 
     Te-ai inscris recent pe Animadopt. Pentru a finaliza inregistrarea, te rugam sa efectuezi confirmarea contului.
-    Aceeseaza link-ul urmator pentru a confirma contul ${confirmationLink}
+    Acceseaza link-ul urmator pentru a confirma contul ${confirmationLink}
     `;
     await Mailer.send(foundUser.email, subject, text);
   }
@@ -165,43 +165,39 @@ class UserController {
       throw new ErrorsFactory("invalid", "InvalidError", "Codul este invalid");
     }
     // Check if the code exists and if it is valid
-    const foundCode = await this.checkCode(codeId, CONFIRMATION_CODE);
+    let foundCode;
+    try {
+      foundCode = await this.checkCode(codeId, CONFIRMATION_CODE);
+    } catch (err) {
+      return "Codul nu mai este valid sau contul este deja confirmat, va rugam incercati din nou";
+    }
+
     // Check if the code expired
     const now = new Date().getTime();
     const expTime = 60 * 1440 * 1000; // 1 DAY
     if (now - foundCode.issuedAt > expTime) {
       foundCode.isValid = false;
       await foundCode.save();
-      throw new ErrorsFactory(
-        "invalid",
-        "InvalidError",
-        "Codul de confirmare a expirat, va rugam sa solicitati alt cod"
-      );
+      return "Codul de confirmare a expirat, va rugam sa solicitati alt cod";
     }
     // Check for user data
     const foundUser = await User.findOne({ _id: foundCode.forUserId });
     if (!foundUser) {
       foundCode.isValid = false;
       await foundCode.save();
-      throw new ErrorsFactory(
-        "invalid",
-        "InvalidError",
-        "Confirmarea a esuat, va rugam sa solicitati alt cod de confirmare sau sa va asigurati ca sunteti inregistrat"
-      );
+      return "Confirmarea a esuat, va rugam sa solicitati alt cod de confirmare sau sa va asigurati ca sunteti inregistrat";
     }
     // Check if the account has already been activated
     if (foundUser.isActive) {
-      throw new ErrorsFactory(
-        "conflict",
-        "ConflictError",
-        "Contul este confirmat"
-      );
+      return "Contul este confirmat";
     }
     // Activate user account and invalidate the code
     foundUser.isActive = true;
     await foundUser.save();
     foundCode.isValid = false;
     await foundCode.save();
+
+    return "Contul a fost confirmat cu succes";
   }
 
   async requestPassResetCode(email) {

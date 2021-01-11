@@ -26,7 +26,6 @@ export function registerUserError() {
 }
 
 export function clearRegisterState() {
-  console.log('clearing register state');
   return {
     type: CLEAR_REGISTER_STATE,
   };
