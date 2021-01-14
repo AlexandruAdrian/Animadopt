@@ -3,7 +3,7 @@ import logo from '../assets/logo.png';
 
 const style = {
   container: {
-    backgroundImage: `linear-gradient(135deg, #b3dde5, ${colors.pacificBlue})`,
+    backgroundColor: colors.pacificBlue,
     width: '100%',
     height: '100%',
     display: 'flex',
@@ -16,39 +16,66 @@ const style = {
     borderRadius: '5px',
     backgroundColor: colors.white,
     width: '100%',
-    maxWidth: '700px',
+    maxWidth: '350px',
     height: '100%',
-    maxHeight: '650px',
+    maxHeight: '450px',
     display: 'flex',
-    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  nav: {
+    width: '100%',
+    height: '40px',
+    paddingRight: '10px',
   },
   logo: {
     backgroundImage: `url(${logo})`,
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center center',
     backgroundSize: 'contain',
-    width: '100%',
-    height: '50px',
-    marginTop: '10px',
+    height: '100%',
+    cursor: 'pointer',
   },
   formWrapper: {
     width: '80%',
-    height: '170px',
     maxWidth: '260px',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    margin: 'auto auto',
+    alignSelf: 'center',
+    paddingTop: '50px',
     '& > button': {
-      marginTop: '25px',
+      marginTop: '45px',
       width: '100%',
     },
   },
   form: {
+    marginTop: '40px',
     display: 'flex',
     flexDirection: 'column',
     height: '95px',
     justifyContent: 'space-between',
+  },
+  error: {
+    fontSize: '14px',
+    height: '25px',
+    color: 'red',
+    textAlign: 'center',
+    marginTop: '10px',
+  },
+  utilities: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexDirection: 'column',
+    height: '45px',
+    '& a': {
+      textDecoration: 'none',
+      color: colors.darkPacificBlue,
+      textAlign: 'center',
+      '&:hover': {
+        textDecoration: 'underline',
+      },
+    },
+    '& p': {
+      fontSize: '13px',
+      cursor: 'pointer',
+    },
   },
 };
 

@@ -4,7 +4,7 @@ const style = {
   confirmationContainer: {
     width: '100%',
     height: '100%',
-    backgroundImage: colors.background,
+    backgroundColor: colors.pacificBlue,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -24,6 +24,7 @@ const style = {
     '& a': {
       textDecoration: 'none',
       color: colors.pacificBlue,
+      fontWeight: '600',
       '&:hover': {
         textDecoration: 'underline',
       },

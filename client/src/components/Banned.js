@@ -51,7 +51,7 @@ function Banned({ banDetails }) {
               {` ${banDetails.reason}`}
             </Typography>
             <Typography component="p">
-              <strong>Pana la:</strong>
+              <strong>Expira la:</strong>
               {` ${moment(banDetails.endTime).format('llll')}`}
             </Typography>
           </Box>

@@ -3,7 +3,7 @@ import logo from '../assets/logo.png';
 
 const styles = {
   container: {
-    backgroundImage: `linear-gradient(135deg, #b3dde5, ${colors.pacificBlue})`,
+    backgroundColor: colors.pacificBlue,
     width: '100%',
     height: '100%',
     display: 'flex',
@@ -21,14 +21,19 @@ const styles = {
     maxHeight: '650px',
     display: 'flex',
     flexDirection: 'column',
+    paddingTop: '10px',
+  },
+  nav: {
+    width: '100%',
+    height: '40px',
   },
   logo: {
     backgroundImage: `url(${logo})`,
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center center',
     backgroundSize: 'contain',
-    height: '45px',
-    marginTop: '10px',
+    height: '100%',
+    cursor: 'pointer',
   },
   successWrapper: {
     display: 'flex',

@@ -20,7 +20,6 @@ const style = {
     maxWidth: '500px',
     height: '100%',
     maxHeight: '300px',
-    lexDirection: 'column',
     borderRadius: '5px',
     padding: '10px',
     display: 'flex',

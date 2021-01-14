@@ -18,8 +18,8 @@ const styles = {
   stepperRoot: {
     backgroundColor: 'gray',
     color: colors.white,
-    width: '50px',
-    height: '50px',
+    width: '45px',
+    height: '45px',
     zIndex: 1,
     display: 'flex',
     justifyContent: 'center',

@@ -8,6 +8,8 @@ import LandingPage from './components/LandingPage';
 import Register from './containers/Register';
 import Login from './containers/Login';
 import ConfirmationPage from './containers/ConfirmationPage';
+import AccountRecovery from './containers/AccountRecovery';
+import PasswordReset from './containers/PasswordReset';
 
 const App = () => {
   return (
@@ -17,6 +19,21 @@ const App = () => {
         <Route exact path="/register" component={Register} />
         <Route exact path="/users/activate/:id" component={ConfirmationPage} />
         <Route exact path="/login" component={Login} />
+        <Route
+          exact
+          path="/recover"
+          component={() => <AccountRecovery password />}
+        />
+        <Route
+          exact
+          path="/activate"
+          component={() => <AccountRecovery activate />}
+        />
+        <Route
+          exact
+          path="/users/password-reset/:id"
+          component={PasswordReset}
+        />
         <Route path="*" component={() => '404 NOT FOUND'} />
       </Switch>
     </BrowserRouter>

@@ -72,7 +72,7 @@ const userRoutes = () => {
         });
       }
     } catch (err) {
-      next(err);
+      return res.json({ err: err.message }).status(401);
     }
   });
 
@@ -89,7 +89,7 @@ const userRoutes = () => {
     }
   });
 
-  router.post("/request-confirmation/", async (req, res, next) => {
+  router.post("/request-confirmation", async (req, res, next) => {
     try {
       const userEmail = req.body.email;
       await UserController.requestConfirmationCode(userEmail);
@@ -99,7 +99,7 @@ const userRoutes = () => {
           "Un email cu detalii privind confirmarea contului a fost trimis pe adresa dumneavoastra",
       });
     } catch (err) {
-      next(err);
+      return res.json({ err: err.message }).status(400);
     }
   });
 
@@ -116,7 +116,7 @@ const userRoutes = () => {
             "Un email cu detalii privind resetarea parolei a fost trimis pe adresa dumneavoastra",
         });
       } catch (err) {
-        next(err);
+        return res.json({ err: err.message }).status(400);
       }
     }
   );
@@ -134,7 +134,11 @@ const userRoutes = () => {
           message: "Parola a fost actualizata cu succes",
         });
       } catch (err) {
-        next(err);
+        res
+          .json({
+            err: err.message,
+          })
+          .status(400);
       }
     }
   );

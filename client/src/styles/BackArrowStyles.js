@@ -6,7 +6,10 @@ const styles = {
     top: '15px',
     left: '7px',
     textDecoration: 'none',
-    color: colors.pacificBlue,
+    color: colors.white,
+    '@media (min-width: 1024px)': {
+      display: 'none',
+    },
   },
 };
 

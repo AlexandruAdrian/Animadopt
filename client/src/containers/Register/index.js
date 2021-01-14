@@ -10,7 +10,6 @@ import Typography from '@material-ui/core/Typography';
 import CustomStepper from '../../components/CustomStepper';
 import RegisterForm from '../../components/RegisterForm';
 import CustomButton from '../../components/CustomButton';
-import BackArrow from '../../components/BackArrow';
 import Loading from '../../components/Loading';
 // Actions
 import { registerUser, clearRegisterState } from './actions';
@@ -19,7 +18,7 @@ import registerValidationSchema from '../../validators/registerValidator';
 // Styles
 import styles from '../../styles/RegisterStyles';
 
-const Register = () => {
+const Register = ({ history }) => {
   const classes = makeStyles(styles)();
   const dispatch = useDispatch();
   const { response, isLoading } = useSelector((state) => state.register);
@@ -81,6 +80,7 @@ const Register = () => {
 
   const clearState = () => {
     dispatch(clearRegisterState());
+    history.push('/');
   };
 
   const successRegister = () => {
@@ -128,8 +128,9 @@ const Register = () => {
   return (
     <Box className={classes.container}>
       <Box className={classes.formContainer}>
-        <BackArrow to="/" handler={clearState} />
-        <Box className={classes.logo}></Box>
+        <Box className={classes.nav}>
+          <Box className={classes.logo} onClick={clearState}></Box>
+        </Box>
 
         {!Object.keys(response).length && !isLoading ? (
           <CustomStepper

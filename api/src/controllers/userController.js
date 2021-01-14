@@ -131,7 +131,7 @@ class UserController {
       throw new ErrorsFactory(
         "invalid",
         "InvalidError",
-        "Pentru a putea solicita un cod de confirmare asigurati-va ca ati incerca sa va inregistrati inainte"
+        "Nu exista nici un cont inregistrat pe acest e-mail"
       );
     }
     // Check if the account has already been activated
@@ -139,7 +139,7 @@ class UserController {
       throw new ErrorsFactory(
         "conflict",
         "ConflictError",
-        "Contul este confirmat"
+        "Contul este deja confirmat"
       );
     }
     // Create an activation code and save it
@@ -169,7 +169,7 @@ class UserController {
     try {
       foundCode = await this.checkCode(codeId, CONFIRMATION_CODE);
     } catch (err) {
-      return "Codul nu mai este valid sau contul este deja confirmat, va rugam incercati din nou";
+      return "Codul nu mai este valid sau contul este deja confirmat";
     }
 
     // Check if the code expired
@@ -207,7 +207,7 @@ class UserController {
       throw new ErrorsFactory(
         "notfound",
         "NotFoundError",
-        "Emailul este incorect"
+        "Nu exista nici un cont inregistrat pe acest e-mail"
       );
     }
     // Create a password reset code and save it

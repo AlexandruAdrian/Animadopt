@@ -4,11 +4,11 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
 // Icons
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import EmailIcon from '@material-ui/icons/Email';
-import InputAdornment from '@material-ui/core/InputAdornment';
 // styles
 import styles from '../styles/LoginFormStyle';
 
@@ -43,10 +43,10 @@ const LoginForm = ({ values, handleChange }) => {
               root: classes.inputLabelRoot,
             },
           }}
-        ></TextField>
+        />
       </FormControl>
 
-      <FormControl>
+      <FormControl style={{ marginTop: '5px' }}>
         <TextField
           id="password"
           type={showPassword ? 'text' : 'password'}
@@ -81,7 +81,7 @@ const LoginForm = ({ values, handleChange }) => {
               </InputAdornment>
             ),
           }}
-        ></TextField>
+        />
       </FormControl>
     </>
   );
