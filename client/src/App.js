@@ -22,7 +22,7 @@ const App = () => {
         <Route
           exact
           path="/recover"
-          component={() => <AccountRecovery password />}
+          component={() => <AccountRecovery recover />}
         />
         <Route
           exact

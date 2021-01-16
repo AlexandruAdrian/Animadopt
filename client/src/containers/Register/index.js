@@ -12,7 +12,8 @@ import RegisterForm from '../../components/RegisterForm';
 import CustomButton from '../../components/CustomButton';
 import Loading from '../../components/Loading';
 // Actions
-import { registerUser, clearRegisterState } from './actions';
+import { registerUser } from './actions';
+import { resetRequestState } from '../../utils/request/actions';
 // Validator
 import registerValidationSchema from '../../validators/registerValidator';
 // Styles
@@ -21,7 +22,7 @@ import styles from '../../styles/RegisterStyles';
 const Register = ({ history }) => {
   const classes = makeStyles(styles)();
   const dispatch = useDispatch();
-  const { response, isLoading } = useSelector((state) => state.register);
+  const { response, isLoading } = useSelector((state) => state.request);
   const [activeStep, setActiveStep] = useState(0);
   const INITIAL_VALUES = {
     email: '',
@@ -79,7 +80,7 @@ const Register = ({ history }) => {
   };
 
   const clearState = () => {
-    dispatch(clearRegisterState());
+    dispatch(resetRequestState());
     history.push('/');
   };
 
@@ -123,6 +124,21 @@ const Register = ({ history }) => {
     );
   };
 
+  const failRegister = () => {
+    const handleClick = () => {
+      dispatch(resetRequestState());
+      setActiveStep(0);
+      history.push('/register');
+    };
+
+    return (
+      <Box className={classes.failWrapper}>
+        <Typography component="p">{response.message}</Typography>
+        <CustomButton text="Inregistrare" primary handler={handleClick} />
+      </Box>
+    );
+  };
+
   const handleBack = () => setActiveStep(activeStep - 1);
 
   return (
@@ -148,8 +164,10 @@ const Register = ({ history }) => {
               setFieldValue={formik.setFieldValue}
             />
           </CustomStepper>
-        ) : !isLoading ? (
+        ) : !isLoading && response.success ? (
           successRegister()
+        ) : !isLoading && !response.success ? (
+          failRegister()
         ) : (
           <Loading />
         )}

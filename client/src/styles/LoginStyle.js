@@ -18,8 +18,10 @@ const style = {
     width: '100%',
     maxWidth: '350px',
     height: '100%',
-    maxHeight: '450px',
+    maxHeight: '500px',
     display: 'flex',
+    padding: '45px 0 20px 0',
+    flexDirection: 'column',
     justifyContent: 'center',
   },
   nav: {
@@ -40,21 +42,21 @@ const style = {
     maxWidth: '260px',
     alignSelf: 'center',
     paddingTop: '50px',
-    '& > button': {
-      marginTop: '45px',
-      width: '100%',
-    },
   },
   form: {
     marginTop: '40px',
     display: 'flex',
     flexDirection: 'column',
-    height: '95px',
-    justifyContent: 'space-between',
+    height: '100%',
+    maxHeight: '228px',
+    '& > button': {
+      marginTop: '40px',
+      width: '100%',
+    },
   },
   error: {
     fontSize: '14px',
-    height: '25px',
+    minHeight: '45px',
     color: 'red',
     textAlign: 'center',
     marginTop: '10px',
@@ -63,6 +65,7 @@ const style = {
     display: 'flex',
     justifyContent: 'space-between',
     flexDirection: 'column',
+    marginTop: 'auto',
     height: '45px',
     '& a': {
       textDecoration: 'none',

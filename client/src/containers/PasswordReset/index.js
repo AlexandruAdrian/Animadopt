@@ -1,5 +1,5 @@
 // System
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router';
@@ -17,13 +17,15 @@ import BackArrow from '../../components/BackArrow';
 import Loading from '../../components/Loading';
 import CustomButton from '../../components/CustomButton';
 // Actions
-import { resetPassword, resetPasswordResetState } from './actions';
+import { resetPassword } from './actions';
+import { resetRequestState } from '../../utils/request/actions';
 // Validator
 import resetPassValidator from '../../validators/resetPassValidator';
 // Utilities
 import { has } from 'lodash';
 // Style
 import style from '../../styles/PasswordReset';
+import { Link } from 'react-router-dom';
 
 function PasswordReset() {
   const INITIAL_VALUES = {
@@ -34,7 +36,7 @@ function PasswordReset() {
   const classes = makeStyles(style)();
   const match = useRouteMatch();
   const [showPassword, setShowPassword] = useState(false);
-  const { response, isLoading } = useSelector((state) => state.passReset);
+  const { response, isLoading } = useSelector((state) => state.request);
 
   const handleSubmit = (values) => {
     dispatch(
@@ -53,10 +55,12 @@ function PasswordReset() {
     onSubmit: handleSubmit,
   });
 
-  useEffect(() => dispatch(resetPasswordResetState()), [dispatch]);
-
   const handlePasswordToggle = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleRedirect = () => {
+    dispatch(resetRequestState());
   };
 
   return (
@@ -65,6 +69,15 @@ function PasswordReset() {
       <Box className={classes.wrapper}>
         {isLoading ? (
           <Loading />
+        ) : has(response, 'message') ? (
+          <Box className={classes.success}>
+            {response.message}
+            {', '}
+            <Link to={'/'} onClick={handleRedirect}>
+              {'click aici'}
+            </Link>
+            {` pentru a fi redirectionat catre pagina principala`}
+          </Box>
         ) : (
           <Box className={classes.formContainer}>
             <form className={classes.form} onSubmit={formik.handleSubmit}>

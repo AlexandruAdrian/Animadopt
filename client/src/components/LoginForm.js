@@ -15,6 +15,7 @@ import styles from '../styles/LoginFormStyle';
 const LoginForm = ({ values, handleChange }) => {
   const classes = makeStyles(styles)();
   const [showPassword, setShowPassword] = useState(false);
+
   const handlePasswordToggle = () => {
     setShowPassword(!showPassword);
   };

@@ -28,9 +28,15 @@ const userRoutes = () => {
           user,
           message:
             "Contul a fost creat cu succes, un email cu detalii privind confirmarea contului a fost trimis pe adresa dumneavoastra",
+          success: true,
         });
       } catch (err) {
-        next(err);
+        res
+          .json({
+            message: err.message,
+            success: false,
+          })
+          .status(err.status);
       }
     }
   );

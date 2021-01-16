@@ -38,7 +38,7 @@ class UserController {
       throw new ErrorsFactory(
         "conflict",
         "ConflictError",
-        "Un utilizator cu acest email exista deja"
+        "Un utilizator cu acest email exista deja, te rugam sa incerci din nou"
       );
     }
 

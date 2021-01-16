@@ -12,7 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import CloseIcon from '@material-ui/icons/Close';
 // Actions
-import { resetLoginState } from '../containers/Login/actions';
+import { resetRequestState } from '../utils/request/actions';
 // Styles
 import style from '../styles/BannedStyle';
 
@@ -27,7 +27,7 @@ function Banned({ banDetails }) {
 
   const handleClose = () => {
     setShow(false);
-    dispatch(resetLoginState());
+    dispatch(resetRequestState());
   };
 
   return show ? (

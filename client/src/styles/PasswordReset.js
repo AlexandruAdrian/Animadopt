@@ -47,6 +47,19 @@ const style = {
     textAlign: 'center',
     marginTop: '10px',
   },
+  success: {
+    color: colors.darkPacificBlue,
+    fontSize: '14px',
+    textAlign: 'center',
+    '& a': {
+      textDecoration: 'none',
+      fontWeight: '600',
+      color: colors.darkPacificBlue,
+      '&:hover': {
+        textDecoration: 'underline',
+      },
+    },
+  },
 };
 
 export default style;

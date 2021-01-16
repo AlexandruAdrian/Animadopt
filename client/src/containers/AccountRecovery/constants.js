@@ -11,6 +11,3 @@ export const REQUEST_CONFIRMATION_SUCCESS =
   'app/containers/AccountRecovery/REQUEST_CONFIRMATION_SUCCESS';
 export const REQUEST_CONFIRMATION_ERROR =
   'app/containers/AccountRecovery/REQUEST_CONFIRMATION_ERROR';
-
-export const RESET_RECOVERY_STATE =
-  'app/containers/AccountRecovery/RESET_RECOVERY_STATE';

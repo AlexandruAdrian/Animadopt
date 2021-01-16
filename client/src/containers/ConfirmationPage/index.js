@@ -1,6 +1,7 @@
 // System
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useRouteMatch } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 // Material UI
 import Typography from '@material-ui/core/Typography';
@@ -9,24 +10,28 @@ import { makeStyles } from '@material-ui/core/styles';
 import Loading from '../../components/Loading';
 // Actions
 import { confirmAccount } from './actions';
+import { resetRequestState } from '../../utils/request/actions';
 // Styles
 import styles from '../../styles/ConfirmationPageStyle';
 
-function ConfirmationPage(props) {
+function ConfirmationPage() {
+  const match = useRouteMatch();
   const classes = makeStyles(styles)();
   const dispatch = useDispatch();
-  const { response, isLoading } = useSelector((state) => state.confirmation);
+  const { response, isLoading } = useSelector((state) => state.request);
 
   useEffect(() => {
-    dispatch(confirmAccount(props.match.params.id));
-  }, [dispatch, props.match.params.id]);
+    dispatch(confirmAccount(match.params.id));
+
+    return () => dispatch(resetRequestState());
+  }, [dispatch, match.params.id]);
 
   return (
     <div className={classes.confirmationContainer}>
       <div className={classes.textWrapper}>
-        {response && !isLoading ? (
+        {response.message && !isLoading ? (
           <Typography component="h1">
-            {response}
+            {response.message}
             {', '}
             <Link to={'/'}>{'click aici'}</Link>
             {` pentru a fi redirectionat catre pagina principala`}

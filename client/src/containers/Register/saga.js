@@ -13,8 +13,8 @@ function* registerSaga() {
 
 function* registerUserSaga({ user }) {
   try {
-    const response = yield call(registerUserHttp, user);
-    yield put(registerUserSuccess(response.data));
+    const { data } = yield call(registerUserHttp, user);
+    yield put(registerUserSuccess(data));
   } catch (err) {
     console.log(`Error registering user: ${err}`);
     yield put(registerUserError());

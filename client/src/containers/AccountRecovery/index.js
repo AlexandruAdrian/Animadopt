@@ -1,6 +1,7 @@
 // System
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
 import PropTypes from 'prop-types';
 import { useFormik } from 'formik';
 // Material UI
@@ -18,11 +19,10 @@ import Loading from '../../components/Loading';
 // Icons
 import EmailIcon from '@material-ui/icons/Email';
 // Actions
-import {
-  recoverPassword,
-  requestConfirmation,
-  resetRecoveryState,
-} from './actions';
+import { recoverPassword, requestConfirmation } from './actions';
+import { resetRequestState } from '../../utils/request/actions';
+// Validator
+import recoverValidatorSchema from '../../validators/recoverValidator';
 // Utilities
 import { has } from 'lodash';
 // Style
@@ -31,25 +31,34 @@ import style from '../../styles/AccountRecoveryStyle';
 function AccountRecovery(props) {
   const INITIAL_VALUES = { email: '' };
   const dispatch = useDispatch();
-  const { response, isLoading } = useSelector((state) => state.recovery);
+  const history = useHistory();
+  const { response, isLoading } = useSelector((state) => state.request);
 
   useEffect(() => {
-    return () => dispatch(resetRecoveryState());
+    return () => dispatch(resetRequestState());
   }, [dispatch]);
 
-  const classes = makeStyles(style)();
-  const formik = useFormik({
-    initialValues: INITIAL_VALUES,
-    validateOnMount: true,
-  });
-
   const handleSubmit = () => {
-    if (props.password) {
+    if (props.recover) {
       dispatch(recoverPassword(formik.values));
     } else if (props.activate) {
       dispatch(requestConfirmation(formik.values));
     }
   };
+
+  const handleBack = () => {
+    dispatch(resetRequestState());
+    history.push('/');
+  };
+
+  const classes = makeStyles(style)();
+  const formik = useFormik({
+    initialValues: INITIAL_VALUES,
+    validationSchema: recoverValidatorSchema,
+    validateOnMount: true,
+    validateOnChange: false,
+    onSubmit: handleSubmit,
+  });
 
   return (
     <Box className={classes.container}>
@@ -58,43 +67,51 @@ function AccountRecovery(props) {
         {isLoading ? (
           <Loading />
         ) : (
-          <form className={classes.form}>
-            <FormControl className={classes.formControl}>
-              <TextField
-                id="email"
-                label="Email"
-                aria-describedby="email"
-                value={formik.values.email}
-                onChange={formik.handleChange}
-                InputProps={{
-                  classes: {
-                    root: classes.inputRoot,
-                  },
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <EmailIcon
-                        className={classes.adornment}
-                        fontSize="small"
-                      />
-                    </InputAdornment>
-                  ),
-                }}
-                InputLabelProps={{
-                  classes: {
-                    root: classes.inputLabelRoot,
-                  },
-                }}
-              />
-            </FormControl>
-            <CustomButton
-              text="Trimite"
-              handler={handleSubmit}
-              primary
-            ></CustomButton>
-            <Typography className={classes.error}>
-              {has(response, 'err') && response.err}
-            </Typography>
-          </form>
+          <Box className={classes.formWrapper}>
+            <Box className={classes.nav}>
+              <Box className={classes.logo} onClick={handleBack}></Box>
+            </Box>
+            <form className={classes.form} onSubmit={formik.handleSubmit}>
+              <FormControl className={classes.formControl}>
+                <TextField
+                  error={!!(formik.touched.email && formik.errors.email)}
+                  helperText={
+                    formik.touched.email && formik.errors.email
+                      ? formik.errors.email
+                      : null
+                  }
+                  id="email"
+                  label="Email"
+                  aria-describedby="email"
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  InputProps={{
+                    classes: {
+                      root: classes.inputRoot,
+                    },
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <EmailIcon
+                          className={classes.adornment}
+                          fontSize="small"
+                        />
+                      </InputAdornment>
+                    ),
+                  }}
+                  InputLabelProps={{
+                    classes: {
+                      root: classes.inputLabelRoot,
+                    },
+                  }}
+                />
+              </FormControl>
+              <CustomButton text="Trimite" type="submit" primary />
+              <Typography className={classes.error}>
+                {has(response, 'err') && response.err}
+              </Typography>
+            </form>
+          </Box>
         )}
       </Box>
       {has(response, 'message') && (
@@ -105,7 +122,7 @@ function AccountRecovery(props) {
 }
 
 AccountRecovery.propTypes = {
-  password: PropTypes.bool,
+  recover: PropTypes.bool,
   activate: PropTypes.bool,
 };
 

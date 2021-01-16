@@ -62,6 +62,23 @@ const styles = {
       },
     },
   },
+  failWrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+    padding: '0 5px',
+    '& > p': {
+      color: colors.darkPacificBlue,
+      fontSize: '14px',
+      textAlign: 'center',
+    },
+    '& > button': {
+      marginTop: '20px',
+    },
+  },
   userDetailsWrapper: {
     width: '100%',
     display: 'flex',

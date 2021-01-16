@@ -1,9 +1,4 @@
-import {
-  LOGIN_USER,
-  LOGIN_USER_ERROR,
-  LOGIN_USER_SUCCESS,
-  RESET_STATE,
-} from './constants';
+import { LOGIN_USER, LOGIN_USER_ERROR, LOGIN_USER_SUCCESS } from './constants';
 
 export function loginUser(userData) {
   return {
@@ -22,11 +17,5 @@ export function loginUserSuccess(response) {
 export function loginUserError() {
   return {
     type: LOGIN_USER_ERROR,
-  };
-}
-
-export function resetLoginState() {
-  return {
-    type: RESET_STATE,
   };
 }

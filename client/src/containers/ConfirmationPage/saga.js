@@ -14,7 +14,7 @@ function* confirmSaga() {
 function* confirmAccountSaga({ code }) {
   try {
     const { data } = yield call(confirmAccountHttp, code);
-    yield put(confirmAccountSuccess(data.message));
+    yield put(confirmAccountSuccess(data));
   } catch (err) {
     console.log(`Error confirming use account: ${err}`);
     yield put(confirmAccountError());
