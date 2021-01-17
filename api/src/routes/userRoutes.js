@@ -78,7 +78,7 @@ const userRoutes = () => {
         });
       }
     } catch (err) {
-      return res.json({ err: err.message }).status(401);
+      return res.json({ message: err.message }).status(401);
     }
   });
 

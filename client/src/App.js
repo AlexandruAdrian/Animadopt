@@ -11,6 +11,7 @@ import ConfirmationPage from './containers/ConfirmationPage';
 import AccountRecovery from './containers/AccountRecovery';
 import PasswordReset from './containers/PasswordReset';
 import NotFound from './components/NotFound';
+import Dashboard from './containers/Dashboard';
 
 const App = () => {
   return (
@@ -35,11 +36,7 @@ const App = () => {
           path="/users/password-reset/:id"
           component={PasswordReset}
         />
-        <Route
-          exact
-          path="/dashboard"
-          component={() => <div>'dashboard'</div>}
-        />
+        <Route exact path="/dashboard" component={Dashboard} />
         <Route path="*" component={NotFound} />
       </Switch>
     </BrowserRouter>

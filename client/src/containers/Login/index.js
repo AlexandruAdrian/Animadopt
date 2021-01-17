@@ -27,7 +27,11 @@ const Login = ({ history }) => {
     password: '',
   };
 
-  useEffect(() => dispatch(resetRequestState()), [dispatch]);
+  useEffect(() => {
+    return () => {
+      dispatch(resetRequestState());
+    };
+  }, [dispatch]);
 
   const formik = useFormik({
     initialValues: INITIAL_VALUES,
@@ -63,7 +67,7 @@ const Login = ({ history }) => {
             <CustomButton text="Autentificare" primary handler={handleSubmit} />
 
             <Typography component="p" className={classes.error}>
-              {get(response, 'err') && response.err}
+              {get(response, 'message') && response.message}
             </Typography>
           </Box>
         </Box>
