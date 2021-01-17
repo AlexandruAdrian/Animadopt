@@ -19,18 +19,24 @@ const style = {
     padding: '25px 20px 15px',
   },
   formContainer: {
+    ...accountRecoveryStyles.formWrapper,
     display: 'flex',
     flexDirection: 'column',
+    justifyContent: 'center',
   },
   form: {
-    ...accountRecoveryStyles.form,
-    '& > div:nth-child(2)': {
-      marginTop: '10px',
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    alignItems: 'center',
+    '& button': {
+      width: '100%',
+      maxWidth: '270px',
+      marginTop: '15px',
     },
   },
   formControl: {
-    width: '200px',
-    margin: '0 auto',
+    ...accountRecoveryStyles.formControl,
   },
   inputRoot: {
     ...registerFormStyles.inputRoot,

@@ -45,13 +45,12 @@ const styles = {
   footer: {
     width: '100%',
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
     marginTop: '10px',
     padding: '5px',
     paddingBottom: '10px',
     '& button': {
       width: '120px',
-      marginRight: '10px',
     },
     '& button:disabled': {
       backgroundColor: 'gray',

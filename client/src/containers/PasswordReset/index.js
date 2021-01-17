@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router';
+import { Link } from 'react-router-dom';
 // Material UI
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -25,7 +26,6 @@ import resetPassValidator from '../../validators/resetPassValidator';
 import { has } from 'lodash';
 // Style
 import style from '../../styles/PasswordReset';
-import { Link } from 'react-router-dom';
 
 function PasswordReset() {
   const INITIAL_VALUES = {
@@ -126,7 +126,6 @@ function PasswordReset() {
                   }}
                 />
               </FormControl>
-
               <FormControl className={classes.formControl}>
                 <TextField
                   error={

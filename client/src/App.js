@@ -10,6 +10,7 @@ import Login from './containers/Login';
 import ConfirmationPage from './containers/ConfirmationPage';
 import AccountRecovery from './containers/AccountRecovery';
 import PasswordReset from './containers/PasswordReset';
+import NotFound from './components/NotFound';
 
 const App = () => {
   return (
@@ -34,7 +35,12 @@ const App = () => {
           path="/users/password-reset/:id"
           component={PasswordReset}
         />
-        <Route path="*" component={() => '404 NOT FOUND'} />
+        <Route
+          exact
+          path="/dashboard"
+          component={() => <div>'dashboard'</div>}
+        />
+        <Route path="*" component={NotFound} />
       </Switch>
     </BrowserRouter>
   );

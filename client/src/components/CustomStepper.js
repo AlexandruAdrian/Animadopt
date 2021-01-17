@@ -97,16 +97,19 @@ const CustomStepper = (props) => {
 
       <div className={classes.footer}>
         <div>
-          <div>
-            {activeStep !== 0 && (
-              <CustomButton handler={handleBack} text={'Inapoi'} primary />
-            )}
+          {activeStep !== 0 && (
             <CustomButton
-              handler={handleNext}
-              text={activeStep === steps.length - 1 ? 'Gata' : 'Urmatorul'}
+              handler={handleBack}
+              text={'Inapoi'}
               primary
+              style={{ marginRight: '10px' }}
             />
-          </div>
+          )}
+          <CustomButton
+            handler={handleNext}
+            text={activeStep === steps.length - 1 ? 'Gata' : 'Urmatorul'}
+            primary
+          />
         </div>
       </div>
     </div>

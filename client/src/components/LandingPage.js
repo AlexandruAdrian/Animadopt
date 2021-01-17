@@ -1,9 +1,12 @@
 // System
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useHistory } from 'react-router';
 // Components
 import { Link } from 'react-router-dom';
 import CustomButton from './CustomButton';
 // Material UI
+// Hooks
+import useLoginStatus from '../hooks/useLoginStatus';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
@@ -12,6 +15,14 @@ import styles from '../styles/LandingPageStyles';
 
 const LandingPage = () => {
   const classes = makeStyles(styles)();
+  const history = useHistory();
+  const isLoggedIn = useLoginStatus();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      history.push('/dashboard');
+    }
+  }, [history, isLoggedIn]);
 
   return (
     <div className={classes.container}>
