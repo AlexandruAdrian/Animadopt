@@ -18,6 +18,16 @@ const style = {
     border: `1px solid ${colors.pacificBlue}`,
     color: colors.pacificBlue,
   },
+  dark: {
+    textTransform: 'capitalize',
+    width: '200px',
+    backgroundColor: colors.darkPacificBlue,
+    color: colors.white,
+    '&:hover': {
+      backgroundColor: colors.darkPacificBlue,
+      opacity: '0.8',
+    },
+  },
 };
 
 export default style;

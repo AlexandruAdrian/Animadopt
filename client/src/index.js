@@ -15,11 +15,9 @@ const MOUNT_NODE = document.getElementById('root');
 
 ReactDOM.render(
   <Provider store={store}>
-    <React.StrictMode>
-      <ThemeProvider theme={theme}>
-        <App />
-      </ThemeProvider>
-    </React.StrictMode>
+    <ThemeProvider theme={theme}>
+      <App />
+    </ThemeProvider>
   </Provider>,
   MOUNT_NODE
 );

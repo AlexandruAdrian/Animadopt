@@ -36,7 +36,7 @@ const App = () => {
           path="/users/password-reset/:id"
           component={PasswordReset}
         />
-        <Route exact path="/dashboard" component={Dashboard} />
+        <Route path="/dashboard" component={Dashboard} />
         <Route path="*" component={NotFound} />
       </Switch>
     </BrowserRouter>

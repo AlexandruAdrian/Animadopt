@@ -48,10 +48,11 @@ const userRoutes = () => {
     async (req, res, next) => {
       try {
         const userId = req.user._id;
-        await UserController.updateAvatar(userId, req.file);
+        const newAvatar = await UserController.updateAvatar(userId, req.file);
 
         res.status(200).json({
           message: "Imaginea a fost incarcata cu succes",
+          newAvatar,
         });
       } catch (err) {
         next(err);
@@ -159,11 +160,17 @@ const userRoutes = () => {
         const userId = req.user._id;
         await UserController.changePassword(userId, oldPassword, newPassword);
 
-        res.status(200).json({
-          message: "Parola a fost actualizata cu succes",
-        });
+        res
+          .json({
+            message: "Parola a fost actualizata cu succes",
+          })
+          .status(200);
       } catch (err) {
-        next(err);
+        res
+          .json({
+            message: err.message,
+          })
+          .status(400);
       }
     }
   );
@@ -173,9 +180,19 @@ const userRoutes = () => {
       const userId = req.params.id;
       const user = await UserController.getUserById(userId);
 
-      res.status(200).json({ user });
+      res.json({ user }).status(200);
     } catch (err) {
-      next(err);
+      res.json({ err: err.message }).status(err.status);
+    }
+  });
+
+  router.get("/", isAuthorized, async (req, res, next) => {
+    try {
+      const user = await UserController.getUser(req.user._id);
+
+      res.json({ user }).status(200);
+    } catch (err) {
+      res.json({ err: err.message }).status(err.status);
     }
   });
 

@@ -29,7 +29,7 @@ import style from '../../styles/PasswordReset';
 
 function PasswordReset() {
   const INITIAL_VALUES = {
-    newPassword: '',
+    password: '',
     passwordConfirmation: '',
   };
   const dispatch = useDispatch();
@@ -41,7 +41,7 @@ function PasswordReset() {
   const handleSubmit = (values) => {
     dispatch(
       resetPassword(
-        values.newPassword,
+        values.password,
         values.passwordConfirmation,
         match.params.id
       )
@@ -83,17 +83,15 @@ function PasswordReset() {
             <form className={classes.form} onSubmit={formik.handleSubmit}>
               <FormControl className={classes.formControl}>
                 <TextField
-                  error={
-                    !!(formik.touched.newPassword && formik.errors.newPassword)
-                  }
-                  id="newPassword"
+                  error={!!(formik.touched.password && formik.errors.password)}
+                  id="password"
                   helperText={
-                    formik.touched.newPassword && formik.errors.newPassword
-                      ? formik.errors.newPassword
+                    formik.touched.password && formik.errors.password
+                      ? formik.errors.password
                       : null
                   }
                   label="Parola noua"
-                  value={formik.values.newPassword}
+                  value={formik.values.password}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   type={showPassword ? 'text' : 'password'}

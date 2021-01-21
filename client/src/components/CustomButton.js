@@ -7,12 +7,14 @@ import Button from '@material-ui/core/Button';
 // Styles
 import styles from '../styles/CustomButtonStyle';
 
-function CustomButton({ handler, text, primary, ...rest }) {
+function CustomButton({ handler, text, primary, dark, ...rest }) {
   const classes = makeStyles(styles)();
 
   return (
     <Button
-      className={primary ? classes.primary : classes.secondary}
+      className={
+        primary ? classes.primary : dark ? classes.dark : classes.secondary
+      }
       onClick={handler}
       {...rest}
     >

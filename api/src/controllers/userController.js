@@ -69,6 +69,7 @@ class UserController {
 
     await newUser.save();
     newUser = newUser.toJSON();
+
     delete newUser.password;
 
     await this.requestConfirmationCode(newUser.email);
@@ -307,10 +308,10 @@ class UserController {
       );
     }
 
-    const filePath = file.path.split("Animadopt\\")[1];
-
+    const filePath = file.path.split("public\\")[1];
     if (!foundUser.avatar.includes("placeholders")) {
       const filename = foundUser.avatar.split("avatars\\")[1];
+
       fs.unlink(`${AVATAR_PICTURES_PATH}/${filename}`, (err) => {
         if (err) {
           throw new ErrorsFactory("notfound", "NotFound", "File not found.");
@@ -320,6 +321,7 @@ class UserController {
 
     foundUser.avatar = filePath;
     await foundUser.save();
+    return foundUser.avatar;
   }
 
   async getUserById(userId) {
@@ -333,10 +335,17 @@ class UserController {
       );
     }
 
+    const role = await Role.findOne({ _id: foundUser.role_id });
+
     const user = foundUser.toJSON();
+    user.role = role;
     delete user.password;
 
     return user;
+  }
+
+  async getUser(id) {
+    return await this.getUserById(id);
   }
 
   signToken(userId) {

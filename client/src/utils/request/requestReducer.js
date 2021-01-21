@@ -26,6 +26,11 @@ import {
   REQUEST_CONFIRMATION_SUCCESS,
   REQUEST_CONFIRMATION_ERROR,
 } from '../../containers/AccountRecovery/constants';
+import {
+  CHANGE_PASSWORD,
+  CHANGE_PASSWORD_SUCCESS,
+  CHANGE_PASSWORD_ERROR,
+} from '../../containers/Settings/constants';
 import { RESET_REQUEST_STATE } from './constants';
 
 const INITIAL_STATE = {
@@ -35,6 +40,7 @@ const INITIAL_STATE = {
 
 const requestReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case CHANGE_PASSWORD:
     case RECOVER_PASSWORD:
     case REQUEST_CONFIRMATION:
     case CONFIRM_ACCOUNT:
@@ -47,6 +53,8 @@ const requestReducer = (state = INITIAL_STATE, action) => {
       };
     }
 
+    case CHANGE_PASSWORD_SUCCESS:
+    case CHANGE_PASSWORD_ERROR:
     case RECOVER_PASSWORD_SUCCESS:
     case RECOVER_PASSWORD_ERROR:
     case REQUEST_CONFIRMATION_SUCCESS:
