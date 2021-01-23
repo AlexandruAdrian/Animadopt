@@ -4,9 +4,13 @@ const fs = require("fs");
 const Post = require("../models/post/postModel");
 const AnimalCategories = require("../models/animalCategories/animalCategoriesModel");
 // Constants
-const { POST_PICTURES_PATH, STATUS_PENDING, STATUS_APPROVED } = require("../models/post/constants");
+const {
+  POST_PICTURES_PATH,
+  STATUS_PENDING,
+  STATUS_APPROVED,
+} = require("../models/post/constants");
 // Utilities
-const { difference } = require('lodash');
+const { difference } = require("lodash");
 const ErrorsFactory = require("../factories/errorsFactory");
 
 class PostController {
@@ -23,15 +27,18 @@ class PostController {
 
     newPost.pictures = this.computePicturesPath(pictures, newPost._id);
     await newPost.save();
-    const category = await AnimalCategories.findOne({ category: newPost.category });
+    const category = await AnimalCategories.findOne({
+      category: newPost.category,
+    });
     category.numberOfPosts += 1;
     await category.save();
 
     return newPost;
   }
 
-  async updatePost(pictures, postData, postId) {
+  async updatePost(pictures, postData, postId, userId) {
     const foundPost = await Post.findOne({ _id: postId });
+
     if (!foundPost) {
       throw new ErrorsFactory(
         "notfound",
@@ -40,15 +47,20 @@ class PostController {
       );
     }
 
+    // Prevent update of posts that belong to other users
+    if (foundPost.postedBy !== userId) {
+      throw new ErrorsFactory("invalid", "InvalidError", "Actiune invalida");
+    }
+
     const picturesPath = this.computePicturesPath(pictures, foundPost._id);
     const diff = difference(foundPost.pictures, picturesPath);
 
-    diff.forEach(picture => {
-      const filename = picture.split('posts\\')[1];
+    diff.forEach((picture) => {
+      const filename = picture.split("posts\\")[1];
 
-      fs.unlink(`${POST_PICTURES_PATH}/${filename}`, err => {
+      fs.unlink(`${POST_PICTURES_PATH}/${filename}`, (err) => {
         if (err) {
-          throw new ErrorsFactory('notfound', 'NotFound', 'File not found.');
+          throw new ErrorsFactory("notfound", "NotFound", "File not found.");
         }
       });
     });
@@ -79,9 +91,16 @@ class PostController {
     return foundPost;
   }
 
-  async deletePost(postId) {
-    const post = await Post.findOne({ _id: postId});
-    const category = await AnimalCategories.findOne({ category: post.category });
+  async deletePost(postId, userId) {
+    const post = await Post.findOne({ _id: postId });
+    // Prevent deletion of posts that belong to other users
+    if (post.postedBy !== userId) {
+      throw new ErrorsFactory("invalid", "InvalidError", "Actiune invalida");
+    }
+
+    const category = await AnimalCategories.findOne({
+      category: post.category,
+    });
     category.numberOfPosts -= 1;
     await category.save();
     await post.remove();
@@ -130,8 +149,12 @@ class PostController {
     return results;
   }
 
-  async markAsAdopted(postId) {
+  async markAsAdopted(postId, userId) {
     const foundPost = await Post.findOne({ _id: postId });
+    if (foundPost.postedBy !== userId) {
+      throw new ErrorsFactory("invalid", "InvalidError", "Actiune invalida");
+    }
+
     if (!foundPost) {
       throw new ErrorsFactory(
         "notfound",
@@ -168,7 +191,7 @@ class PostController {
       );
 
       const splitPath = picture.path.split("post-");
-      const relativePath = splitPath[0].split('Animadopt\\')[1];
+      const relativePath = splitPath[0].split("Animadopt\\")[1];
       const newPath = `${relativePath}${postId}-${splitFileName[1]}`;
 
       picturesPath.push(newPath);

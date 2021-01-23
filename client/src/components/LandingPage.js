@@ -22,7 +22,7 @@ const LandingPage = () => {
     if (isLoggedIn) {
       history.push('/dashboard');
     }
-  }, [history]);
+  }, [history, isLoggedIn]);
 
   return (
     <div className={classes.container}>

@@ -37,9 +37,10 @@ const Login = ({ history }) => {
     initialValues: INITIAL_VALUES,
     validateOnMount: true,
   });
-  const handleSubmit = () => {
+  function handleSubmit() {
     dispatch(loginUser(formik.values));
-  };
+  }
+
   const handleBack = () => {
     dispatch(resetRequestState());
     history.push('/');

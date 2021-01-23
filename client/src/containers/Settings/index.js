@@ -25,9 +25,7 @@ import { updateUserAvatar, changePassword } from './actions';
 import { resetRequestState } from '../../utils/request/actions';
 // Validators
 import avatarValidationSchema from '../../validators/avatarChangeValidator';
-import resetPassValidator from '../../validators/resetPassValidator';
-// Utils
-import { has } from 'lodash';
+import passChangeValidationSchema from '../../validators/changePassValidator';
 // Styles
 import style from '../../styles/SettingsStyle';
 import clsx from 'clsx';
@@ -35,7 +33,7 @@ import clsx from 'clsx';
 function Settings({ user }) {
   const classes = makeStyles(style)();
   const dispatch = useDispatch();
-  const { response, isLoading } = useSelector((state) => state.request);
+  const { isLoading } = useSelector((state) => state.request);
   const [showPassword, setShowPassword] = useState(false);
 
   const handlePasswordToggle = () => {
@@ -59,7 +57,7 @@ function Settings({ user }) {
   });
   const passwordForm = useFormik({
     initialValues: PASSWORD_INITIAL_STATE,
-    validationSchema: resetPassValidator,
+    validationSchema: passChangeValidationSchema,
     validateOnBlur: true,
     onSubmit: handlePasswordSubmit,
   });
@@ -110,13 +108,15 @@ function Settings({ user }) {
                   hidden
                 />
               </Button>
-              <Typography component="p">{avatarForm.errors.file}</Typography>
             </form>
             <img
               alt="avatar"
               src={`${process.env.REACT_APP_API_ENDPOINT}/${user.avatar}`}
             />
           </Box>
+          {avatarForm.errors.file ? (
+            <Typography component="p">{avatarForm.errors.file}</Typography>
+          ) : null}
           <Box className={classes.details}>
             <ul>
               <li>

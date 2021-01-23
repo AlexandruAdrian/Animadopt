@@ -34,8 +34,7 @@ function* changeUserPasswordSaga(action) {
     const { data } = yield call(changeUserPasswordHttp, action);
     yield put(changePasswordSuccess(data));
   } catch (err) {
-    console.log(`Error changing password: ${err}`);
-    yield put(changePasswordError());
+    yield put(changePasswordError(err));
   }
 }
 

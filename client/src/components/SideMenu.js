@@ -17,6 +17,7 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import SettingsIcon from '@material-ui/icons/Settings';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import GroupIcon from '@material-ui/icons/Group';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 // Constants
 import {
   USER_ROLE_ADMIN,
@@ -54,6 +55,15 @@ function SideMenu({ open, onClose, user }) {
           )}
 
           <ListItem className={classes.option}>
+            <Link to={`${path}/`} onClick={onClose}>
+              <ListItemIcon>
+                <DashboardIcon className={classes.icon} />
+              </ListItemIcon>
+              <ListItemText primary={'Pagina principala'} />
+            </Link>
+          </ListItem>
+
+          <ListItem className={classes.option}>
             <ListItemIcon>
               <AssignmentIcon className={classes.icon} />
             </ListItemIcon>
@@ -61,7 +71,7 @@ function SideMenu({ open, onClose, user }) {
           </ListItem>
 
           <ListItem className={classes.option} onClick={onClose}>
-            <Link to={`${path}/settings`}>
+            <Link to={`${path}/settings`} onClick={onClose}>
               <ListItemIcon>
                 <SettingsIcon className={classes.icon} />
               </ListItemIcon>
@@ -73,10 +83,12 @@ function SideMenu({ open, onClose, user }) {
             (user.role.type === USER_ROLE_ADMIN ||
               user.role.type === USER_ROLE_OWNER) && (
               <ListItem className={classes.option}>
-                <ListItemIcon>
-                  <GroupIcon className={classes.icon} />
-                </ListItemIcon>
-                <ListItemText primary={'Utilizatori'} />
+                <Link to={`${path}/users`} onClick={onClose}>
+                  <ListItemIcon>
+                    <GroupIcon className={classes.icon} />
+                  </ListItemIcon>
+                  <ListItemText primary={'Utilizatori'} />
+                </Link>
               </ListItem>
             )}
 

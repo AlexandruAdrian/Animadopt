@@ -5,7 +5,7 @@ const style = {
   container: {
     width: '100%',
     height: '100%',
-    padding: '60px 10px 0 10px',
+    padding: '60px 10px 20px 10px',
   },
   card: {
     display: 'flex',
@@ -25,6 +25,12 @@ const style = {
     '& > div:last-child': {
       display: 'flex',
       flexDirection: 'column',
+      '& > p': {
+        fontSize: '14px',
+        color: 'red',
+        marginTop: '30px',
+        textAlign: 'center',
+      },
       '@media (min-width: 540px)': {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -73,8 +79,8 @@ const style = {
     },
     '& > form': {
       position: 'absolute',
-      right: '2px',
-      bottom: '-10px',
+      right: '5px',
+      bottom: '-12px',
       width: '30px',
       height: '30px',
       display: 'flex',
@@ -95,11 +101,6 @@ const style = {
           color: colors.white,
           backgroundColor: colors.darkPacificBlue,
         },
-      },
-      '& > p': {
-        fontSize: '14px',
-        color: 'red',
-        marginTop: '8px',
       },
     },
   },

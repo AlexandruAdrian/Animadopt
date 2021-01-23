@@ -53,10 +53,12 @@ const postRoutes = () => {
         const pictures = req.files;
         const postData = req.body;
         const postId = req.params.postId;
+        const userId = req.user._id;
         const updatedPost = await PostController.updatePost(
           pictures,
           postData,
-          postId
+          postId,
+          userId
         );
 
         res.status(200).json({
@@ -69,11 +71,7 @@ const postRoutes = () => {
     }
   );
 
-  router.get(
-    "/:postId",
-    isAuthorized,
-    isBanned,
-    async (req, res, next) => {
+  router.get("/:postId", isAuthorized, isBanned, async (req, res, next) => {
     try {
       const post = await PostController.getPostById(req.params.postId);
 
@@ -83,13 +81,9 @@ const postRoutes = () => {
     }
   });
 
-  router.delete(
-    "/:postId",
-    isAuthorized,
-    isBanned,
-    async (req, res, next) => {
+  router.delete("/:postId", isAuthorized, isBanned, async (req, res, next) => {
     try {
-      await PostController.deletePost(req.params.postId);
+      await PostController.deletePost(req.params.postId, req.user._id);
 
       res.status(200).json({ message: "Postarea a fost stearsa cu succes" });
     } catch (err) {
@@ -102,23 +96,19 @@ const postRoutes = () => {
     isAuthorized,
     isBanned,
     async (req, res, next) => {
-    try {
-      const postId = req.params.postId;
-      await PostController.markAsAdopted(postId);
+      try {
+        await PostController.markAsAdopted(req.params.postId, req.user._id);
 
-      res.status(200).json({
-        message: "Postarea a fost actualizata cu succes",
-      });
-    } catch (err) {
-      next(err);
+        res.status(200).json({
+          message: "Postarea a fost actualizata cu succes",
+        });
+      } catch (err) {
+        next(err);
+      }
     }
-  });
+  );
 
-  router.get(
-    "/p/user",
-    isAuthorized,
-    isBanned,
-    async (req, res, next) => {
+  router.get("/p/user", isAuthorized, isBanned, async (req, res, next) => {
     try {
       const userId = req.user._id;
       const userPosts = await PostController.fetchUserPosts(userId);
@@ -162,22 +152,17 @@ const postRoutes = () => {
     }
   );
 
-  router.get(
-    "/poststotal",
-    isAuthorized,
-    isBanned,
-    async (req, res, next) => {
-      try {
-        const totalPosts = await PostController.getTotalPostsLength();
+  router.get("/poststotal", isAuthorized, isBanned, async (req, res, next) => {
+    try {
+      const totalPosts = await PostController.getTotalPostsLength();
 
-        res.status(200).json({
-          totalPosts,
-        });
-      } catch (err) {
-        next(err);
-      }
+      res.status(200).json({
+        totalPosts,
+      });
+    } catch (err) {
+      next(err);
     }
-  );
+  });
 
   return router;
 };

@@ -22,7 +22,7 @@ const styles = {
       position: 'absolute',
       width: '22px',
       height: '22px',
-      background: colors.pacificBlue,
+      background: colors.darkPacificBlue,
       animation: '$lds-heart 1.2s infinite cubic-bezier(0.215, 0.61, 0.355, 1)',
     },
     '& div:after, & div:before': {
@@ -31,7 +31,7 @@ const styles = {
       display: 'block',
       width: '22px',
       height: '22px',
-      background: colors.pacificBlue,
+      background: colors.darkPacificBlue,
     },
     '& div:before': {
       left: '-15px',
@@ -63,7 +63,7 @@ const styles = {
     },
   },
   loadingText: {
-    color: colors.pacificBlue,
+    color: colors.darkPacificBlue,
     fontSize: '14px',
   },
 };

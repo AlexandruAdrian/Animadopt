@@ -4,7 +4,7 @@ import lostPuppy from '../assets/lost-puppy.png';
 const style = {
   container: {
     width: '100%',
-    height: '100%',
+    minHeight: '100%',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -14,7 +14,7 @@ const style = {
     color: colors.darkPacificBlue,
     fontSize: '60px',
     marginBottom: '10px',
-    paddingRight: '10px',
+    paddingRight: '3px',
   },
   picture: {
     backgroundImage: `url(${lostPuppy})`,

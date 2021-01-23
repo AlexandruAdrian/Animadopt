@@ -166,11 +166,7 @@ const userRoutes = () => {
           })
           .status(200);
       } catch (err) {
-        res
-          .json({
-            message: err.message,
-          })
-          .status(400);
+        res.sendStatus(400);
       }
     }
   );

@@ -4,7 +4,7 @@ const style = {
   dashboard: {
     backgroundColor: colors.offWhite,
     width: '100%',
-    height: '100%',
+    minHeight: '100%',
   },
 };
 
