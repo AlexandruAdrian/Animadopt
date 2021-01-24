@@ -1,5 +1,5 @@
 // System
-const express = require('express');
+const express = require("express");
 // Controllers
 const AdminController = require("../controllers/adminController");
 // Middleware
@@ -12,13 +12,16 @@ const adminRoutes = () => {
   const router = express.Router();
 
   router.put(
-    '/post/:postId',
+    "/post/:postId",
     isAuthorized,
     isAdminOrOwner,
     async (req, res, next) => {
       try {
-        const updatedPost =
-          await AdminController.updatePostStatus(req.params.postId, parseInt(req.body.status), req.body.message);
+        const updatedPost = await AdminController.updatePostStatus(
+          req.params.postId,
+          parseInt(req.body.status),
+          req.body.message
+        );
 
         res.status(200).json({
           updatedPost,
@@ -27,10 +30,10 @@ const adminRoutes = () => {
         next(err);
       }
     }
-  )
+  );
 
   router.delete(
-    '/post/:postId',
+    "/post/:postId",
     isAuthorized,
     isAdminOrOwner,
     async (req, res, next) => {
@@ -38,8 +41,8 @@ const adminRoutes = () => {
         await AdminController.deletePost(req.params.postId, req.body.message);
 
         return res.status(200).json({
-          message: 'Postarea a fost stearsa cu succes',
-        })
+          message: "Postarea a fost stearsa cu succes",
+        });
       } catch (err) {
         next(err);
       }
@@ -47,7 +50,7 @@ const adminRoutes = () => {
   );
 
   router.put(
-    '/ban/:userId',
+    "/ban/:userId",
     isAuthorized,
     isAdminOrOwner,
     async (req, res, next) => {
@@ -60,7 +63,7 @@ const adminRoutes = () => {
         );
 
         res.status(200).json({
-          message: 'User-ul a fost blocat',
+          message: "User-ul a fost blocat cu succes",
           ban,
         });
       } catch (err) {
@@ -70,7 +73,7 @@ const adminRoutes = () => {
   );
 
   router.put(
-    '/unban/:userId',
+    "/unban/:userId",
     isAuthorized,
     isAdminOrOwner,
     async (req, res, next) => {
@@ -78,8 +81,8 @@ const adminRoutes = () => {
         await AdminController.unbanUser(req.params.userId);
 
         res.status(200).json({
-          message: 'User-ul a fost deblocat',
-        })
+          message: "User-ul a fost deblocat",
+        });
       } catch (err) {
         next(err);
       }
@@ -87,12 +90,14 @@ const adminRoutes = () => {
   );
 
   router.get(
-    '/user/history/:userId',
+    "/user/history/:userId",
     isAuthorized,
     isAdminOrOwner,
     async (req, res, next) => {
       try {
-        const banHistory = await AdminController.getUserBanHistory(req.params.userId);
+        const banHistory = await AdminController.getUserBanHistory(
+          req.params.userId
+        );
 
         return res.status(200).json({
           banHistory,
@@ -104,7 +109,7 @@ const adminRoutes = () => {
   );
 
   router.get(
-    '/users',
+    "/users",
     isAuthorized,
     isAdminOrOwner,
     query("page").escape(),
@@ -112,19 +117,25 @@ const adminRoutes = () => {
     async (req, res, next) => {
       try {
         const page = parseInt(req.query.page);
-        const searchTerm = req.query.search;
+        const searchTerm = req.query.searchTerm;
+        const role = req.query.role;
         const limit = 10;
-        const results = await AdminController.getUsers(page, limit, searchTerm);
+        const results = await AdminController.getUsers(
+          page,
+          limit,
+          searchTerm,
+          role
+        );
 
         res.status(200).json(results);
       } catch (err) {
-        next(err);
+        res.sendStatus(400);
       }
     }
   );
 
   router.post(
-    '/categories',
+    "/categories",
     isAuthorized,
     isAdminOrOwner,
     async (req, res, next) => {
@@ -142,12 +153,15 @@ const adminRoutes = () => {
   );
 
   router.put(
-    '/categories/:categoryId',
+    "/categories/:categoryId",
     isAuthorized,
     isAdminOrOwner,
     async (req, res, next) => {
       try {
-        const updatedCategory = await AdminController.editCategory(req.params.categoryId, req.body);
+        const updatedCategory = await AdminController.editCategory(
+          req.params.categoryId,
+          req.body
+        );
 
         res.status(200).json({
           message: "Categoria a fost actualizata cu success",
@@ -160,14 +174,16 @@ const adminRoutes = () => {
   );
 
   router.delete(
-    '/categories/:categoryId',
+    "/categories/:categoryId",
     isAuthorized,
     isAdminOrOwner,
     async (req, res, next) => {
       try {
         await AdminController.deleteCategory(req.params.categoryId);
 
-        res.status(200).json({ message: "Categoria a fost eliminata cu succes" });
+        res
+          .status(200)
+          .json({ message: "Categoria a fost eliminata cu succes" });
       } catch (err) {
         next(err);
       }
@@ -175,6 +191,6 @@ const adminRoutes = () => {
   );
 
   return router;
-}
+};
 
 module.exports = adminRoutes();

@@ -28,6 +28,16 @@ const style = {
       opacity: '0.8',
     },
   },
+  danger: {
+    textTransform: 'capitalize',
+    width: '200px',
+    backgroundColor: 'red',
+    color: colors.white,
+    '&:hover': {
+      backgroundColor: 'red',
+      opacity: '0.8',
+    },
+  },
 };
 
 export default style;

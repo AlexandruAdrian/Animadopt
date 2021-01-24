@@ -1,12 +1,9 @@
 // System
-import React, { useEffect } from 'react';
-import { useHistory } from 'react-router';
+import React from 'react';
 // Components
 import { Link } from 'react-router-dom';
 import CustomButton from './CustomButton';
 // Material UI
-// Hooks
-import useLoginStatus from '../hooks/useLoginStatus';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
@@ -15,20 +12,12 @@ import styles from '../styles/LandingPageStyles';
 
 const LandingPage = () => {
   const classes = makeStyles(styles)();
-  const history = useHistory();
-  const isLoggedIn = useLoginStatus();
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      history.push('/dashboard');
-    }
-  }, [history, isLoggedIn]);
 
   return (
     <div className={classes.container}>
       <Box className={classes.logoPets}>
-        <div className={classes.pets}></div>
-        <div className={classes.logo}></div>
+        <div className={classes.pets} />
+        <div className={classes.logo} />
       </Box>
 
       <Box className={classes.promoButtons}>
@@ -39,7 +28,7 @@ const LandingPage = () => {
         </Box>
 
         <Box className={classes.login}>
-          <div className={classes.logoRight}></div>
+          <div className={classes.logoRight} />
 
           <Box className={classes.buttons}>
             <Link to="/login">

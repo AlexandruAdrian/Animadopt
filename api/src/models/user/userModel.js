@@ -21,7 +21,6 @@ const UserSchema = new Schema({
   password: { type: String, required: true },
   phone: { type: String },
   gender: { type: String, enum: Object.values(Genders), required: true },
-  ban_id: { type: mongoose.Types.ObjectId, default: null },
   role_id: { type: mongoose.Types.ObjectId, required: true },
   isActive: { type: Boolean, default: false },
   joinedDate: { type: Date, default: Date.now },

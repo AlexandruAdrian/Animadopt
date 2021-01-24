@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { useFormik } from 'formik';
 // Material UI
 import { makeStyles } from '@material-ui/core/styles';
-import { Card, TextField } from '@material-ui/core';
+import { Card, CardActions, TextField } from '@material-ui/core';
 import { CardHeader } from '@material-ui/core';
 import { CardContent } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
@@ -109,14 +109,16 @@ function Settings({ user }) {
                 />
               </Button>
             </form>
+
             <img
               alt="avatar"
               src={`${process.env.REACT_APP_API_ENDPOINT}/${user.avatar}`}
             />
+
+            {avatarForm.errors.file ? (
+              <Typography component="p">{avatarForm.errors.file}</Typography>
+            ) : null}
           </Box>
-          {avatarForm.errors.file ? (
-            <Typography component="p">{avatarForm.errors.file}</Typography>
-          ) : null}
           <Box className={classes.details}>
             <ul>
               <li>

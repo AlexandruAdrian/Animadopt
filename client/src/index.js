@@ -26,7 +26,7 @@ ReactDOM.render(
       autoClose={5000}
       draggablePercent={60}
       draggable={true}
-      position={'top-center'}
+      position={'bottom-left'}
       limit={4}
     />
   </Provider>,

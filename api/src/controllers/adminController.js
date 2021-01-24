@@ -6,8 +6,11 @@ const Ban = require("../models/ban/banModel");
 const AnimalCategories = require("../models/animalCategories/animalCategoriesModel");
 const Notification = require("../models/notification/notificationModel");
 // Constants
-const { USER_ROLE_USER } = require("../models/role/constants");
-const { STATUS_APPROVED, STATUS_PENDING, STATUS_REJECTED } = require("../models/post/constants");
+const {
+  STATUS_APPROVED,
+  STATUS_PENDING,
+  STATUS_REJECTED,
+} = require("../models/post/constants");
 // Utilities
 const ErrorsFactory = require("../factories/errorsFactory");
 const asyncForEach = require("../utilities/asyncForEach");
@@ -18,18 +21,21 @@ class AdminController {
 
     if (!foundPost) {
       throw new ErrorsFactory(
-        'notfound',
-        'NotFound',
-        'Anuntul nu a fost gasit'
+        "notfound",
+        "NotFound",
+        "Anuntul nu a fost gasit"
       );
     }
 
-    const isValidStatus = status === STATUS_APPROVED || status === STATUS_REJECTED || status === STATUS_PENDING;
+    const isValidStatus =
+      status === STATUS_APPROVED ||
+      status === STATUS_REJECTED ||
+      status === STATUS_PENDING;
     if (!isValidStatus) {
       throw new ErrorsFactory(
-        'invalid',
-        'InvalidError',
-        'Statusul este invalid'
+        "invalid",
+        "InvalidError",
+        "Statusul este invalid"
       );
     }
 
@@ -40,7 +46,7 @@ class AdminController {
         itemId: foundPost._id,
         message: "Postarea a fost aprobata",
       });
-     await notification.save();
+      await notification.save();
     } else if (status === STATUS_REJECTED) {
       notification = new Notification({
         forUserId: foundPost.postedBy,
@@ -72,9 +78,9 @@ class AdminController {
 
     if (!foundUser) {
       throw new ErrorsFactory(
-        'notfound',
-        'NotFound',
-        'User-ul nu a fost gasit'
+        "notfound",
+        "NotFound",
+        "User-ul nu a fost gasit"
       );
     }
 
@@ -94,19 +100,15 @@ class AdminController {
     const foundUser = await User.findOne({ _id: userId });
     if (!foundUser) {
       throw new ErrorsFactory(
-        'notfound',
-        'NotFound',
-        'User-ul nu a fost gasit'
+        "notfound",
+        "NotFound",
+        "User-ul nu a fost gasit"
       );
     }
 
     const foundBan = await Ban.findOne({ forUserId: foundUser._id });
     if (!foundBan) {
-      throw new ErrorsFactory(
-        'notfound',
-        'NotFound',
-        'Ban-ul nu a fost gasit'
-      );
+      throw new ErrorsFactory("notfound", "NotFound", "Ban-ul nu a fost gasit");
     }
 
     foundBan.isValid = false;
@@ -117,8 +119,8 @@ class AdminController {
     return await Ban.find({ forUserId: userId });
   }
 
-  async getUsers(page, limit, searchTerm) {
-    const userRole = await Role.findOne({ type: USER_ROLE_USER });
+  async getUsers(page, limit, searchTerm, role) {
+    const userRole = await Role.findOne({ type: role });
     if (page < 1) {
       throw new ErrorsFactory(
         "invalid",
@@ -129,20 +131,23 @@ class AdminController {
 
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
-    const results = {};
+    const results = {
+      results: [],
+    };
 
     let query = {
       role_id: userRole._id,
     };
 
     if (searchTerm) {
+      console.log(searchTerm);
       query = {
         ...query,
         $or: [
-          { firstName: searchTerm },
-          { lastName: searchTerm },
-          { email: searchTerm },
-        ]
+          { firstName: new RegExp(searchTerm) },
+          { lastName: new RegExp(searchTerm) },
+          { email: new RegExp(searchTerm) },
+        ],
       };
     }
 
@@ -158,7 +163,17 @@ class AdminController {
       };
     }
 
-    results.results = await User.find(query).limit(limit).skip(startIndex);
+    const tempResults = await User.find(query).limit(limit).skip(startIndex);
+
+    if (tempResults) {
+      await asyncForEach(tempResults, async (user) => {
+        const foundBan = await Ban.findOne({ forUserId: user._id });
+        user = user.toJSON();
+        user.ban = foundBan;
+
+        results.results.push(user);
+      });
+    }
 
     return results;
   }
@@ -174,7 +189,7 @@ class AdminController {
         "conflict",
         "ConflictError",
         "Categoria exista deja"
-      )
+      );
     }
 
     const newCategory = new AnimalCategories({ key, category });
@@ -191,7 +206,7 @@ class AdminController {
         "notfound",
         "NotFoundError",
         "Categoria a fost deja eliminata"
-      )
+      );
     }
 
     if (foundCategory.isDefault) {
@@ -199,7 +214,7 @@ class AdminController {
         "invalid",
         "InvalidError",
         "Categoriile implicite nu se pot sterge"
-      )
+      );
     }
 
     if (foundCategory.numberOfPosts > 0) {
@@ -211,7 +226,6 @@ class AdminController {
     } else {
       await foundCategory.remove();
     }
-
   }
 
   async editCategory(categoryId, data) {
@@ -221,7 +235,7 @@ class AdminController {
         "notfound",
         "NotFoundError",
         "Aceasta categorie nu exista"
-      )
+      );
     }
 
     if (foundCategory.isDefault) {
@@ -232,7 +246,7 @@ class AdminController {
       );
     }
 
-    const posts = await Post.find({ category: foundCategory.category});
+    const posts = await Post.find({ category: foundCategory.category });
 
     const { key, category } = data;
     foundCategory.key = key;

@@ -70,6 +70,7 @@ const style = {
     justifyContent: 'center',
     '@media (min-width: 540px)': {
       order: '2',
+      marginRight: '20px',
     },
     '& > img': {
       width: '110px',
@@ -80,7 +81,7 @@ const style = {
     '& > form': {
       position: 'absolute',
       right: '5px',
-      bottom: '-12px',
+      bottom: '-8px',
       width: '30px',
       height: '30px',
       display: 'flex',
@@ -88,7 +89,9 @@ const style = {
       justifyContent: 'center',
       marginTop: '15px',
       paddingRight: '5px',
-      '@media (min-width: 540px)': {},
+      '@media (min-width: 540px)': {
+        right: '-11px',
+      },
       '& > label': {
         display: 'flex',
         minWidth: '45px',
@@ -101,6 +104,17 @@ const style = {
           color: colors.white,
           backgroundColor: colors.darkPacificBlue,
         },
+      },
+    },
+    ' & > p': {
+      color: 'red',
+      fontSize: '14px',
+      position: 'absolute',
+      top: '-30px',
+      width: '250px',
+      textAlign: 'center',
+      '@media (min-width: 540px)': {
+        right: '100px',
       },
     },
   },
