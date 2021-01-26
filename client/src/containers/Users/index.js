@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 // Components
 import AdminUserDetails from '../../components/AdminUserDetails';
-import BanModal from '../../components/BanModal';
 // Material UI
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -27,13 +26,11 @@ function Users() {
   const classes = makeStyles(style)();
   const dispatch = useDispatch();
   const { users, isLoading } = useSelector((state) => state.users);
-  const [selectedUserId, setSelectedUserId] = useState('');
   const [query, setQuery] = useState({
     page: 1,
     searchTerm: '',
     role: USER_ROLE_USER,
   });
-  const [openBanModal, setOpenBanModal] = useState(false);
 
   function handleSearchTerm(e) {
     setQuery({
@@ -41,14 +38,6 @@ function Users() {
       searchTerm: e.target.value,
     });
   }
-
-  const handleCloseBanModal = () => {
-    setOpenBanModal(false);
-  };
-
-  const handleOpenBanModal = () => {
-    setOpenBanModal(true);
-  };
 
   useEffect(() => {
     dispatch(getUsers(query));
@@ -74,7 +63,7 @@ function Users() {
                       <SearchIcon className={classes.icon} fontSize="small" />
                     </InputAdornment>
                   ),
-                  placeholder: 'Cauta',
+                  placeholder: 'Cauta dupa nume, prenume, email...',
                 }}
               />
             </FormControl>
@@ -83,20 +72,10 @@ function Users() {
 
         {users.map((user) => (
           <Grid item xs={12} md={6} lg={4} key={user._id}>
-            <AdminUserDetails
-              user={user}
-              openBanModal={handleOpenBanModal}
-              setUserId={setSelectedUserId}
-            />
+            <AdminUserDetails user={user} />
           </Grid>
         ))}
       </Grid>
-
-      <BanModal
-        open={openBanModal}
-        onClose={handleCloseBanModal}
-        userId={selectedUserId}
-      />
     </Box>
   );
 }

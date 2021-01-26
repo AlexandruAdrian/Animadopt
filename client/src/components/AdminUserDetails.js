@@ -2,61 +2,33 @@
 import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router';
 // Components
 import CustomButton from './CustomButton';
+import UserInfo from './UserInfo';
 // Material UI
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Card, CardActions, CardContent } from '@material-ui/core';
-// Icons
-import PersonIcon from '@material-ui/icons/Person';
-import EmailIcon from '@material-ui/icons/Email';
-import PhoneIcon from '@material-ui/icons/Phone';
+import { Card, CardActions } from '@material-ui/core';
+// Actions
+import { setSelectedUser } from '../containers/Users/actions';
 // Style
 import style from '../styles/AdminUserDetailsStyle';
 
-function AdminUserDetails({ user, openBanModal, setUserId }) {
+function AdminUserDetails({ user }) {
   const classes = makeStyles(style)();
+  const dispatch = useDispatch();
+  const history = useHistory();
   moment().locale('ro');
 
-  const handleModal = () => {
-    openBanModal();
-    setUserId(user._id);
+  const handleUserDetails = () => {
+    dispatch(setSelectedUser(user));
+    history.push(`/dashboard/user/${user._id}`);
   };
 
   return (
     <Card className={classes.userCard}>
-      <CardContent>
-        <Box className={classes.avatar}>
-          <img
-            alt="avatar"
-            src={`${process.env.REACT_APP_API_ENDPOINT}/${user.avatar}`}
-          />
-        </Box>
-        <Box className={classes.details}>
-          <ul>
-            <li>
-              <PersonIcon fontSize="small" />
-              <strong>Nume: </strong>
-              {user.lastName}
-            </li>
-            <li>
-              <PersonIcon fontSize="small" />
-              <strong>Prenume: </strong>
-              {user.firstName}
-            </li>
-            <li>
-              <PhoneIcon fontSize="small" />
-              <strong>Telefon: </strong>
-              {user.phone}
-            </li>
-            <li>
-              <EmailIcon fontSize="small" />
-              <strong>Email: </strong>
-              {user.email}
-            </li>
-          </ul>
-        </Box>
-      </CardContent>
+      <UserInfo user={user} />
       <CardActions className={classes.userActions} disableSpacing={true}>
         {user.ban && user.ban.isValid && (
           <p className={classes.banned}>
@@ -65,19 +37,11 @@ function AdminUserDetails({ user, openBanModal, setUserId }) {
           </p>
         )}
         <CustomButton
-          handler={() => {}}
+          handler={handleUserDetails}
           text={'Detalii utilizator'}
           size="small"
           primary
         />
-        {!user.ban && (
-          <CustomButton
-            handler={handleModal}
-            text={'Blocheaza utilizator'}
-            size="small"
-            danger
-          />
-        )}
       </CardActions>
     </Card>
   );
@@ -85,8 +49,6 @@ function AdminUserDetails({ user, openBanModal, setUserId }) {
 
 AdminUserDetails.propTypes = {
   user: PropTypes.object.isRequired,
-  openBanModal: PropTypes.func.isRequired,
-  setUserId: PropTypes.func.isRequired,
 };
 
 export default AdminUserDetails;

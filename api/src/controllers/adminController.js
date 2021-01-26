@@ -105,14 +105,9 @@ class AdminController {
         "User-ul nu a fost gasit"
       );
     }
+    await Ban.deleteOne({ forUserId: foundUser._id });
 
-    const foundBan = await Ban.findOne({ forUserId: foundUser._id });
-    if (!foundBan) {
-      throw new ErrorsFactory("notfound", "NotFound", "Ban-ul nu a fost gasit");
-    }
-
-    foundBan.isValid = false;
-    foundBan.save();
+    return foundUser._id;
   }
 
   async getUserBanHistory(userId) {
@@ -140,7 +135,6 @@ class AdminController {
     };
 
     if (searchTerm) {
-      console.log(searchTerm);
       query = {
         ...query,
         $or: [
@@ -168,14 +162,41 @@ class AdminController {
     if (tempResults) {
       await asyncForEach(tempResults, async (user) => {
         const foundBan = await Ban.findOne({ forUserId: user._id });
+        const role = await Role.findOne({ _id: user.role_id });
+
         user = user.toJSON();
+        delete user.password;
         user.ban = foundBan;
+        user.role = role;
 
         results.results.push(user);
       });
     }
 
     return results;
+  }
+
+  async getUserById(userId) {
+    let foundUser = await User.findOne({ _id: userId });
+
+    if (!foundUser) {
+      throw new ErrorsFactory(
+        "notfound",
+        "NotFound",
+        "Utilizatorul nu a fost gasit"
+      );
+    }
+
+    const foundRole = await Role.findOne({ _id: foundUser.role_id });
+    const foundBan = await Ban.findOne({ forUserId: foundUser._id });
+
+    foundUser = foundUser.toJSON();
+    foundUser.ban = foundBan;
+    foundUser.role = foundRole;
+
+    delete foundUser.password;
+
+    return foundUser;
   }
 
   async createCategory(data) {

@@ -9,11 +9,12 @@ import Modal from '@material-ui/core/Modal';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
+// Components
+import CustomButton from './CustomButton';
 // Actions
-import { banUser } from '../containers/Users/actions';
+import { banUser } from '../containers/User/actions';
 // Style
 import styles from '../styles/BanModalStyle';
-import CustomButton from './CustomButton';
 import moment from 'moment';
 
 function BanModal({ open, onClose, userId }) {

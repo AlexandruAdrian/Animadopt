@@ -11,6 +11,7 @@ import { AuthContext } from '../../context/authContext';
 import Navbar from '../../components/Navbar';
 import Settings from '../Settings';
 import Users from '../Users';
+import User from '../User';
 // Actions
 import { getUser } from './actions';
 // Styles
@@ -36,6 +37,11 @@ function Dashboard() {
         component={() => <Settings user={user} />}
       />
       <Route exact path={`${url}/users`} component={Users} />
+      <Route
+        exact
+        path={`${url}/user/:id`}
+        component={() => <User loggedUser={user} />}
+      />
     </Box>
   ) : (
     <Redirect to="/login" />

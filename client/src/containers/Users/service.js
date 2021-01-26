@@ -17,19 +17,3 @@ export const getUsersHttp = ({ page, searchTerm, role }) => {
     },
   });
 };
-
-export const banUserHttp = ({ startTime, endTime, reason, userId }) => {
-  return axios.put(
-    `${API_ENDPOINT}/ban/${userId}`,
-    {
-      startTime,
-      endTime,
-      reason,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${getLocalStorageItem('token')}`,
-      },
-    }
-  );
-};

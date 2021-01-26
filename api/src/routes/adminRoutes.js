@@ -78,10 +78,13 @@ const adminRoutes = () => {
     isAdminOrOwner,
     async (req, res, next) => {
       try {
-        await AdminController.unbanUser(req.params.userId);
+        const unbannedUserId = await AdminController.unbanUser(
+          req.params.userId
+        );
 
         res.status(200).json({
           message: "User-ul a fost deblocat",
+          userId: unbannedUserId,
         });
       } catch (err) {
         next(err);
@@ -104,6 +107,25 @@ const adminRoutes = () => {
         });
       } catch (err) {
         next(err);
+      }
+    }
+  );
+
+  router.get(
+    "/user/:userId",
+    isAuthorized,
+    isAdminOrOwner,
+    async (req, res, next) => {
+      try {
+        const user = await AdminController.getUserById(req.params.userId);
+
+        return res.json({ user }).status(200);
+      } catch (err) {
+        return res
+          .json({
+            error: err.message,
+          })
+          .status(err.status || 500);
       }
     }
   );

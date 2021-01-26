@@ -1,7 +1,7 @@
 // System
 import { put, call, all, takeLatest } from 'redux-saga/effects';
 // Service
-import { getUsersHttp, banUserHttp } from './service';
+import { getUsersHttp } from './service';
 // Actions
 import {
   getUsersSuccess,
@@ -10,13 +10,10 @@ import {
   banUserError,
 } from './actions';
 // Constants
-import { GET_USERS, BAN_USER } from './constants';
+import { GET_USERS } from './constants';
 
 function* usersSaga() {
-  yield all([
-    takeLatest(GET_USERS, getUsersSaga),
-    takeLatest(BAN_USER, banUserSaga),
-  ]);
+  yield all([takeLatest(GET_USERS, getUsersSaga)]);
 }
 
 function* getUsersSaga(action) {
@@ -25,15 +22,6 @@ function* getUsersSaga(action) {
     yield put(getUsersSuccess(data.results));
   } catch (err) {
     yield put(getUsersError());
-  }
-}
-
-export function* banUserSaga(action) {
-  try {
-    const { data } = yield call(banUserHttp, action);
-    yield put(banUserSuccess(data));
-  } catch (err) {
-    yield put(banUserError());
   }
 }
 

@@ -17,6 +17,9 @@ const style = {
     },
     '& > div:first-child': {
       width: '100%',
+      '& > p': {
+        marginTop: '15px',
+      },
       '@media (min-width: 500px)': {
         display: 'flex',
         justifyContent: 'space-between',

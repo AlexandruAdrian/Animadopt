@@ -1,6 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 import colors from './colors';
-import { roRO } from '@material-ui/core/locale';
 
 const theme = createMuiTheme({
   palette: {
