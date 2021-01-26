@@ -9,3 +9,18 @@ export const BAN_USER_ERROR = 'app/containers/User/BAN_USER_ERROR';
 export const UNBAN_USER = 'app/containers/User/UNBAN_USER';
 export const UNBAN_USER_SUCCESS = 'app/containers/User/UNBAN_USER_SUCCESS';
 export const UNBAN_USER_ERROR = 'app/containers/User/UNBAN_USER_ERROR';
+
+export const PROMOTE_USER = 'app/containers/User/PROMOTE_USER';
+export const PROMOTE_USER_SUCCESS = 'app/containers/User/PROMOTE_USER_SUCCESS';
+export const PROMOTE_USER_ERROR = 'app/containers/User/PROMOTE_USER_ERROR';
+
+export const DEMOTE_USER = 'app/containers/User/DEMOTE_USER';
+export const DEMOTE_USER_SUCCESS = 'app/containers/User/DEMOTE_USER_SUCCESS';
+export const DEMOTE_USER_ERROR = 'app/containers/User/DEMOTE_USER_ERROR';
+
+export const UNBAN_CONFIRMATION_MESSAGE =
+  'Sunteti sigur ca doriti sa deblocati utilizatorul ?';
+export const PROMOTION_CONFIRMATION_MESSAGE =
+  'Sunteti sigur ca doriti sa promovati utilizatorul ?';
+export const DEMOTION_CONFIRMATION_MESSAGE =
+  'Sunteti sigur ca doriti sa retrogradati utilizatorul ?';

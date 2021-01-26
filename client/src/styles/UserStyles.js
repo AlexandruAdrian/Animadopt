@@ -1,4 +1,3 @@
-import colors from './colors';
 import AdminUserDetailsStyle from './AdminUserDetailsStyle';
 
 const style = {
@@ -13,13 +12,13 @@ const style = {
   actions: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
 
     '& > p': {
       color: 'red',
       fontSize: '14px',
-      textAlign: 'center',
+      textAlign: 'left',
+      width: '100%',
+      paddingTop: '2px',
     },
 
     '& > button': {

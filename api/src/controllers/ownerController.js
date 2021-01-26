@@ -1,30 +1,27 @@
 // Models
 const User = require("../models/user/userModel");
 const Role = require("../models/role/roleModel");
+const Ban = require("../models/ban/banModel");
 const Notification = require("../models/notification/notificationModel");
 // Constants
-const { USER_ROLE_USER, USER_ROLE_ADMIN, USER_ROLE_OWNER } = require("../models/role/constants");
+const {
+  USER_ROLE_USER,
+  USER_ROLE_ADMIN,
+  USER_ROLE_OWNER,
+} = require("../models/role/constants");
 // Utilities
 const ErrorsFactory = require("../factories/errorsFactory");
 
 class OwnerController {
   async promoteUser(userId) {
-    const foundUser = await User.findOne({ _id: userId });
+    let foundUser = await User.findOne({ _id: userId });
     if (!foundUser) {
-      throw new ErrorsFactory(
-        'notfound',
-        'NotFound',
-        'Userul nu a fost gasit'
-      );
+      throw new ErrorsFactory("notfound", "NotFound", "Userul nu a fost gasit");
     }
 
     const userRole = await Role.findOne({ _id: foundUser.role_id });
     if (!userRole) {
-      throw new ErrorsFactory(
-        'notfound',
-        'NotFound',
-        'Role not found'
-      );
+      throw new ErrorsFactory("notfound", "NotFound", "Role not found");
     }
 
     let notification;
@@ -33,7 +30,8 @@ class OwnerController {
         const adminRole = await Role.findOne({ type: USER_ROLE_ADMIN });
         notification = new Notification({
           forUserId: foundUser._id,
-          message: "Ati fost promovat la rolul de Admin, va rugam sa va relogati"
+          message:
+            "Ati fost promovat la rolul de Admin, va rugam sa va relogati",
         });
         foundUser.role_id = adminRole._id;
         break;
@@ -42,7 +40,8 @@ class OwnerController {
         foundUser.role_id = ownerRole._id;
         notification = new Notification({
           forUserId: foundUser._id,
-          message: "Ati fost promovat la rolul de Owner, va rugam sa va relogati"
+          message:
+            "Ati fost promovat la rolul de Owner, va rugam sa va relogati",
         });
         break;
       case USER_ROLE_OWNER:
@@ -50,28 +49,31 @@ class OwnerController {
         break;
     }
 
+    const foundBan = await Ban.findOne({ forUserId: foundUser._id });
+    const role = await Role.findOne({ _id: foundUser.role_id });
+
     await foundUser.save();
-    await notification.save();
+    if (notification) {
+      await notification.save();
+    }
+
+    foundUser = foundUser.toJSON();
+    delete foundUser.password;
+    foundUser.ban = foundBan;
+    foundUser.role = role;
+
     return foundUser;
   }
 
   async demoteUser(userId) {
-    const foundUser = await User.findOne({ _id: userId });
+    let foundUser = await User.findOne({ _id: userId });
     if (!foundUser) {
-      throw new ErrorsFactory(
-        'notfound',
-        'NotFound',
-        'Userul nu a fost gasit'
-      );
+      throw new ErrorsFactory("notfound", "NotFound", "Userul nu a fost gasit");
     }
 
     const userRole = await Role.findOne({ _id: foundUser.role_id });
     if (!userRole) {
-      throw new ErrorsFactory(
-        'notfound',
-        'NotFound',
-        'Role not found'
-      );
+      throw new ErrorsFactory("notfound", "NotFound", "Role not found");
     }
 
     let notification;
@@ -81,7 +83,8 @@ class OwnerController {
         foundUser.role_id = adminRole._id;
         notification = new Notification({
           forUserId: foundUser._id,
-          message: "Ati fost retrogradat la rolul de admin, va rugam sa va relogati"
+          message:
+            "Ati fost retrogradat la rolul de admin, va rugam sa va relogati",
         });
         break;
       case USER_ROLE_ADMIN:
@@ -89,7 +92,8 @@ class OwnerController {
         foundUser.role_id = userRole._id;
         notification = new Notification({
           forUserId: foundUser._id,
-          message: "Ati fost retrogradat la rolul de user, va rugam sa va relogati"
+          message:
+            "Ati fost retrogradat la rolul de user, va rugam sa va relogati",
         });
         break;
       case USER_ROLE_USER:
@@ -97,8 +101,19 @@ class OwnerController {
         break;
     }
 
+    const foundBan = await Ban.findOne({ forUserId: foundUser._id });
+    const role = await Role.findOne({ _id: foundUser.role_id });
+
     await foundUser.save();
-    await notification.save();
+    if (notification) {
+      await notification.save();
+    }
+
+    foundUser = foundUser.toJSON();
+    delete foundUser.password;
+    foundUser.ban = foundBan;
+    foundUser.role = role;
+
     return foundUser;
   }
 }

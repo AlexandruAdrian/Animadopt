@@ -11,6 +11,12 @@ import {
   UNBAN_USER,
   UNBAN_USER_SUCCESS,
   UNBAN_USER_ERROR,
+  PROMOTE_USER,
+  PROMOTE_USER_SUCCESS,
+  PROMOTE_USER_ERROR,
+  DEMOTE_USER,
+  DEMOTE_USER_SUCCESS,
+  DEMOTE_USER_ERROR,
 } from '../User/constants';
 
 import { FETCH_USER_SUCCESS } from '../User/constants';
@@ -23,6 +29,8 @@ const INITIAL_STATE = {
 
 const usersReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case PROMOTE_USER:
+    case DEMOTE_USER:
     case UNBAN_USER:
     case BAN_USER:
     case GET_USERS: {
@@ -39,43 +47,19 @@ const usersReducer = (state = INITIAL_STATE, action) => {
       };
     }
 
+    case UNBAN_USER_SUCCESS:
     case BAN_USER_SUCCESS: {
-      let bannedUser = {};
-
-      const usersAfterBan = state.users.map((user) => {
-        if (user._id === action.ban.forUserId) {
-          user.ban = action.ban;
-          bannedUser = { ...user };
-        }
-
-        return user;
-      });
-
       return {
-        users: usersAfterBan,
-        isLoading: false,
-        selectedUser: bannedUser,
+        ...state,
+        selectedUser: {
+          ...state.selectedUser,
+          ban: action.ban,
+        },
       };
     }
 
-    case UNBAN_USER_SUCCESS: {
-      let unbannedUser = {};
-      const usersAfterUnban = state.users.map((user) => {
-        if (user._id === action.userId) {
-          user.ban = null;
-          unbannedUser = { ...user };
-        }
-
-        return user;
-      });
-
-      return {
-        users: usersAfterUnban,
-        isLoading: false,
-        selectedUser: unbannedUser,
-      };
-    }
-
+    case PROMOTE_USER_ERROR:
+    case DEMOTE_USER_ERROR:
     case UNBAN_USER_ERROR:
     case BAN_USER_ERROR:
     case GET_USERS_ERROR:
@@ -86,6 +70,13 @@ const usersReducer = (state = INITIAL_STATE, action) => {
 
     case FETCH_USER_SUCCESS:
     case SET_SELECTED_USER:
+      return {
+        ...state,
+        selectedUser: action.user,
+      };
+
+    case PROMOTE_USER_SUCCESS:
+    case DEMOTE_USER_SUCCESS:
       return {
         ...state,
         selectedUser: action.user,

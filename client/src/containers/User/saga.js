@@ -1,7 +1,13 @@
 // System
 import { put, call, all, takeLatest } from 'redux-saga/effects';
 // Service
-import { getUserForAdminHttp, banUserHttp, unbanUserHttp } from './service';
+import {
+  getUserForAdminHttp,
+  banUserHttp,
+  unbanUserHttp,
+  promoteUserHttp,
+  demoteUserHttp,
+} from './service';
 // Actions
 import {
   fetchUserSuccess,
@@ -10,15 +16,27 @@ import {
   banUserError,
   unbanUserSuccess,
   unbanUserError,
+  promoteUserSuccess,
+  promoteUserError,
+  demoteUserSuccess,
+  demoteUserError,
 } from './actions';
 // Constants
-import { FETCH_USER, BAN_USER, UNBAN_USER } from './constants';
+import {
+  FETCH_USER,
+  BAN_USER,
+  UNBAN_USER,
+  PROMOTE_USER,
+  DEMOTE_USER,
+} from './constants';
 
 function* userForAdminSaga() {
   yield all([
     takeLatest(FETCH_USER, getUserForAdminSaga),
     takeLatest(BAN_USER, banUserSaga),
     takeLatest(UNBAN_USER, unbanUserSaga),
+    takeLatest(PROMOTE_USER, promoteUserSaga),
+    takeLatest(DEMOTE_USER, demoteUserSaga),
   ]);
 }
 
@@ -46,6 +64,24 @@ export function* unbanUserSaga(action) {
     yield put(unbanUserSuccess(data));
   } catch (err) {
     yield put(unbanUserError());
+  }
+}
+
+export function* promoteUserSaga(action) {
+  try {
+    const { data } = yield call(promoteUserHttp, action);
+    yield put(promoteUserSuccess(data));
+  } catch (err) {
+    yield put(promoteUserError());
+  }
+}
+
+export function* demoteUserSaga(action) {
+  try {
+    const { data } = yield call(demoteUserHttp, action);
+    yield put(demoteUserSuccess(data));
+  } catch (err) {
+    yield put(demoteUserError());
   }
 }
 

@@ -8,6 +8,12 @@ import {
   UNBAN_USER,
   UNBAN_USER_SUCCESS,
   UNBAN_USER_ERROR,
+  PROMOTE_USER,
+  PROMOTE_USER_SUCCESS,
+  PROMOTE_USER_ERROR,
+  DEMOTE_USER,
+  DEMOTE_USER_SUCCESS,
+  DEMOTE_USER_ERROR,
 } from './constants';
 import { toast } from 'react-toastify';
 
@@ -52,7 +58,7 @@ export function banUserSuccess({ message, ban }) {
 
 export function banUserError() {
   toast.error(
-    'Ooops! Am intampinat o eroare in preluarea utilizatorilor, te rugam sa incerci din nou'
+    'Ooops! Am intampinat o eroare in preluarea utilizatorilor, va rugam sa incercati din nou'
   );
   return {
     type: BAN_USER_ERROR,
@@ -66,20 +72,68 @@ export function unbanUser(userId) {
   };
 }
 
-export function unbanUserSuccess({ message, userId }) {
+export function unbanUserSuccess({ message }) {
   toast.success(message);
   return {
     type: UNBAN_USER_SUCCESS,
+    ban: null,
     message,
-    userId,
   };
 }
 
 export function unbanUserError() {
   toast.error(
-    'Ooops! Am intampinat o eroare in deblocarea acestui utlizator, te rugam sa incerci din nou'
+    'Ooops! Am intampinat o eroare in deblocarea acestui utlizator, va rugam sa incercati din nou'
   );
   return {
     type: UNBAN_USER_ERROR,
+  };
+}
+
+export function promoteUser(userId) {
+  return {
+    type: PROMOTE_USER,
+    userId,
+  };
+}
+
+export function promoteUserSuccess({ message, promotedUser }) {
+  toast.success(message);
+  return {
+    type: PROMOTE_USER_SUCCESS,
+    user: promotedUser,
+  };
+}
+
+export function promoteUserError() {
+  toast.error(
+    'Ooops! Am intampinat o eroare in promovarea acestui utilizator, va rugam sa incercati din nou'
+  );
+  return {
+    type: PROMOTE_USER_ERROR,
+  };
+}
+
+export function demoteUser(userId) {
+  return {
+    type: DEMOTE_USER,
+    userId,
+  };
+}
+
+export function demoteUserSuccess({ message, demotedUser }) {
+  toast.success(message);
+  return {
+    type: DEMOTE_USER_SUCCESS,
+    user: demotedUser,
+  };
+}
+
+export function demoteUserError() {
+  toast.error(
+    'Ooops! Am intampinat o eroare in retrogradarea acestui utilizator, va rugam sa incercati din nou'
+  );
+  return {
+    type: DEMOTE_USER_ERROR,
   };
 }

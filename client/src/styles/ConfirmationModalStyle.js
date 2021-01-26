@@ -12,7 +12,7 @@ const style = {
     justifyContent: 'center',
   },
   content: {
-    paddingTop: '100px',
+    paddingTop: '80px',
     height: '250px',
     display: 'flex',
     width: '95%',
@@ -36,6 +36,7 @@ const style = {
       width: '50px',
       marginLeft: '10px',
       marginTop: '25px',
+      fontSize: '16px',
     },
   },
 };

@@ -1,6 +1,5 @@
 // System
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 // Material UI
@@ -9,13 +8,18 @@ import Box from '@material-ui/core/Box';
 import { Card, CardActions } from '@material-ui/core';
 // Components
 import BanModal from '../../components/BanModal';
-import UnbanModal from '../../components/UnbanModal';
+import ConfirmationModal from '../../components/ConfirmationModal';
 import UserInfo from '../../components/UserInfo';
 import CustomButton from '../../components/CustomButton';
 // Actions
-import { fetchUser } from './actions';
+import { unbanUser, promoteUser, demoteUser } from './actions';
 // Constants
 import { USER_ROLE_OWNER, USER_ROLE_USER } from '../Dashboard/constants';
+import {
+  UNBAN_CONFIRMATION_MESSAGE,
+  PROMOTION_CONFIRMATION_MESSAGE,
+  DEMOTION_CONFIRMATION_MESSAGE,
+} from './constants';
 // Style
 import style from '../../styles/UserStyles';
 // Utils
@@ -25,9 +29,9 @@ import moment from 'moment';
 function User({ loggedUser }) {
   const classes = makeStyles(style)();
   const dispatch = useDispatch();
+  const [openModal, setOpenModal] = useState(false);
   const [openBanModal, setOpenBanModal] = useState(false);
-  const [openUnbanModal, setOpenUnbanModal] = useState(false);
-  const { id } = useParams();
+  const [confirmationMessage, setConfirmationMessage] = useState('');
   const { selectedUser } = useSelector((state) => state.users);
 
   const handleCloseBanModal = () => {
@@ -38,17 +42,48 @@ function User({ loggedUser }) {
     setOpenBanModal(true);
   };
 
-  const handleCloseUnbanModal = () => {
-    setOpenUnbanModal(false);
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
+  const handleUnbanUser = () => {
+    dispatch(unbanUser(selectedUser._id));
+    handleCloseModal();
+  };
+
+  const handlePromoteUser = () => {
+    dispatch(promoteUser(selectedUser._id));
+    handleCloseModal();
+  };
+
+  const handleDemoteUser = () => {
+    dispatch(demoteUser(selectedUser._id));
+    handleCloseModal();
   };
 
   const handleOpenUnbanModal = () => {
-    setOpenUnbanModal(true);
+    setConfirmationMessage(UNBAN_CONFIRMATION_MESSAGE);
+    setOpenModal(true);
   };
 
-  useEffect(() => {
-    dispatch(fetchUser(id));
-  }, []);
+  const handleOpenPromotionModal = () => {
+    setConfirmationMessage(PROMOTION_CONFIRMATION_MESSAGE);
+    setOpenModal(true);
+  };
+
+  const handleOpenDemotionModal = () => {
+    setConfirmationMessage(DEMOTION_CONFIRMATION_MESSAGE);
+    setOpenModal(true);
+  };
+
+  let handler = null;
+  if (confirmationMessage === UNBAN_CONFIRMATION_MESSAGE) {
+    handler = handleUnbanUser;
+  } else if (confirmationMessage === PROMOTION_CONFIRMATION_MESSAGE) {
+    handler = handlePromoteUser;
+  } else {
+    handler = handleDemoteUser;
+  }
 
   return (
     <Box className={classes.userInfo}>
@@ -60,6 +95,10 @@ function User({ loggedUser }) {
               <p className={classes.banned}>
                 <strong>Utilizator blocat pana la: </strong>
                 {moment(selectedUser.ban.endTime).format('llll')}
+              </p>
+              <p className={classes.banned}>
+                <strong>Motiv: </strong>
+                {selectedUser.ban.reason}
               </p>
               <CustomButton
                 handler={handleOpenUnbanModal}
@@ -84,7 +123,7 @@ function User({ loggedUser }) {
                 {selectedUser.role &&
                   selectedUser.role.type !== USER_ROLE_OWNER && (
                     <CustomButton
-                      handler={() => {}}
+                      handler={handleOpenPromotionModal}
                       text={'Promoveaza Utilizator'}
                       primary
                       size={'small'}
@@ -93,7 +132,7 @@ function User({ loggedUser }) {
                 {selectedUser.role &&
                   selectedUser.role.type !== USER_ROLE_USER && (
                     <CustomButton
-                      handler={() => {}}
+                      handler={handleOpenDemotionModal}
                       text={'Retrogradeaza Utilizator'}
                       danger
                       size={'small'}
@@ -111,10 +150,11 @@ function User({ loggedUser }) {
         />
       )}
       {selectedUser._id && (
-        <UnbanModal
-          open={openUnbanModal}
-          onClose={handleCloseUnbanModal}
-          userId={selectedUser._id}
+        <ConfirmationModal
+          open={openModal}
+          onClose={handleCloseModal}
+          confirmationText={confirmationMessage}
+          confirmationHandler={handler}
         />
       )}
     </Box>

@@ -2,11 +2,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 // Components
 import App from './App';
+import Loading from './components/Loading';
 import { ToastContainer, Slide } from 'react-toastify';
 // Store
-import store from './config/configStore';
+import { store, persistor } from './config/configStore';
 import './styles/root.css';
 // Theme
 import theme from './styles/theme';
@@ -19,12 +21,14 @@ const MOUNT_NODE = document.getElementById('root');
 ReactDOM.render(
   <Provider store={store}>
     <ThemeProvider theme={theme}>
-      <App />
+      <PersistGate loading={<Loading />} persistor={persistor}>
+        <App />
+      </PersistGate>
     </ThemeProvider>
     <ToastContainer
       transition={Slide}
-      autoClose={5000}
-      draggablePercent={60}
+      autoClose={3000}
+      draggablePercent={40}
       draggable={true}
       position={'bottom-left'}
       limit={4}

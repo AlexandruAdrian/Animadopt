@@ -106,8 +106,6 @@ class AdminController {
       );
     }
     await Ban.deleteOne({ forUserId: foundUser._id });
-
-    return foundUser._id;
   }
 
   async getUserBanHistory(userId) {

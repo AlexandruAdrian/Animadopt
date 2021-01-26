@@ -8,6 +8,7 @@ import { Box, CardContent } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
 import PhoneIcon from '@material-ui/icons/Phone';
 import EmailIcon from '@material-ui/icons/Email';
+import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
 // Styles
 import styles from '../styles/AdminUserDetailsStyle';
 
@@ -43,6 +44,11 @@ function UserInfo({ user }) {
             <EmailIcon fontSize="small" />
             <strong>Email: </strong>
             {user.email}
+          </li>
+          <li>
+            <BusinessCenterIcon fontSize="small" />
+            <strong>Rol: </strong>
+            {user.role.type}
           </li>
         </ul>
       </Box>
