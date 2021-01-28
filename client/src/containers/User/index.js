@@ -87,61 +87,65 @@ function User({ loggedUser }) {
 
   return (
     <Box className={classes.userInfo}>
-      <Card className={classes.userCard}>
-        <UserInfo user={selectedUser} />
-        <CardActions disableSpacing={true} className={classes.actions}>
-          {selectedUser.ban && selectedUser.ban.isValid && (
-            <>
-              <p className={classes.banned}>
-                <strong>Utilizator blocat pana la: </strong>
-                {moment(selectedUser.ban.endTime).format('llll')}
-              </p>
-              <p className={classes.banned}>
-                <strong>Motiv: </strong>
-                {selectedUser.ban.reason}
-              </p>
-              <CustomButton
-                handler={handleOpenUnbanModal}
-                text={'Deblocheaza utilizator'}
-                primary
-                size="small"
-              />
-            </>
-          )}
-          {(!selectedUser.ban || !selectedUser.ban.isValid) && (
-            <CustomButton
-              handler={handleOpenBanModal}
-              text={'Blocheaza utilizator'}
-              danger
-              size={'small'}
-            />
-          )}
-          {has(loggedUser, 'role') &&
-            loggedUser.role.type === USER_ROLE_OWNER &&
-            !selectedUser.ban && (
-              <>
-                {selectedUser.role &&
-                  selectedUser.role.type !== USER_ROLE_OWNER && (
-                    <CustomButton
-                      handler={handleOpenPromotionModal}
-                      text={'Promoveaza Utilizator'}
-                      primary
-                      size={'small'}
-                    />
-                  )}
-                {selectedUser.role &&
-                  selectedUser.role.type !== USER_ROLE_USER && (
-                    <CustomButton
-                      handler={handleOpenDemotionModal}
-                      text={'Retrogradeaza Utilizator'}
-                      danger
-                      size={'small'}
-                    />
-                  )}
-              </>
+      <Box className={classes.user}>
+        <Card className={classes.userCard}>
+          <UserInfo user={selectedUser} />
+          <CardActions disableSpacing={true} className={classes.actions}>
+            {selectedUser.ban && selectedUser.ban.isValid && (
+              <Box className={classes.banned}>
+                <p>
+                  <strong>Utilizator blocat pana la: </strong>
+                  {moment(selectedUser.ban.endTime).format('llll')}
+                </p>
+                <p>
+                  <strong>Motiv: </strong>
+                  {selectedUser.ban.reason}
+                </p>
+                <CustomButton
+                  handler={handleOpenUnbanModal}
+                  text={'Deblocheaza'}
+                  primary
+                  size="small"
+                />
+              </Box>
             )}
-        </CardActions>
-      </Card>
+            <Box className={classes.buttonGroup}>
+              {has(loggedUser, 'role') &&
+                loggedUser.role.type === USER_ROLE_OWNER &&
+                !selectedUser.ban && (
+                  <>
+                    {selectedUser.role &&
+                      selectedUser.role.type !== USER_ROLE_OWNER && (
+                        <CustomButton
+                          handler={handleOpenPromotionModal}
+                          text={'Promoveaza'}
+                          primary
+                          size={'small'}
+                        />
+                      )}
+                    {selectedUser.role &&
+                      selectedUser.role.type !== USER_ROLE_USER && (
+                        <CustomButton
+                          handler={handleOpenDemotionModal}
+                          text={'Retrogradeaza'}
+                          danger
+                          size={'small'}
+                        />
+                      )}
+                  </>
+                )}
+              {(!selectedUser.ban || !selectedUser.ban.isValid) && (
+                <CustomButton
+                  handler={handleOpenBanModal}
+                  text={'Blocheaza'}
+                  danger
+                  size={'small'}
+                />
+              )}
+            </Box>
+          </CardActions>
+        </Card>
+      </Box>
       {selectedUser._id && (
         <BanModal
           open={openBanModal}

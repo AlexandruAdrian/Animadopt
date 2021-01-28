@@ -27,7 +27,7 @@ ReactDOM.render(
     </ThemeProvider>
     <ToastContainer
       transition={Slide}
-      autoClose={3000}
+      autoClose={2500}
       draggablePercent={40}
       draggable={true}
       position={'bottom-left'}

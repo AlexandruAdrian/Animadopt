@@ -3,6 +3,7 @@ import {
   GET_USERS_SUCCESS,
   GET_USERS_ERROR,
   SET_SELECTED_USER,
+  RESET_USERS_STATE,
 } from './constants';
 import {
   BAN_USER,
@@ -81,6 +82,9 @@ const usersReducer = (state = INITIAL_STATE, action) => {
         ...state,
         selectedUser: action.user,
       };
+
+    case RESET_USERS_STATE:
+      return INITIAL_STATE;
 
     default:
       return state;

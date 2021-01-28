@@ -4,54 +4,44 @@ import PropTypes from 'prop-types';
 // Material UI
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, CardContent } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 // Icons
-import PersonIcon from '@material-ui/icons/Person';
 import PhoneIcon from '@material-ui/icons/Phone';
 import EmailIcon from '@material-ui/icons/Email';
 import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
 // Styles
-import styles from '../styles/AdminUserDetailsStyle';
+import styles from '../styles/UserInfoStyles';
 
 function UserInfo({ user }) {
   const classes = makeStyles(styles)();
 
   return (
     <CardContent>
-      <Box className={classes.avatar}>
+      <Box className={classes.user}>
         <img
           alt="avatar"
           src={`${process.env.REACT_APP_API_ENDPOINT}/${user.avatar}`}
         />
+        <Typography component="p">{`${user.firstName} ${user.lastName}`}</Typography>
       </Box>
-      <Box className={classes.details}>
-        <ul>
-          <li>
-            <PersonIcon fontSize="small" />
-            <strong>Nume: </strong>
-            {user.lastName}
-          </li>
-          <li>
-            <PersonIcon fontSize="small" />
-            <strong>Prenume: </strong>
-            {user.firstName}
-          </li>
-          <li>
-            <PhoneIcon fontSize="small" />
-            <strong>Telefon: </strong>
-            {user.phone}
-          </li>
-          <li>
-            <EmailIcon fontSize="small" />
-            <strong>Email: </strong>
-            {user.email}
-          </li>
-          <li>
-            <BusinessCenterIcon fontSize="small" />
-            <strong>Rol: </strong>
-            {user.role.type}
-          </li>
-        </ul>
-      </Box>
+
+      <ul className={classes.userDetails}>
+        <li>
+          <PhoneIcon fontSize="small" />
+          <strong>Telefon: </strong>
+          {user.phone}
+        </li>
+        <li>
+          <EmailIcon fontSize="small" />
+          <strong>Email: </strong>
+          {user.email}
+        </li>
+        <li>
+          <BusinessCenterIcon fontSize="small" />
+          <strong>Rol: </strong>
+          {user.role.type}
+        </li>
+      </ul>
     </CardContent>
   );
 }

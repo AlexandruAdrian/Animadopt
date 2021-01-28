@@ -8,8 +8,9 @@ const styles = {
   },
   formContainer: {
     padding: '15px',
-    height: '300px',
-    width: '600px',
+    height: '270px',
+    width: '95%',
+    maxWidth: '500px',
     outline: 0,
   },
   form: {

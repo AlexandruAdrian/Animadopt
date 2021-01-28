@@ -4,6 +4,7 @@ import {
   GET_USERS_SUCCESS,
   GET_USERS_ERROR,
   SET_SELECTED_USER,
+  RESET_USERS_STATE,
 } from './constants';
 // Tostify
 import { toast } from 'react-toastify';
@@ -38,5 +39,11 @@ export function setSelectedUser(user) {
   return {
     type: SET_SELECTED_USER,
     user,
+  };
+}
+
+export function resetUsersState() {
+  return {
+    type: RESET_USERS_STATE,
   };
 }

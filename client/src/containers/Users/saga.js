@@ -3,12 +3,7 @@ import { put, call, all, takeLatest } from 'redux-saga/effects';
 // Service
 import { getUsersHttp } from './service';
 // Actions
-import {
-  getUsersSuccess,
-  getUsersError,
-  banUserSuccess,
-  banUserError,
-} from './actions';
+import { getUsersSuccess, getUsersError } from './actions';
 // Constants
 import { GET_USERS } from './constants';
 
