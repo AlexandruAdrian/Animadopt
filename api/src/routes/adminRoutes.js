@@ -56,6 +56,7 @@ const adminRoutes = () => {
     async (req, res, next) => {
       try {
         const ban = await AdminController.banUser(
+          req.user._id,
           req.params.userId,
           req.body.startTime,
           req.body.endTime,
@@ -135,11 +136,13 @@ const adminRoutes = () => {
     query("search").escape(),
     async (req, res, next) => {
       try {
+        const userId = req.user._id;
         const page = parseInt(req.query.page);
         const searchTerm = req.query.searchTerm;
         const role = req.query.role;
         const limit = 10;
         const results = await AdminController.getUsers(
+          userId,
           page,
           limit,
           searchTerm,

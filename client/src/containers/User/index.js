@@ -76,7 +76,7 @@ function User({ loggedUser }) {
     setOpenModal(true);
   };
 
-  let handler = null;
+  let handler;
   if (confirmationMessage === UNBAN_CONFIRMATION_MESSAGE) {
     handler = handleUnbanUser;
   } else if (confirmationMessage === PROMOTION_CONFIRMATION_MESSAGE) {
@@ -114,7 +114,7 @@ function User({ loggedUser }) {
                 loggedUser.role.type === USER_ROLE_OWNER &&
                 !selectedUser.ban && (
                   <>
-                    {selectedUser.role &&
+                    {loggedUser.role.type === USER_ROLE_OWNER &&
                       selectedUser.role.type !== USER_ROLE_OWNER && (
                         <CustomButton
                           handler={handleOpenPromotionModal}
@@ -123,7 +123,7 @@ function User({ loggedUser }) {
                           size={'small'}
                         />
                       )}
-                    {selectedUser.role &&
+                    {loggedUser.role.type === USER_ROLE_OWNER &&
                       selectedUser.role.type !== USER_ROLE_USER && (
                         <CustomButton
                           handler={handleOpenDemotionModal}
@@ -134,14 +134,15 @@ function User({ loggedUser }) {
                       )}
                   </>
                 )}
-              {(!selectedUser.ban || !selectedUser.ban.isValid) && (
-                <CustomButton
-                  handler={handleOpenBanModal}
-                  text={'Blocheaza'}
-                  danger
-                  size={'small'}
-                />
-              )}
+              {(!selectedUser.ban || !selectedUser.ban.isValid) &&
+                selectedUser.role.type === USER_ROLE_USER && (
+                  <CustomButton
+                    handler={handleOpenBanModal}
+                    text={'Blocheaza'}
+                    danger
+                    size={'small'}
+                  />
+                )}
             </Box>
           </CardActions>
         </Card>
@@ -153,7 +154,7 @@ function User({ loggedUser }) {
           userId={selectedUser._id}
         />
       )}
-      {selectedUser._id && (
+      {selectedUser._id && selectedUser.role.type === USER_ROLE_USER && (
         <ConfirmationModal
           open={openModal}
           onClose={handleCloseModal}

@@ -14,6 +14,11 @@ const {
 // Utilities
 const ErrorsFactory = require("../factories/errorsFactory");
 const asyncForEach = require("../utilities/asyncForEach");
+const mongoose = require("mongoose");
+const {
+  USER_ROLE_ADMIN,
+  USER_ROLE_OWNER,
+} = require("../models/role/constants");
 
 class AdminController {
   async updatePostStatus(postId, status, message) {
@@ -73,16 +78,49 @@ class AdminController {
     await post.remove();
   }
 
-  async banUser(userId, startTime, endTime, reason) {
-    const foundUser = await User.findOne({ _id: userId });
+  async isAllowed(byUser, targetUser) {
+    const foundByUserRole = await Role.findOne({ _id: byUser.role_id });
+    const foundTargetUserRole = await Role.findOne({
+      _id: targetUser.role_id,
+    });
 
-    if (!foundUser) {
+    if (
+      foundByUserRole.type === USER_ROLE_ADMIN &&
+      (foundTargetUserRole.type === USER_ROLE_OWNER ||
+        foundTargetUserRole.type === USER_ROLE_ADMIN)
+    ) {
+      throw new ErrorsFactory(
+        "authorization",
+        "Authorization",
+        "Actiunea nu este permisa"
+      );
+    }
+
+    if (
+      foundByUserRole.type === USER_ROLE_OWNER &&
+      foundTargetUserRole.type === USER_ROLE_OWNER
+    ) {
+      throw new ErrorsFactory(
+        "authorization",
+        "Authorization",
+        "Actiunea nu este permisa"
+      );
+    }
+  }
+
+  async banUser(byUserId, targetUserId, startTime, endTime, reason) {
+    const foundByUser = await User.findOne({ _id: byUserId });
+    const foundUser = await User.findOne({ _id: targetUserId });
+
+    if (!foundUser || !foundByUser) {
       throw new ErrorsFactory(
         "notfound",
         "NotFound",
         "User-ul nu a fost gasit"
       );
     }
+
+    await this.isAllowed(foundByUser, foundUser);
 
     const ban = new Ban({
       forUserId: foundUser._id,
@@ -112,7 +150,7 @@ class AdminController {
     return await Ban.find({ forUserId: userId });
   }
 
-  async getUsers(page, limit, searchTerm, role) {
+  async getUsers(userId, page, limit, searchTerm, role) {
     const userRole = await Role.findOne({ type: role });
     if (page < 1) {
       throw new ErrorsFactory(
@@ -130,6 +168,9 @@ class AdminController {
 
     let query = {
       role_id: userRole._id,
+      _id: {
+        $nin: [mongoose.Types.ObjectId(userId)],
+      },
     };
 
     if (searchTerm) {

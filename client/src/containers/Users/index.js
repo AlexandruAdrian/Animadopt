@@ -2,11 +2,14 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 // Components
+import TabPicker from '../../components/TabPicker';
 import AdminUserDetails from '../../components/AdminUserDetails';
 // Material UI
 import { makeStyles } from '@material-ui/core/styles';
+import FormControl from '@material-ui/core/FormControl';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
+import { Card, InputAdornment, TextField } from '@material-ui/core';
 // Icons
 import SearchIcon from '@material-ui/icons/Search';
 // Actions
@@ -16,16 +19,17 @@ import {
   USER_ROLE_USER,
   USER_ROLE_ADMIN,
   USER_ROLE_OWNER,
+  TAB_USER,
+  TAB_ADMIN,
 } from '../Dashboard/constants';
 // Styles
 import style from '../../styles/UsersStyle';
-import { Card, InputAdornment, TextField } from '@material-ui/core';
-import FormControl from '@material-ui/core/FormControl';
 
 function Users() {
   const classes = makeStyles(style)();
   const dispatch = useDispatch();
   const { users, isLoading } = useSelector((state) => state.users);
+  const [selectedTab, setSelectedTab] = useState(TAB_USER);
   const [query, setQuery] = useState({
     page: 1,
     searchTerm: '',
@@ -39,9 +43,28 @@ function Users() {
     });
   }
 
+  const onTabChange = async (e, newValue) => {
+    setSelectedTab(newValue);
+  };
+
+  useEffect(() => {
+    let role;
+    if (selectedTab === TAB_USER) {
+      role = USER_ROLE_USER;
+    } else if (selectedTab === TAB_ADMIN) {
+      role = USER_ROLE_ADMIN;
+    } else {
+      role = USER_ROLE_OWNER;
+    }
+    setQuery({
+      ...query,
+      role,
+    });
+  }, [selectedTab]);
+
   useEffect(() => {
     dispatch(getUsers(query));
-  }, []);
+  }, [query]);
 
   return (
     <Box className={classes.container}>
@@ -68,6 +91,10 @@ function Users() {
               />
             </FormControl>
           </Card>
+        </Grid>
+
+        <Grid item xs={12}>
+          <TabPicker selectedTab={selectedTab} changeHandler={onTabChange} />
         </Grid>
 
         {users.map((user) => (

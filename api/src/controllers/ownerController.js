@@ -13,11 +13,14 @@ const {
 const ErrorsFactory = require("../factories/errorsFactory");
 
 class OwnerController {
-  async promoteUser(userId) {
-    let foundUser = await User.findOne({ _id: userId });
-    if (!foundUser) {
+  async promoteUser(byUserId, targetUserId) {
+    let foundByUser = await User.findOne({ _id: byUserId });
+    let foundUser = await User.findOne({ _id: targetUserId });
+    if (!foundUser || !foundByUser) {
       throw new ErrorsFactory("notfound", "NotFound", "Userul nu a fost gasit");
     }
+
+    await this.isAllowed(foundByUser, foundUser);
 
     const userRole = await Role.findOne({ _id: foundUser.role_id });
     if (!userRole) {
@@ -65,12 +68,14 @@ class OwnerController {
     return foundUser;
   }
 
-  async demoteUser(userId) {
-    let foundUser = await User.findOne({ _id: userId });
+  async demoteUser(byUserId, targetUserId) {
+    let foundByUser = await User.findOne({ _id: byUserId });
+    let foundUser = await User.findOne({ _id: targetUserId });
     if (!foundUser) {
       throw new ErrorsFactory("notfound", "NotFound", "Userul nu a fost gasit");
     }
 
+    await this.isAllowed(foundByUser, foundUser);
     const userRole = await Role.findOne({ _id: foundUser.role_id });
     if (!userRole) {
       throw new ErrorsFactory("notfound", "NotFound", "Role not found");
@@ -115,6 +120,24 @@ class OwnerController {
     foundUser.role = role;
 
     return foundUser;
+  }
+
+  async isAllowed(byUser, targetUser) {
+    const foundByUserRole = await Role.findOne({ _id: byUser.role_id });
+    const foundTargetUserRole = await Role.findOne({
+      _id: targetUser.role_id,
+    });
+
+    if (
+      foundByUserRole.type === USER_ROLE_OWNER &&
+      foundTargetUserRole.type === USER_ROLE_OWNER
+    ) {
+      throw new ErrorsFactory(
+        "authorization",
+        "Authorization",
+        "Actiunea nu este permisa"
+      );
+    }
   }
 }
 

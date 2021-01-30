@@ -1,5 +1,5 @@
 // System
-const express = require('express');
+const express = require("express");
 // Controllers
 const OwnerController = require("../controllers/ownerController");
 // Middleware
@@ -10,17 +10,20 @@ const ownerRoutes = () => {
   const router = express.Router();
 
   router.put(
-    '/promote/:userId',
+    "/promote/:userId",
     isAuthorized,
     isOwner,
     async (req, res, next) => {
       try {
-        const promotedUser = await OwnerController.promoteUser(req.params.userId);
+        const promotedUser = await OwnerController.promoteUser(
+          req.user._id,
+          req.params.userId
+        );
 
         res.status(200).json({
-          message: 'Utilizatorul a fost promovat',
+          message: "Utilizatorul a fost promovat",
           promotedUser,
-        })
+        });
       } catch (err) {
         next(err);
       }
@@ -28,17 +31,20 @@ const ownerRoutes = () => {
   );
 
   router.put(
-    '/demote/:userId',
+    "/demote/:userId",
     isAuthorized,
     isOwner,
     async (req, res, next) => {
       try {
-        const demotedUser = await OwnerController.demoteUser(req.params.userId);
+        const demotedUser = await OwnerController.demoteUser(
+          req.user._id,
+          req.params.userId
+        );
 
         res.status(200).json({
-          message: 'Utilizatorul a fost retrogradat',
+          message: "Utilizatorul a fost retrogradat",
           demotedUser,
-        })
+        });
       } catch (err) {
         next(err);
       }

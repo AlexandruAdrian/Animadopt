@@ -3,8 +3,8 @@ import colors from './colors';
 const style = {
   confirmationContainer: {
     width: '100%',
-    height: '100%',
-    backgroundColor: colors.pacificBlue,
+    height: '100vh',
+    backgroundColor: colors.darkPacificBlue,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',

@@ -6,7 +6,7 @@ const style = {
     ...settingsStyle.container,
     margin: '0 auto',
     '@media (min-width: 500px)': {
-      maxWidth: '490px',
+      maxWidth: '500px',
     },
     '@media (min-width: 960px)': {
       maxWidth: '1000px',
