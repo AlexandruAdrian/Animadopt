@@ -12,6 +12,7 @@ import Navbar from '../../components/Navbar';
 import Settings from '../Settings';
 import Users from '../Users';
 import User from '../User';
+import Categories from '../Categories';
 // Actions
 import { getUser } from './actions';
 // Styles
@@ -42,6 +43,7 @@ function Dashboard() {
         path={`${url}/user/:id`}
         component={() => <User loggedUser={user} />}
       />
+      <Route exact path={`${url}/categories`} component={Categories} />
     </Box>
   ) : (
     <Redirect to="/login" />

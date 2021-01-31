@@ -28,7 +28,7 @@ export function getUsersSuccess(users) {
 
 export function getUsersError() {
   toast.error(
-    'Ooops! Am intampinat o eroare in preluarea utilizatorilor, te rugam sa incerci din nou'
+    'Ooops! Am intampinat o eroare in preluarea utilizatorilor, va rugam incercati din nou mai tarziu'
   );
   return {
     type: GET_USERS_ERROR,

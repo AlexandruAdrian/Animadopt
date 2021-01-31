@@ -169,7 +169,7 @@ const adminRoutes = () => {
           newCategory,
         });
       } catch (err) {
-        next(err);
+        return res.sendStatus(400);
       }
     }
   );
@@ -185,12 +185,12 @@ const adminRoutes = () => {
           req.body
         );
 
-        res.status(200).json({
+        return res.status(200).json({
           message: "Categoria a fost actualizata cu success",
           updatedCategory,
         });
       } catch (err) {
-        next(err);
+        return res.sendStatus(400);
       }
     }
   );
@@ -203,9 +203,10 @@ const adminRoutes = () => {
       try {
         await AdminController.deleteCategory(req.params.categoryId);
 
-        res
-          .status(200)
-          .json({ message: "Categoria a fost eliminata cu succes" });
+        res.status(200).json({
+          message: "Categoria a fost stearsa cu succes",
+          categoryId: req.params.categoryId,
+        });
       } catch (err) {
         next(err);
       }

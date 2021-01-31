@@ -238,6 +238,10 @@ class AdminController {
     return foundUser;
   }
 
+  async getCategories() {
+    return await AnimalCategories.find({});
+  }
+
   async createCategory(data) {
     const { key, category } = data;
 

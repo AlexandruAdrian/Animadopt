@@ -18,6 +18,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import GroupIcon from '@material-ui/icons/Group';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import CategoryIcon from '@material-ui/icons/Category';
 // Constants
 import {
   USER_ROLE_ADMIN,
@@ -70,15 +71,6 @@ function SideMenu({ open, onClose, user }) {
             <ListItemText primary={'Postarile mele'} />
           </ListItem>
 
-          <ListItem className={classes.option} onClick={onClose}>
-            <Link to={`${path}/settings`} onClick={onClose}>
-              <ListItemIcon>
-                <SettingsIcon className={classes.icon} />
-              </ListItemIcon>
-              <ListItemText primary={'Setari'} />
-            </Link>
-          </ListItem>
-
           {has(user, 'role') &&
             (user.role.type === USER_ROLE_ADMIN ||
               user.role.type === USER_ROLE_OWNER) && (
@@ -91,6 +83,28 @@ function SideMenu({ open, onClose, user }) {
                 </Link>
               </ListItem>
             )}
+
+          {has(user, 'role') &&
+            (user.role.type === USER_ROLE_ADMIN ||
+              user.role.type === USER_ROLE_OWNER) && (
+              <ListItem className={classes.option}>
+                <Link to={`${path}/categories`} onClick={onClose}>
+                  <ListItemIcon>
+                    <CategoryIcon className={classes.icon} />
+                  </ListItemIcon>
+                  <ListItemText primary={'Categorii'} />
+                </Link>
+              </ListItem>
+            )}
+
+          <ListItem className={classes.option} onClick={onClose}>
+            <Link to={`${path}/settings`} onClick={onClose}>
+              <ListItemIcon>
+                <SettingsIcon className={classes.icon} />
+              </ListItemIcon>
+              <ListItemText primary={'Setari'} />
+            </Link>
+          </ListItem>
 
           <ListItem className={classes.logout} onClick={handleLogOut}>
             <ListItemIcon>

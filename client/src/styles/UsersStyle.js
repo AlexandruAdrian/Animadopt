@@ -12,7 +12,6 @@ const style = {
       maxWidth: '1000px',
     },
   },
-
   card: {
     marginTop: '15px',
     display: 'flex',

@@ -14,7 +14,11 @@ import CustomButton from '../../components/CustomButton';
 // Actions
 import { unbanUser, promoteUser, demoteUser } from './actions';
 // Constants
-import { USER_ROLE_OWNER, USER_ROLE_USER } from '../Dashboard/constants';
+import {
+  USER_ROLE_ADMIN,
+  USER_ROLE_OWNER,
+  USER_ROLE_USER,
+} from '../Dashboard/constants';
 import {
   UNBAN_CONFIRMATION_MESSAGE,
   PROMOTION_CONFIRMATION_MESSAGE,
@@ -124,7 +128,7 @@ function User({ loggedUser }) {
                         />
                       )}
                     {loggedUser.role.type === USER_ROLE_OWNER &&
-                      selectedUser.role.type !== USER_ROLE_USER && (
+                      selectedUser.role.type === USER_ROLE_ADMIN && (
                         <CustomButton
                           handler={handleOpenDemotionModal}
                           text={'Retrogradeaza'}
@@ -135,7 +139,7 @@ function User({ loggedUser }) {
                   </>
                 )}
               {(!selectedUser.ban || !selectedUser.ban.isValid) &&
-                selectedUser.role.type === USER_ROLE_USER && (
+                selectedUser.role.type !== USER_ROLE_OWNER && (
                   <CustomButton
                     handler={handleOpenBanModal}
                     text={'Blocheaza'}
@@ -154,7 +158,7 @@ function User({ loggedUser }) {
           userId={selectedUser._id}
         />
       )}
-      {selectedUser._id && selectedUser.role.type === USER_ROLE_USER && (
+      {selectedUser._id && (
         <ConfirmationModal
           open={openModal}
           onClose={handleCloseModal}
