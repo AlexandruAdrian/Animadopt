@@ -1,7 +1,9 @@
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const { customAlphabet } = require('nanoid');
 
+const nanoid = customAlphabet('1234567890abcdef', 10)
 const AVATARS_DIR = path.join(__dirname, "../public/uploads/avatars");
 const POSTS_DIR = path.join(__dirname, "../public/uploads/posts");
 
@@ -20,14 +22,14 @@ const storage = multer.diskStorage({
     if (req.originalUrl.includes("avatar")) {
       cb(
         null,
-        req.user._id + "-" + Date.now() + path.extname(file.originalname)
+        req.user._id + "-" + nanoid() + path.extname(file.originalname)
       );
-    } else if (req.originalUrl.includes("posts")) {
-      cb(null, "post-" + Date.now() + path.extname(file.originalname));
+    } else if ( req.originalUrl.includes("posts")) {
+      cb(null, "post-" + nanoid() +  path.extname(file.originalname))
     } else if (req.originalUrl.includes("register")) {
       cb(
         null,
-        req.body.email + "-" + Date.now() + path.extname(file.originalname)
+        req.body.email + "-" + nanoid() + path.extname(file.originalname)
       );
     }
   },

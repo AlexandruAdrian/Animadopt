@@ -13,8 +13,11 @@ import Settings from '../Settings';
 import Users from '../Users';
 import User from '../User';
 import Categories from '../Categories';
+import Posts from '../Posts';
+import AddPosts from '../AddPost';
 // Actions
 import { getUser } from './actions';
+import { resetRequestState } from '../../utils/request/actions';
 // Styles
 import style from '../../styles/DashboardStyle';
 
@@ -27,6 +30,7 @@ function Dashboard() {
 
   useEffect(() => {
     dispatch(getUser());
+    dispatch(resetRequestState());
   }, [dispatch]);
 
   return isLoggedIn ? (
@@ -44,6 +48,8 @@ function Dashboard() {
         component={() => <User loggedUser={user} />}
       />
       <Route exact path={`${url}/categories`} component={Categories} />
+      <Route exact path={`${url}/posts`} component={Posts} />
+      <Route exact path={`${url}/posts/add`} component={AddPosts} />
     </Box>
   ) : (
     <Redirect to="/login" />

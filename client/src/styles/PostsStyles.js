@@ -1,9 +1,8 @@
-import colors from './colors';
-import settingsStyle from './SettingsStyle';
-
-const style = {
+const styles = {
   container: {
-    ...settingsStyle.container,
+    width: '100%',
+    height: '100%',
+    padding: '60px 10px 20px 10px',
     margin: '0 auto',
     '@media (min-width: 500px)': {
       maxWidth: '500px',
@@ -14,4 +13,4 @@ const style = {
   },
 };
 
-export default style;
+export default styles;

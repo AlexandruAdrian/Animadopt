@@ -32,6 +32,11 @@ import {
   CHANGE_PASSWORD_ERROR,
 } from '../../containers/Settings/constants';
 import { RESET_REQUEST_STATE } from './constants';
+import {
+  ADD_POST_SUCCESS,
+  ADD_POST_ERROR,
+  ADD_POST,
+} from '../../containers/AddPost/constants';
 
 const INITIAL_STATE = {
   response: {},
@@ -40,6 +45,7 @@ const INITIAL_STATE = {
 
 const requestReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case ADD_POST:
     case CHANGE_PASSWORD:
     case RECOVER_PASSWORD:
     case REQUEST_CONFIRMATION:
@@ -53,6 +59,8 @@ const requestReducer = (state = INITIAL_STATE, action) => {
       };
     }
 
+    case ADD_POST_SUCCESS:
+    case ADD_POST_ERROR:
     case CHANGE_PASSWORD_SUCCESS:
     case CHANGE_PASSWORD_ERROR:
     case RECOVER_PASSWORD_SUCCESS:

@@ -65,10 +65,12 @@ function SideMenu({ open, onClose, user }) {
           </ListItem>
 
           <ListItem className={classes.option}>
-            <ListItemIcon>
-              <AssignmentIcon className={classes.icon} />
-            </ListItemIcon>
-            <ListItemText primary={'Postarile mele'} />
+            <Link to={`${path}/posts`} onClick={onClose}>
+              <ListItemIcon>
+                <AssignmentIcon className={classes.icon} />
+              </ListItemIcon>
+              <ListItemText primary={'Anunturile mele'} />
+            </Link>
           </ListItem>
 
           {has(user, 'role') &&

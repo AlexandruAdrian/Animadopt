@@ -6,6 +6,8 @@ export const USER_ROLE_OWNER = 'Owner';
 export const USER_ROLE_ADMIN = 'Admin';
 export const USER_ROLE_USER = 'User';
 
+export const TAB_LABELS = [USER_ROLE_USER, USER_ROLE_ADMIN, USER_ROLE_OWNER];
+
 export const TAB_USER = 0;
 export const TAB_ADMIN = 1;
 export const TAB_OWNER = 2;

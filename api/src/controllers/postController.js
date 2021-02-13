@@ -3,6 +3,7 @@ const fs = require("fs");
 // Models
 const Post = require("../models/post/postModel");
 const AnimalCategories = require("../models/animalCategories/animalCategoriesModel");
+const Counties = require("../models/counties/countiesModel");
 // Constants
 const {
   POST_PICTURES_PATH,
@@ -106,7 +107,7 @@ class PostController {
     await post.remove();
   }
 
-  async getPosts(page, limit, category, location) {
+  async getPosts(page, limit, category, location, status, adopted, title) {
     if (page < 1) {
       throw new ErrorsFactory(
         "invalid",
@@ -121,15 +122,20 @@ class PostController {
     const results = {};
 
     const query = {
-      isAdopted: false,
-      status: STATUS_APPROVED,
+      isAdopted: adopted,
+      status: status,
     };
+
     if (category) {
       query.category = { $in: category };
     }
 
     if (location) {
       query.location = { $in: location };
+    }
+
+    if (title) {
+      query.title = { title: new RegExp(title)};
     }
 
     if (endIndex < (await Post.countDocuments(query))) {
@@ -171,13 +177,57 @@ class PostController {
     return await Post.countDocuments({});
   }
 
-  async fetchUserPosts(userId) {
-    return await Post.find({ postedBy: userId, isAdopted: false });
+  async fetchUserPosts(userId, page, limit, adopted, status, title, breed) {
+    if (page < 1) {
+      throw new ErrorsFactory(
+        "invalid",
+        "InvalidError",
+        "Numarul paginii trebuie sa aiba o valoare pozitiva"
+      );
+    }
+
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+
+    const results = {};
+
+    const query = {
+      postedBy: userId,
+      isAdopted: adopted,
+      status: status,
+    }
+
+    if (title) {
+      query.title = { title: new RegExp(title)};
+    }
+
+    if (breed) {
+      query.breed = { breed: new RegExp(breed)};
+    }
+
+    if (endIndex < (await Post.countDocuments(query))) {
+      results.next = {
+        page: page + 1,
+      };
+    }
+
+    if (startIndex > 0) {
+      results.previous = {
+        page: page - 1,
+      };
+    }
+
+    results.results = await Post.find(query).limit(limit).skip(startIndex);
+
+    return results;
+  }
+
+  async getCounties() {
+    return await Counties.find({});
   }
 
   computePicturesPath(pictures, postId) {
     const picturesPath = [];
-
     pictures.forEach((picture) => {
       const splitFileName = picture.filename.split("-");
       fs.rename(

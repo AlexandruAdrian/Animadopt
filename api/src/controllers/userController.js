@@ -366,6 +366,7 @@ class UserController {
 
     await user.delete();
   }
+
 }
 
 module.exports = new UserController();

@@ -35,6 +35,7 @@ const postRoutes = () => {
         res.status(201).json({
           message: "Postarea a fost creata cu succes",
           post: newPost,
+          success: true,
         });
       } catch (err) {
         next(err);
@@ -108,41 +109,117 @@ const postRoutes = () => {
     }
   );
 
-  router.get("/p/user", isAuthorized, isBanned, async (req, res, next) => {
-    try {
-      const userId = req.user._id;
-      const userPosts = await PostController.fetchUserPosts(userId);
 
-      res.status(200).json({ posts: userPosts });
+  router.get("/p/counties", isAuthorized, async (req, res, next) => {
+    try {
+      const counties = await PostController.getCounties();
+
+      res.json(counties).status(200);
     } catch (err) {
       next(err);
     }
   });
 
   router.get(
+    "/p/user",
+    isAuthorized,
+    isBanned,
+    query("page").escape(),
+    query("title").escape(),
+    query("category").escape(),
+    query("status").escape(),
+    query("adopted").escape(),
+    query("breed").escape(),
+    async (req, res, next) => {
+      try {
+        const userId = req.user._id;
+        const page = parseInt(req.query.page);
+        let title;
+        let breed;
+        let status;
+        let adopted = false;
+
+        if (req.query.title) {
+          title = req.query.title;
+        }
+
+        if (req.query.breed) {
+          breed = req.query.breed;
+        }
+
+        if (req.query.status) {
+          status = req.query.status;
+        }
+
+        if (req.query.adopted) {
+          adopted = req.query.adopted;
+        }
+
+        const limit = 10;
+        const userPosts = await PostController.fetchUserPosts(
+          userId,
+          page,
+          limit,
+          adopted,
+          status,
+          title,
+          breed
+        );
+
+        res.status(200).json({posts: userPosts});
+      } catch (err) {
+        next(err);
+      }
+    });
+
+  router.get(
     "/",
     isAuthorized,
     isBanned,
     query("page").escape(),
+    query("title").escape(),
     query("category").escape(),
     query("location").escape(),
+    query("status").escape(),
+    query("adopted").escape(),
     async (req, res, next) => {
       try {
         const page = parseInt(req.query.page);
         let category;
         let location;
+        let status;
+        let title;
+        let adopted = false;
+
+        if (req.query.title) {
+          title = req.query.title;
+        }
+
         if (req.query.category) {
           category = req.query.category.split(",");
         }
+
         if (req.query.location) {
           location = req.query.location.split(",");
         }
+
+        if (req.query.status) {
+          status = req.query.status;
+        }
+
+        if (req.query.adopted) {
+          adopted = req.query.adopted;
+        }
+
         const limit = 10;
         const results = await PostController.getPosts(
           page,
           limit,
           category,
-          location
+          location,
+          status,
+          adopted,
+          title
         );
 
         res.status(200).json(results);

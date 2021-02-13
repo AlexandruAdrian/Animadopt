@@ -2,6 +2,7 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useDropzone } from 'react-dropzone';
+import { toast } from 'react-toastify';
 // Material UI
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -11,13 +12,20 @@ import CloseIcon from '@material-ui/icons/Close';
 // Styles
 import styles from '../styles/CustomDropzone';
 
-function CustomDropzone(props) {
-  const { setFieldValue, multipleFiles, addedImages } = props;
+function PostDropzone(props) {
+  const { setFieldValue, addedImages } = props;
   const MAX_SIZE = 50000000;
+  const MAX_NUMBER_OF_FILES = 5;
   const classes = makeStyles(styles)();
   const onDrop = useCallback(
     (acceptedFiles) => {
-      setFieldValue('avatar', acceptedFiles);
+      if (acceptedFiles.length <= MAX_NUMBER_OF_FILES) {
+        setFieldValue('pictures', acceptedFiles);
+      } else {
+        toast.error(
+          `Va rugam sa incarcati maxim ${MAX_NUMBER_OF_FILES} imagini`
+        );
+      }
     },
     [setFieldValue]
   );
@@ -32,7 +40,7 @@ function CustomDropzone(props) {
     accept: 'image/jpeg, image/png',
     onDrop,
     maxSize: MAX_SIZE,
-    multiple: multipleFiles,
+    multiple: true,
   });
 
   const style = useMemo(
@@ -45,8 +53,14 @@ function CustomDropzone(props) {
     [isDragActive, isDragAccept, isDragReject]
   );
 
-  const handleImageRemover = () => {
-    setFieldValue('avatar', null);
+  const handleImageRemover = (e, index) => {
+    const filteredImages = addedImages.filter((img, imgIndex) => {
+      if (index !== imgIndex) {
+        return img;
+      }
+    });
+
+    setFieldValue('pictures', filteredImages);
   };
 
   return (
@@ -57,14 +71,14 @@ function CustomDropzone(props) {
           {!isDragActive && (
             <>
               <SystemUpdateAltIcon />
-              <Typography component="p">Adauga imagine</Typography>
+              <Typography component="p">Adauga imagini</Typography>
             </>
           )}
           {isDragAccept && (
-            <Typography component="p">Adauga imagine</Typography>
+            <Typography component="p">Adauga imagini</Typography>
           )}
-          {isDragReject && !multipleFiles && (
-            <Typography component="p">Doar o singura imagine</Typography>
+          {isDragReject && (
+            <Typography component="p">Fisiere invalide</Typography>
           )}
         </div>
       </div>
@@ -72,17 +86,19 @@ function CustomDropzone(props) {
       <div className={classes.previewContainer}>
         {addedImages &&
           addedImages.map((image, index) => (
-            <div className={classes.previewImageWrapper} key={index}>
-              <img
-                alt="Preview"
-                className={classes.previewImage}
-                src={URL.createObjectURL(image)}
-              />
-              <div className={classes.iconWrapper}>
-                <CloseIcon
-                  className={classes.previewCloseIcon}
-                  onClick={handleImageRemover}
+            <div className={classes.previewImages} key={index}>
+              <div className={classes.previewImageWrapper}>
+                <img
+                  alt="Preview"
+                  className={classes.previewImage}
+                  src={URL.createObjectURL(image)}
                 />
+                <div className={classes.iconWrapper}>
+                  <CloseIcon
+                    className={classes.previewCloseIcon}
+                    onClick={(e) => handleImageRemover(e, index)}
+                  />
+                </div>
               </div>
             </div>
           ))}
@@ -91,10 +107,9 @@ function CustomDropzone(props) {
   );
 }
 
-CustomDropzone.propTypes = {
+PostDropzone.propTypes = {
   setFieldValue: PropTypes.func.isRequired,
-  multipleFiles: PropTypes.bool.isRequired,
   addedImages: PropTypes.array,
 };
 
-export default CustomDropzone;
+export default PostDropzone;

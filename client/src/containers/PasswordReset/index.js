@@ -83,8 +83,8 @@ function PasswordReset() {
             <form className={classes.form} onSubmit={formik.handleSubmit}>
               <FormControl className={classes.formControl}>
                 <TextField
-                  error={!!(formik.touched.password && formik.errors.password)}
                   id="password"
+                  error={!!(formik.touched.password && formik.errors.password)}
                   helperText={
                     formik.touched.password && formik.errors.password
                       ? formik.errors.password

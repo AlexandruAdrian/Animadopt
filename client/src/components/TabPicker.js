@@ -10,7 +10,7 @@ import Card from '@material-ui/core/Card';
 // Styles
 import styles from '../styles/TabPickerStyles';
 
-function TabPicker({ selectedTab, changeHandler }) {
+function TabPicker({ selectedTab, changeHandler, tabs }) {
   const classes = makeStyles(styles)();
 
   return (
@@ -27,27 +27,16 @@ function TabPicker({ selectedTab, changeHandler }) {
             indicator: classes.indicator,
           }}
         >
-          <Tab
-            label="User"
-            classes={{
-              selected: classes.selectedTab,
-              root: classes.tab,
-            }}
-          />
-          <Tab
-            label="Admin"
-            classes={{
-              selected: classes.selectedTab,
-              root: classes.tab,
-            }}
-          />
-          <Tab
-            label="Owner"
-            classes={{
-              selected: classes.selectedTab,
-              root: classes.tab,
-            }}
-          />
+          {tabs.map((tab) => (
+            <Tab
+              key={`${tab}-${selectedTab}`}
+              label={tab}
+              classes={{
+                selected: classes.selectedTab,
+                root: classes.tab,
+              }}
+            />
+          ))}
         </Tabs>
       </AppBar>
     </Card>
@@ -57,6 +46,7 @@ function TabPicker({ selectedTab, changeHandler }) {
 TabPicker.propTypes = {
   selectedTab: PropTypes.number.isRequired,
   changeHandler: PropTypes.func.isRequired,
+  tabs: PropTypes.array.isRequired,
 };
 
 export default TabPicker;

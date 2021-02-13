@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+// System
+import React from 'react';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -26,12 +27,6 @@ const Login = ({ history }) => {
     email: '',
     password: '',
   };
-
-  useEffect(() => {
-    return () => {
-      dispatch(resetRequestState());
-    };
-  }, [dispatch]);
 
   const formik = useFormik({
     initialValues: INITIAL_VALUES,

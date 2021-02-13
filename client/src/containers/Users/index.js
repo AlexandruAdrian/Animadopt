@@ -4,14 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 // Components
 import TabPicker from '../../components/TabPicker';
 import AdminUserDetails from '../../components/AdminUserDetails';
+import SearchBar from '../../components/SearchBar';
 // Material UI
 import { makeStyles } from '@material-ui/core/styles';
-import FormControl from '@material-ui/core/FormControl';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
-import { Card, InputAdornment, TextField } from '@material-ui/core';
-// Icons
-import SearchIcon from '@material-ui/icons/Search';
 // Actions
 import { getUsers } from './actions';
 // Constants
@@ -21,6 +18,7 @@ import {
   USER_ROLE_OWNER,
   TAB_USER,
   TAB_ADMIN,
+  TAB_LABELS,
 } from '../Dashboard/constants';
 // Styles
 import style from '../../styles/UsersStyle';
@@ -43,7 +41,7 @@ function Users() {
     });
   }
 
-  const onTabChange = async (e, newValue) => {
+  const onTabChange = (e, newValue) => {
     setSelectedTab(newValue);
   };
 
@@ -70,31 +68,19 @@ function Users() {
     <Box className={classes.container}>
       <Grid container spacing={1}>
         <Grid item xs={12}>
-          <Card className={classes.card}>
-            <FormControl className={classes.searchControl}>
-              <TextField
-                id="searchTerm"
-                aria-describedby="Search"
-                value={query.searchTerm}
-                onChange={handleSearchTerm}
-                InputProps={{
-                  classes: {
-                    root: classes.inputRoot,
-                  },
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <SearchIcon className={classes.icon} fontSize="small" />
-                    </InputAdornment>
-                  ),
-                  placeholder: 'Cauta dupa nume, prenume, email...',
-                }}
-              />
-            </FormControl>
-          </Card>
+          <SearchBar
+            value={query.searchTerm}
+            handler={handleSearchTerm}
+            placeholder={'Cauta dupa nume, prenume, email...'}
+          />
         </Grid>
 
         <Grid item xs={12}>
-          <TabPicker selectedTab={selectedTab} changeHandler={onTabChange} />
+          <TabPicker
+            selectedTab={selectedTab}
+            changeHandler={onTabChange}
+            tabs={TAB_LABELS}
+          />
         </Grid>
 
         {users.map((user) => (
