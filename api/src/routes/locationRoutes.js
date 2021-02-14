@@ -1,12 +1,12 @@
 // System
 const express = require("express");
 // Controllers
-const CategoriesController = require("../controllers/categoriesController");
+const LocationController = require("../controllers/locationController");
 // Middleware
 const isAuthorized = require("../middlewares/authorization");
 const isBanned = require("../middlewares/isBanned");
 
-const categoryRoutes = () => {
+const locationRoutes = () => {
   const router = express.Router();
 
   router.get(
@@ -14,16 +14,16 @@ const categoryRoutes = () => {
     isAuthorized,
     isBanned,
     async (req, res, next) => {
-    try {
-      const categories = await CategoriesController.getCategories();
+      try {
+        const locations = await LocationController.getLocations();
 
-      res.status(200).json({ categories });
-    } catch (err) {
-      next(err);
-    }
+        res.status(200).json({ locations });
+      } catch (err) {
+        next(err);
+      }
   });
 
   return router;
-};
+}
 
-module.exports = categoryRoutes();
+module.exports = locationRoutes();

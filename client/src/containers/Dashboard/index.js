@@ -13,10 +13,10 @@ import Settings from '../Settings';
 import Users from '../Users';
 import User from '../User';
 import Categories from '../Categories';
-import Posts from '../Posts';
+import PostsPage from '../PostsPage';
 import AddPosts from '../AddPost';
 // Actions
-import { getUser } from './actions';
+import { getUser, getLocations } from './actions';
 import { resetRequestState } from '../../utils/request/actions';
 // Styles
 import style from '../../styles/DashboardStyle';
@@ -30,6 +30,7 @@ function Dashboard() {
 
   useEffect(() => {
     dispatch(getUser());
+    dispatch(getLocations());
     dispatch(resetRequestState());
   }, [dispatch]);
 
@@ -48,7 +49,7 @@ function Dashboard() {
         component={() => <User loggedUser={user} />}
       />
       <Route exact path={`${url}/categories`} component={Categories} />
-      <Route exact path={`${url}/posts`} component={Posts} />
+      <Route exact path={`${url}/posts`} component={PostsPage} />
       <Route exact path={`${url}/posts/add`} component={AddPosts} />
     </Box>
   ) : (

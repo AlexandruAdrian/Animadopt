@@ -177,7 +177,7 @@ class PostController {
     return await Post.countDocuments({});
   }
 
-  async fetchUserPosts(userId, page, limit, adopted, status, title, breed) {
+  async fetchUserPosts(userId, page, limit, adopted, status, category, location, searchTerm) {
     if (page < 1) {
       throw new ErrorsFactory(
         "invalid",
@@ -189,20 +189,32 @@ class PostController {
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
 
-    const results = {};
+    const results = {
+      results: [],
+    };
 
-    const query = {
+    let query = {
       postedBy: userId,
       isAdopted: adopted,
       status: status,
     }
 
-    if (title) {
-      query.title = { title: new RegExp(title)};
+    if (category) {
+      query.category = { $in: category };
     }
 
-    if (breed) {
-      query.breed = { breed: new RegExp(breed)};
+    if (location) {
+      query.location = { $in: location };
+    }
+
+    if (searchTerm) {
+      query = {
+        ...query,
+        $or: [
+          { title: new RegExp(searchTerm) },
+          { breed: new RegExp(searchTerm) },
+        ]
+      }
     }
 
     if (endIndex < (await Post.countDocuments(query))) {
@@ -218,7 +230,7 @@ class PostController {
     }
 
     results.results = await Post.find(query).limit(limit).skip(startIndex);
-
+    console.log('results: ', results);
     return results;
   }
 

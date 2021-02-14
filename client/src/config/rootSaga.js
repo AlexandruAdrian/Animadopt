@@ -12,6 +12,7 @@ import usersSaga from '../containers/Users/saga';
 import userForAdminSaga from '../containers/User/saga';
 import categoriesSaga from '../containers/Categories/saga';
 import countiesSaga from '../containers/AddPost/saga';
+import userPostsSaga from '../containers/PostsPage/saga';
 
 const rootSaga = function* rootSaga() {
   yield all([
@@ -26,6 +27,7 @@ const rootSaga = function* rootSaga() {
     userForAdminSaga(),
     categoriesSaga(),
     countiesSaga(),
+    userPostsSaga(),
   ]);
 };
 export default rootSaga;

@@ -11,7 +11,7 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'absolute',
+    position: 'fixed',
     bottom: '10px',
     right: '10px',
     '& > svg': {
@@ -24,13 +24,18 @@ const styles = {
       position: 'static',
       fontSize: '14px',
       textDecoration: 'none',
-      width: '135px',
+      width: '200px',
       height: 'auto',
       padding: '8px 0',
       margin: '10px auto 0 auto',
       borderRadius: '5px',
+      '& > svg': {
+        fontSize: '23px',
+        marginRight: '3px',
+      },
       '& > p': {
         display: 'block',
+        fontSize: '14px',
       },
     },
   },

@@ -125,27 +125,20 @@ const postRoutes = () => {
     isAuthorized,
     isBanned,
     query("page").escape(),
-    query("title").escape(),
     query("category").escape(),
+    query("location").escape(),
     query("status").escape(),
     query("adopted").escape(),
-    query("breed").escape(),
+    query("search").escape(),
     async (req, res, next) => {
       try {
         const userId = req.user._id;
         const page = parseInt(req.query.page);
-        let title;
-        let breed;
+        const searchTerm = req.query.search;
+        let category;
+        let location;
         let status;
         let adopted = false;
-
-        if (req.query.title) {
-          title = req.query.title;
-        }
-
-        if (req.query.breed) {
-          breed = req.query.breed;
-        }
 
         if (req.query.status) {
           status = req.query.status;
@@ -155,18 +148,27 @@ const postRoutes = () => {
           adopted = req.query.adopted;
         }
 
+        if (req.query.category) {
+          category = req.query.category.split(",");
+        }
+
+        if (req.query.location) {
+          location = req.query.location.split(",");
+        }
+
         const limit = 10;
-        const userPosts = await PostController.fetchUserPosts(
+        const results = await PostController.fetchUserPosts(
           userId,
           page,
           limit,
           adopted,
           status,
-          title,
-          breed
+          category,
+          location,
+          searchTerm
         );
 
-        res.status(200).json({posts: userPosts});
+        res.status(200).json(results);
       } catch (err) {
         next(err);
       }
