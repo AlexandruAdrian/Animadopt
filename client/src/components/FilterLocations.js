@@ -20,7 +20,7 @@ function FilterLocations({ locations, onLocationChange }) {
     <Box className={classes.locationsContainer}>
       <FormControl component="fieldset" fullWidth>
         <FormLabel component="legend" classes={{ root: classes.legend }}>
-          Judete:
+          Localitati:
         </FormLabel>
         <FormGroup className={classes.checkboxes}>
           <Grid container spacing={1}>

@@ -36,6 +36,7 @@ function PostsPage() {
 
   const { categories } = useSelector((state) => state.categories);
   const { locations } = useSelector((state) => state.dashboard);
+  const { posts, isLoading } = useSelector((state) => state.userPosts);
 
   const [selectedStatusTab, setSelectedStatusTab] = useState(TAB_APPROVED);
   const [selectedAdoptionTab, setSelectedAdoptionTab] = useState(
@@ -177,7 +178,7 @@ function PostsPage() {
         <MobileAddPostButton />
         {/* Results */}
         <Grid item xs={12}>
-          <Posts query={query} />
+          <Posts posts={posts.results} />
         </Grid>
       </Grid>
     </Box>

@@ -230,7 +230,6 @@ class PostController {
     }
 
     results.results = await Post.find(query).limit(limit).skip(startIndex);
-    console.log('results: ', results);
     return results;
   }
 
@@ -253,8 +252,8 @@ class PostController {
       );
 
       const splitPath = picture.path.split("post-");
-      const relativePath = splitPath[0].split("Animadopt\\")[1];
-      const newPath = `${relativePath}${postId}-${splitFileName[1]}`;
+      const relativePath = splitPath[0].split("public\\")[1];
+      const newPath = `${relativePath}${postId}-${splitFileName[1]}`.replace(/\\/g, "/");
 
       picturesPath.push(newPath);
     });
