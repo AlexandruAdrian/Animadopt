@@ -25,7 +25,13 @@ function FilterCategories({ categories, onCategoryChange }) {
         <FormGroup className={classes.checkboxes}>
           <Grid container spacing={1}>
             {categories.map((category) => (
-              <Grid item xs={6} md={4} key={`${category.key}-${category.id}`}>
+              <Grid
+                item
+                xs={6}
+                md={4}
+                lg={12}
+                key={`${category.key}-${category.id}`}
+              >
                 <FormControlLabel
                   onChange={onCategoryChange}
                   value={category.category}

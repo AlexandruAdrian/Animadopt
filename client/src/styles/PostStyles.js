@@ -2,13 +2,18 @@ import colors from './colors';
 
 const styles = {
   header: {
-    maxHeight: '230px',
+    height: '210px',
   },
   carousel: {
-    maxHeight: '230px',
     '& div, & ul': {
-      maxHeight: '250px',
+      height: '210px',
     },
+    '& .control-dots': {
+      bottom: '-190px',
+    },
+  },
+  card: {
+    height: '100%',
   },
   image: {
     height: '100%',
@@ -18,8 +23,11 @@ const styles = {
   title: {
     width: '100%',
     textAlign: 'center',
-    fontSize: '20px',
+    fontSize: '18px',
     marginBottom: '15px',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
     color: colors.darkPacificBlue,
   },
   detailList: {

@@ -29,6 +29,7 @@ import {
 } from './constants';
 // Styles
 import styles from '../../styles/PostsPageStyles';
+import WebFilters from '../../components/WebFilters';
 
 function PostsPage() {
   const classes = makeStyles(styles)();
@@ -139,48 +140,54 @@ function PostsPage() {
   }
 
   return (
-    <Box className={classes.container}>
-      <Grid container spacing={1}>
-        {/* Search bar */}
-        <Grid item xs={12}>
-          <SearchBar
-            value={query.search}
-            handler={handleSearchTerm}
-            placeholder="Cauta dupa titlu, rasa..."
-          />
-        </Grid>
-        {/* Status tabs */}
-        <Grid item xs={12}>
-          <TabPicker
-            selectedTab={selectedStatusTab}
-            changeHandler={onStatusTabChange}
-            tabs={STATUS_TABS}
-          />
-        </Grid>
-        {/* Adopted tabs */}
-        <Grid item xs={12}>
-          <TabPicker
-            selectedTab={selectedAdoptionTab}
-            changeHandler={onAdoptionTabChange}
-            tabs={ADOPTED_TABS}
-          />
-        </Grid>
-        {/* Filters */}
-        <Grid item xs={12}>
-          <MobileFilters
-            categories={categories}
-            locations={locations}
-            onCategoryChange={onCategoryChange}
-            onLocationChange={onLocationChange}
-          />
-        </Grid>
+    <Box className={classes.postsPage}>
+      <Box className={classes.container}>
+        <Grid container spacing={1}>
+          {/* Search bar */}
+          <Grid item xs={12}>
+            <SearchBar
+              value={query.search}
+              handler={handleSearchTerm}
+              placeholder="Cauta dupa titlu, rasa..."
+            />
+          </Grid>
+          {/* Status tabs */}
+          <Grid item xs={12}>
+            <TabPicker
+              selectedTab={selectedStatusTab}
+              changeHandler={onStatusTabChange}
+              tabs={STATUS_TABS}
+            />
+          </Grid>
+          {/* Adopted tabs */}
+          <Grid item xs={12}>
+            <TabPicker
+              selectedTab={selectedAdoptionTab}
+              changeHandler={onAdoptionTabChange}
+              tabs={ADOPTED_TABS}
+            />
+          </Grid>
+          {/* Filters */}
+          <Grid item xs={12} className={classes.mobileFilters}>
+            <MobileFilters
+              categories={categories}
+              locations={locations}
+              onCategoryChange={onCategoryChange}
+              onLocationChange={onLocationChange}
+            />
+          </Grid>
 
-        <MobileAddPostButton />
-        {/* Results */}
-        <Grid item xs={12}>
+          <MobileAddPostButton />
+          {/* Results */}
           <Posts posts={posts.results} />
         </Grid>
-      </Grid>
+      </Box>
+      <WebFilters
+        categories={categories}
+        locations={locations}
+        onCategoryChange={onCategoryChange}
+        onLocationChange={onLocationChange}
+      />
     </Box>
   );
 }

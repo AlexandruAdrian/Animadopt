@@ -14,6 +14,7 @@ const styles = {
     position: 'fixed',
     bottom: '10px',
     right: '10px',
+    zIndex: '9999',
     '& > svg': {
       fontSize: '28px',
     },
@@ -27,7 +28,7 @@ const styles = {
       width: '200px',
       height: 'auto',
       padding: '8px 0',
-      margin: '10px auto 0 auto',
+      margin: '10px auto',
       borderRadius: '5px',
       '& > svg': {
         fontSize: '23px',

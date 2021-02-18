@@ -29,7 +29,7 @@ function FilterLocations({ locations, onLocationChange }) {
                 item
                 xs={6}
                 md={4}
-                lg={3}
+                lg={12}
                 key={`${location.key}-${location.id}`}
               >
                 <FormControlLabel

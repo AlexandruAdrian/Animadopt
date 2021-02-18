@@ -7,18 +7,13 @@ import moment from 'moment';
 import axios from 'axios';
 // Material UI
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  Card,
-  CardActionArea,
-  CardActions,
-  CardContent,
-} from '@material-ui/core';
+import { Card, CardActionArea, CardContent } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItem from '@material-ui/core/ListItem';
 import List from '@material-ui/core/List';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 // Icons
 import PetsIcon from '@material-ui/icons/Pets';
@@ -54,84 +49,88 @@ function PostPreview({ post }) {
   }, []);
 
   return (
-    <Card>
-      <Box className={classes.header}>
-        <Carousel
-          showThumbs={false}
-          showStatus={false}
-          autoplay={false}
-          autoFocus={false}
-          className={classes.carousel}
-        >
-          {post.pictures.map((picture, index) => {
-            return (
-              <img
-                src={`${process.env.REACT_APP_API_ENDPOINT}/${picture}`}
-                key={`${post.id}-${index}`}
-                className={classes.image}
-              />
-            );
-          })}
-        </Carousel>
-      </Box>
-      <CardActionArea>
-        <CardContent>
-          <Typography component="p" className={classes.title}>
-            {post.title}
-          </Typography>
+    <Grid item xs={12} md={6} lg={4}>
+      <Card
+        classes={{
+          root: classes.card,
+        }}
+      >
+        <Box className={classes.header}>
+          <Carousel
+            showThumbs={false}
+            showStatus={false}
+            autoplay={false}
+            autoFocus={false}
+            className={classes.carousel}
+          >
+            {post.pictures.map((picture, index) => {
+              return (
+                <img
+                  src={`${process.env.REACT_APP_API_ENDPOINT}/${picture}`}
+                  key={`${post.id}-${index}`}
+                  className={classes.image}
+                />
+              );
+            })}
+          </Carousel>
+        </Box>
+        <CardActionArea>
+          <CardContent>
+            <Typography component="p" className={classes.title}>
+              {post.title}
+            </Typography>
 
-          <List className={classes.detailList}>
-            <ListItem className={classes.listItem}>
-              <ListItemIcon>
-                <PetsIcon />
-              </ListItemIcon>
-              <ListItemText primary={'Rasa'} secondary={post.breed} />
-            </ListItem>
+            <List className={classes.detailList}>
+              <ListItem className={classes.listItem}>
+                <ListItemIcon>
+                  <PetsIcon />
+                </ListItemIcon>
+                <ListItemText primary={'Rasa'} secondary={post.breed} />
+              </ListItem>
 
-            <ListItem className={classes.listItem}>
-              <ListItemIcon>
-                <CategoryIcon />
-              </ListItemIcon>
-              <ListItemText primary={'Categoria'} secondary={post.category} />
-            </ListItem>
+              <ListItem className={classes.listItem}>
+                <ListItemIcon>
+                  <CategoryIcon />
+                </ListItemIcon>
+                <ListItemText primary={'Categoria'} secondary={post.category} />
+              </ListItem>
 
-            <ListItem className={classes.listItem}>
-              <ListItemIcon>
-                <LocationOnIcon />
-              </ListItemIcon>
-              <ListItemText primary={'Localitatea'} secondary={post.location} />
-            </ListItem>
-          </List>
+              <ListItem className={classes.listItem}>
+                <ListItemIcon>
+                  <LocationOnIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary={'Localitatea'}
+                  secondary={post.location}
+                />
+              </ListItem>
+            </List>
 
-          <List className={classes.footerList}>
-            <ListItem className={classes.listItem}>
-              <ListItemIcon>
-                <ScheduleIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary={'Postat'}
-                secondary={moment(post.postedAt).fromNow()}
-              />
-            </ListItem>
+            <List className={classes.footerList}>
+              <ListItem className={classes.listItem}>
+                <ListItemIcon>
+                  <ScheduleIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary={'Postat'}
+                  secondary={moment(post.postedAt).fromNow()}
+                />
+              </ListItem>
 
-            <ListItem className={classes.listItem}>
-              <ListItemIcon>
-                <PersonIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary={'Postat de'}
-                secondary={postedBy.fullName}
-              />
-            </ListItem>
-          </List>
-        </CardContent>
-      </CardActionArea>
-      <CardActions>
-        <Button size="small" color="primary">
-          Vezi mai mult
-        </Button>
-      </CardActions>
-    </Card>
+              <ListItem className={classes.listItem}>
+                <ListItemIcon>
+                  <PersonIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary={'Postat de'}
+                  secondary={postedBy.fullName}
+                />
+              </ListItem>
+            </List>
+          </CardContent>
+        </CardActionArea>
+      </Card>
+    </Grid>
   );
 }
 
