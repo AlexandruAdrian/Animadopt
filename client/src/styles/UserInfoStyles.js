@@ -27,12 +27,14 @@ const styles = {
       display: 'flex',
       alignItems: 'center',
       marginTop: '6px',
+      flexWrap: 'wrap',
       '& > svg': {
         paddingBottom: '3px',
         marginRight: '5px',
       },
       '& > strong': {
         marginRight: '3px',
+        flexWrap: 'wrap',
       },
     },
   },

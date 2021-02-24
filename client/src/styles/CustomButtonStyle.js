@@ -28,6 +28,16 @@ const style = {
       opacity: '0.8',
     },
   },
+  success: {
+    textTransform: 'capitalize',
+    width: '200px',
+    backgroundColor: 'green',
+    color: colors.white,
+    '&:hover': {
+      backgroundColor: 'green',
+      opacity: '0.8',
+    },
+  },
   danger: {
     textTransform: 'capitalize',
     width: '200px',

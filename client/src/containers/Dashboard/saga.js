@@ -1,21 +1,31 @@
 // System
 import { put, all, call, takeLatest } from 'redux-saga/effects';
 // Service
-import { getUserHttp, getLocationsHttp } from './service';
+import {
+  getUserHttp,
+  getLocationsHttp,
+  getDashboardPostsHttp,
+  updatePostStatus,
+} from './service';
 // Actions
 import {
   getUserSuccess,
   getUserError,
   getLocationsSuccess,
   getLocationsError,
+  fetchDashboardPostsSuccess,
 } from './actions';
 // Constants
-import { GET_USER, GET_LOCATIONS } from './constants';
+import { GET_USER, GET_LOCATIONS, FETCH_DASHBOARD_POSTS } from './constants';
+// Toastify
+import { toast } from 'react-toastify';
+import { fetchUserPostsError } from '../PostsPage/actions';
 
 function* dashboardSaga() {
   yield all([
-    yield takeLatest(GET_USER, getUserSaga),
-    yield takeLatest(GET_LOCATIONS, getLocationsSaga),
+    takeLatest(GET_USER, getUserSaga),
+    takeLatest(GET_LOCATIONS, getLocationsSaga),
+    takeLatest(FETCH_DASHBOARD_POSTS, getDashboardPostsSaga),
   ]);
 }
 
@@ -36,6 +46,16 @@ function* getLocationsSaga() {
   } catch (err) {
     console.log(`Error fetching locations: ${err}`);
     yield put(getLocationsError());
+  }
+}
+
+function* getDashboardPostsSaga(action) {
+  try {
+    const { data } = yield call(getDashboardPostsHttp, action);
+    yield put(fetchDashboardPostsSuccess(data.results));
+  } catch (err) {
+    toast.error('Ooops! Am intampinat o eroare in preluarea anunturilor');
+    yield put(fetchUserPostsError());
   }
 }
 

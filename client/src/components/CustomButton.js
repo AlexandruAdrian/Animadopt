@@ -7,7 +7,15 @@ import Button from '@material-ui/core/Button';
 // Styles
 import styles from '../styles/CustomButtonStyle';
 
-function CustomButton({ handler, text, primary, dark, danger, ...rest }) {
+function CustomButton({
+  handler,
+  text,
+  primary,
+  dark,
+  danger,
+  success,
+  ...rest
+}) {
   const classes = makeStyles(styles)();
   let buttonStyle;
 
@@ -17,6 +25,8 @@ function CustomButton({ handler, text, primary, dark, danger, ...rest }) {
     buttonStyle = classes.dark;
   } else if (danger) {
     buttonStyle = classes.danger;
+  } else if (success) {
+    buttonStyle = classes.success;
   } else {
     buttonStyle = classes.secondary;
   }

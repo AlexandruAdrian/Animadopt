@@ -1,10 +1,11 @@
 // System
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
+import { useHistory } from 'react-router';
 import moment from 'moment';
-import axios from 'axios';
 // Material UI
 import { makeStyles } from '@material-ui/core/styles';
 import { Card, CardActionArea, CardContent } from '@material-ui/core';
@@ -21,32 +22,22 @@ import LocationOnIcon from '@material-ui/icons/LocationOn';
 import CategoryIcon from '@material-ui/icons/Category';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import PersonIcon from '@material-ui/icons/Person';
-// Helpers
-import { getLocalStorageItem } from '../helpers/localStorage';
+// Actions
+import { setSelectedPost } from '../containers/Dashboard/actions';
 // Styles
-import styles from '../styles/PostStyles';
+import styles from '../styles/PostPreviewStyles';
 
 function PostPreview({ post }) {
   const classes = makeStyles(styles)();
-  const [postedBy, setPostedBy] = useState({});
-  useEffect(() => {
-    (async () => {
-      const API_ENDPOINT = `${process.env.REACT_APP_API_ENDPOINT}/${process.env.REACT_APP_API}/${process.env.REACT_APP_API_V}/users/${post.postedBy}`;
-      const config = {
-        headers: {
-          Authorization: `Bearer ${getLocalStorageItem('token')}`,
-        },
-      };
+  const dispatch = useDispatch();
+  const history = useHistory();
 
-      const {
-        data: { user },
-      } = await axios.get(API_ENDPOINT, config);
-      setPostedBy({
-        fullName: `${user.firstName} ${user.lastName}`,
-        avatar: user.avatar,
-      });
-    })();
-  }, []);
+  const handlePostClick = () => {
+    dispatch(setSelectedPost(post));
+    history.push(`/dashboard/posts/post/${post._id}`);
+  };
+
+  const postedBy = post.postedBy.firstName + ' ' + post.postedBy.lastName;
 
   return (
     <Grid item xs={12} md={6} lg={4}>
@@ -59,7 +50,7 @@ function PostPreview({ post }) {
           <Carousel
             showThumbs={false}
             showStatus={false}
-            autoplay={false}
+            autoPlay={false}
             autoFocus={false}
             className={classes.carousel}
           >
@@ -74,7 +65,7 @@ function PostPreview({ post }) {
             })}
           </Carousel>
         </Box>
-        <CardActionArea>
+        <CardActionArea onClick={handlePostClick}>
           <CardContent>
             <Typography component="p" className={classes.title}>
               {post.title}
@@ -121,10 +112,7 @@ function PostPreview({ post }) {
                 <ListItemIcon>
                   <PersonIcon />
                 </ListItemIcon>
-                <ListItemText
-                  primary={'Postat de'}
-                  secondary={postedBy.fullName}
-                />
+                <ListItemText primary={'Postat de'} secondary={postedBy} />
               </ListItem>
             </List>
           </CardContent>

@@ -14,3 +14,10 @@ const config = {
 export const getUserHttp = () => axios.get(`${API_ENDPOINT}/users`, config);
 export const getLocationsHttp = () =>
   axios.get(`${API_ENDPOINT}/locations`, config);
+export const getDashboardPostsHttp = ({ queryParams }) =>
+  axios.get(`${API_ENDPOINT}/posts`, {
+    ...config,
+    params: {
+      ...queryParams,
+    },
+  });

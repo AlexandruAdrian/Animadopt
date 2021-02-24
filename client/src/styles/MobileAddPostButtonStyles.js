@@ -14,7 +14,7 @@ const styles = {
     position: 'fixed',
     bottom: '10px',
     right: '10px',
-    zIndex: '9999',
+    zIndex: '998',
     '& > svg': {
       fontSize: '28px',
     },

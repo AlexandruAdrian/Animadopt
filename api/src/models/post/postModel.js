@@ -4,7 +4,14 @@ const { deletePictures } = require("../../utilities/deletePictures");
 const { POST_PICTURES_PATH } = require("./constants");
 
 const PostSchema = new Schema({
-  postedBy: { type: mongoose.Types.ObjectId, required: true },
+  postedBy: {
+    type: {
+      _id: mongoose.Types.ObjectId,
+      firstName: String,
+      lastName: String,
+      email: String,
+    }, required: true
+  },
   title: { type: String, required: true },
   description: { type: String, required: true },
   breed: { type: String, default: "Necunoscut" },

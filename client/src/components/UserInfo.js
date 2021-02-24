@@ -12,7 +12,7 @@ import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
 // Styles
 import styles from '../styles/UserInfoStyles';
 
-function UserInfo({ user }) {
+function UserInfo({ user, showRole = true }) {
   const classes = makeStyles(styles)();
 
   return (
@@ -36,11 +36,13 @@ function UserInfo({ user }) {
           <strong>Email: </strong>
           {user.email}
         </li>
-        <li>
-          <BusinessCenterIcon fontSize="small" />
-          <strong>Rol: </strong>
-          {user.role.type}
-        </li>
+        {showRole && (
+          <li>
+            <BusinessCenterIcon fontSize="small" />
+            <strong>Rol: </strong>
+            {user.role.type}
+          </li>
+        )}
       </ul>
     </CardContent>
   );
@@ -48,6 +50,7 @@ function UserInfo({ user }) {
 
 UserInfo.propTypes = {
   user: PropTypes.object.isRequired,
+  showRole: PropTypes.bool,
 };
 
 export default UserInfo;

@@ -8,9 +8,20 @@ export const GET_LOCATIONS_SUCCESS =
 export const GET_LOCATIONS_ERROR =
   'app/containers/Dashboard/GET_LOCATIONS_ERROR';
 
+export const FETCH_DASHBOARD_POSTS =
+  'app/containers/Dashboard/FETCH_DASHBOARD_POSTS';
+export const FETCH_DASHBOARD_POSTS_SUCCESS =
+  'app/containers/Dashboard/FETCH_DASHBOARD_POSTS_SUCCESS';
+export const FETCH_DASHBOARD_POSTS_ERROR =
+  'app/containers/Dashboard/FETCH_DASHBOARD_POSTS_ERROR';
+
 export const USER_ROLE_OWNER = 'Owner';
 export const USER_ROLE_ADMIN = 'Admin';
 export const USER_ROLE_USER = 'User';
+
+export const SET_SELECTED_POST = 'app/containers/Dashboard/SET_SELECTED_POST';
+
+export const RESET_DASHBOARD = 'app/containers/Dashboard/RESET_DASHBOARD';
 
 export const TAB_LABELS = [USER_ROLE_USER, USER_ROLE_ADMIN, USER_ROLE_OWNER];
 

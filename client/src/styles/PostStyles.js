@@ -1,37 +1,77 @@
 import colors from './colors';
-
 const styles = {
+  postPage: {
+    width: '100%',
+    height: '100%',
+    padding: '80px 10px 20px 10px',
+  },
+  container: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    margin: '0 auto',
+    '@media (min-width: 1250px)': {
+      width: '1200px',
+      flexDirection: 'row',
+    },
+  },
+  userInfoWrapper: {
+    marginBottom: '15px',
+    width: '100%',
+    maxWidth: '600px',
+    margin: '0 auto',
+    '@media (min-width: 1250px)': {
+      order: '2',
+      width: '400px',
+    },
+  },
+  userInfo: {
+    '@media (min-width: 1250px)': {
+      maxHeight: '135px',
+    },
+  },
+  post: {
+    maxWidth: '600px',
+    height: 'auto',
+    margin: '0 auto',
+  },
   header: {
-    height: '210px',
+    maxHeight: '400px',
+  },
+  postActions: {
+    padding: '4px 8px',
+    marginTop: '10px',
+    display: 'flex',
+    justifyContent: 'center',
+    '& > button': {
+      width: '49%',
+    },
+    '& > button:first-child': {
+      marginRight: '8px',
+    },
   },
   carousel: {
     '& div, & ul': {
-      height: '210px',
+      maxHeight: '400px',
+      borderTopLeftRadius: '5px',
+      borderTopRightRadius: '5px',
     },
-    '& .control-dots': {
-      bottom: '-190px',
+  },
+  generalInformation: {
+    display: 'flex',
+    marginTop: '30px',
+    flexDirection: 'column',
+    padding: '0 10px',
+    '& > h2': {
+      color: colors.darkPacificBlue,
     },
-  },
-  card: {
-    height: '100%',
-  },
-  image: {
-    height: '100%',
-    width: '100%',
-    objectFit: 'contain',
-  },
-  title: {
-    width: '100%',
-    textAlign: 'center',
-    fontSize: '18px',
-    marginBottom: '15px',
-    textOverflow: 'ellipsis',
-    overflow: 'hidden',
-    whiteSpace: 'nowrap',
-    color: colors.darkPacificBlue,
-  },
-  detailList: {
-    padding: 0,
+    '@media (min-width: 540px)': {
+      marginTop: '60px',
+    },
+    '@media (min-width: 580px)': {
+      marginTop: '90px',
+    },
   },
   listItem: {
     padding: 0,
@@ -46,8 +86,22 @@ const styles = {
       minWidth: '40px',
     },
   },
-  footerList: {
-    padding: 0,
+  description: {
+    padding: '0 10px 10px',
+    '& > h2': {
+      color: colors.darkPacificBlue,
+    },
+    '& > p': {
+      fontSize: '14px',
+      color: colors.darkPacificBlue,
+    },
+  },
+  actions: {
+    width: '100%',
+    padding: '10px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 };
 

@@ -1,23 +1,28 @@
 // System
 const fs = require("fs");
+const mongoose = require("mongoose");
 // Models
 const Post = require("../models/post/postModel");
 const AnimalCategories = require("../models/animalCategories/animalCategoriesModel");
 const Counties = require("../models/counties/countiesModel");
+const User = require("../models/user/userModel");
 // Constants
 const {
   POST_PICTURES_PATH,
   STATUS_PENDING,
-  STATUS_APPROVED,
 } = require("../models/post/constants");
 // Utilities
-const { difference } = require("lodash");
+const { difference, pick } = require("lodash");
 const ErrorsFactory = require("../factories/errorsFactory");
 
 class PostController {
   async createPost(pictures, postData, userId) {
+    let user = await User.findOne({ _id: userId });
+    user = user.toJSON();
+    user = pick(user, ['avatar', 'firstName', 'lastName', 'phone', 'email', '_id']);
+
     const newPost = new Post({
-      postedBy: userId,
+      postedBy: user,
       title: postData.title,
       description: postData.description,
       breed: postData.breed,
@@ -33,7 +38,6 @@ class PostController {
     });
     category.numberOfPosts += 1;
     await category.save();
-
     return newPost;
   }
 
@@ -95,7 +99,8 @@ class PostController {
   async deletePost(postId, userId) {
     const post = await Post.findOne({ _id: postId });
     // Prevent deletion of posts that belong to other users
-    if (post.postedBy !== userId) {
+
+    if (post.postedBy._id.toString() !== userId.toString()) {
       throw new ErrorsFactory("invalid", "InvalidError", "Actiune invalida");
     }
 
@@ -157,7 +162,8 @@ class PostController {
 
   async markAsAdopted(postId, userId) {
     const foundPost = await Post.findOne({ _id: postId });
-    if (foundPost.postedBy !== userId) {
+
+    if (foundPost.postedBy._id.toString() !== userId.toString()) {
       throw new ErrorsFactory("invalid", "InvalidError", "Actiune invalida");
     }
 
@@ -194,7 +200,7 @@ class PostController {
     };
 
     let query = {
-      postedBy: userId,
+      'postedBy._id': mongoose.Types.ObjectId(userId),
       isAdopted: adopted,
       status: status,
     }

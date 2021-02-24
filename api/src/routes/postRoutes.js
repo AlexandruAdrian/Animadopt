@@ -6,6 +6,7 @@ const PostController = require("../controllers/postController");
 const isAuthorized = require("../middlewares/authorization");
 const isBanned = require("../middlewares/isBanned");
 const upload = require("../middlewares/multer");
+const resize = require("../middlewares/resize");
 // Validators
 const { query } = require("express-validator");
 const validate = require("../validators/index");
@@ -19,6 +20,7 @@ const postRoutes = () => {
     isAuthorized,
     isBanned,
     upload.array("pictures", 5),
+    // resize,
     validate(validatePost()),
     async (req, res, next) => {
       try {
@@ -63,7 +65,6 @@ const postRoutes = () => {
         );
 
         res.status(200).json({
-          message: "Postarea a fost actualizata cu succes",
           post: updatedPost,
         });
       } catch (err) {
@@ -86,7 +87,10 @@ const postRoutes = () => {
     try {
       await PostController.deletePost(req.params.postId, req.user._id);
 
-      res.status(200).json({ message: "Postarea a fost stearsa cu succes" });
+      res.status(200).json({
+        postId: req.params.postId,
+        message: "Postarea a fost stearsa cu succes"
+      });
     } catch (err) {
       next(err);
     }
@@ -101,7 +105,7 @@ const postRoutes = () => {
         await PostController.markAsAdopted(req.params.postId, req.user._id);
 
         res.status(200).json({
-          message: "Postarea a fost actualizata cu succes",
+          message: "Anuntul a fost marcat ca fiind adoptat",
         });
       } catch (err) {
         next(err);

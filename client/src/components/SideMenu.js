@@ -19,6 +19,7 @@ import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import GroupIcon from '@material-ui/icons/Group';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import CategoryIcon from '@material-ui/icons/Category';
+import MenuBookIcon from '@material-ui/icons/MenuBook';
 // Constants
 import {
   USER_ROLE_ADMIN,
@@ -60,7 +61,7 @@ function SideMenu({ open, onClose, user }) {
               <ListItemIcon>
                 <DashboardIcon className={classes.icon} />
               </ListItemIcon>
-              <ListItemText primary={'Pagina principala'} />
+              <ListItemText primary={'Anunturi'} />
             </Link>
           </ListItem>
 
@@ -72,6 +73,19 @@ function SideMenu({ open, onClose, user }) {
               <ListItemText primary={'Anunturile mele'} />
             </Link>
           </ListItem>
+
+          {has(user, 'role') &&
+            (user.role.type === USER_ROLE_ADMIN ||
+              user.role.type === USER_ROLE_OWNER) && (
+              <ListItem className={classes.option}>
+                <Link to={`${path}/reviews`} onClick={onClose}>
+                  <ListItemIcon>
+                    <MenuBookIcon className={classes.icon} />
+                  </ListItemIcon>
+                  <ListItemText primary={'Revizuire'} />
+                </Link>
+              </ListItem>
+            )}
 
           {has(user, 'role') &&
             (user.role.type === USER_ROLE_ADMIN ||

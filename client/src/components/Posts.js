@@ -9,7 +9,7 @@ function Posts({ posts }) {
   return (
     <Grid item container xs={12} spacing={1} style={{ margin: '0 auto' }}>
       {posts.map((post) => (
-        <PostPreview post={post} key={post.id} />
+        <PostPreview post={post} key={post._id} />
       ))}
     </Grid>
   );

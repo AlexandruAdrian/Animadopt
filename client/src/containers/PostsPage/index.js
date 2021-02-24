@@ -1,6 +1,7 @@
 // System
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 // Material UI
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -11,8 +12,6 @@ import SearchBar from '../../components/SearchBar';
 import TabPicker from '../../components/TabPicker';
 import Posts from '../../components/Posts';
 import MobileFilters from '../../components/MobileFilters';
-// Actions
-import { fetchUserPosts } from './actions';
 // Constants
 import {
   STATUS_TABS,
@@ -31,36 +30,16 @@ import {
 import styles from '../../styles/PostsPageStyles';
 import WebFilters from '../../components/WebFilters';
 
-function PostsPage() {
+function PostsPage({ posts, query, setQuery, tabs, canAdd }) {
   const classes = makeStyles(styles)();
-  const dispatch = useDispatch();
 
   const { categories } = useSelector((state) => state.categories);
   const { locations } = useSelector((state) => state.dashboard);
-  const { posts, isLoading } = useSelector((state) => state.userPosts);
 
   const [selectedStatusTab, setSelectedStatusTab] = useState(TAB_APPROVED);
   const [selectedAdoptionTab, setSelectedAdoptionTab] = useState(
     TAB_NOT_ADOPTED
   );
-  const [query, setQuery] = useState({
-    page: 1,
-    search: '',
-    adopted: IS_NOT_ADOPTED,
-    status: STATUS_APPROVED,
-    category: [],
-    location: [],
-  });
-
-  useEffect(() => {
-    dispatch(
-      fetchUserPosts({
-        ...query,
-        category: query.category.join(','),
-        location: query.location.join(','),
-      })
-    );
-  }, [query]);
 
   const onStatusTabChange = (e, newValue) => {
     setSelectedStatusTab(newValue);
@@ -152,21 +131,25 @@ function PostsPage() {
             />
           </Grid>
           {/* Status tabs */}
-          <Grid item xs={12}>
-            <TabPicker
-              selectedTab={selectedStatusTab}
-              changeHandler={onStatusTabChange}
-              tabs={STATUS_TABS}
-            />
-          </Grid>
+          {tabs.status && (
+            <Grid item xs={12}>
+              <TabPicker
+                selectedTab={selectedStatusTab}
+                changeHandler={onStatusTabChange}
+                tabs={STATUS_TABS}
+              />
+            </Grid>
+          )}
           {/* Adopted tabs */}
-          <Grid item xs={12}>
-            <TabPicker
-              selectedTab={selectedAdoptionTab}
-              changeHandler={onAdoptionTabChange}
-              tabs={ADOPTED_TABS}
-            />
-          </Grid>
+          {tabs.adopted && (
+            <Grid item xs={12}>
+              <TabPicker
+                selectedTab={selectedAdoptionTab}
+                changeHandler={onAdoptionTabChange}
+                tabs={ADOPTED_TABS}
+              />
+            </Grid>
+          )}
           {/* Filters */}
           <Grid item xs={12} className={classes.mobileFilters}>
             <MobileFilters
@@ -177,9 +160,10 @@ function PostsPage() {
             />
           </Grid>
 
-          <MobileAddPostButton />
+          {canAdd && <MobileAddPostButton />}
+
           {/* Results */}
-          <Posts posts={posts.results} />
+          <Posts posts={posts} />
         </Grid>
       </Box>
       <WebFilters
@@ -191,5 +175,22 @@ function PostsPage() {
     </Box>
   );
 }
+
+PostsPage.propTypes = {
+  posts: PropTypes.array.isRequired,
+  query: PropTypes.object.isRequired,
+  setQuery: PropTypes.func.isRequired,
+  tabs: PropTypes.object.isRequired,
+  canAdd: PropTypes.bool,
+};
+
+PostsPage.defaultProps = {
+  posts: [],
+  tabs: {
+    status: true,
+    adopted: true,
+  },
+  canAdd: true,
+};
 
 export default PostsPage;
