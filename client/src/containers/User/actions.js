@@ -17,6 +17,9 @@ import {
   GET_USER_BAN_HISTORY,
   GET_USER_BAN_HISTORY_SUCCESS,
   GET_USER_BAN_HISTORY_ERROR,
+  GET_USER_POSTS,
+  GET_USER_POSTS_SUCCESS,
+  GET_USER_POSTS_ERROR,
 } from './constants';
 import { toast } from 'react-toastify';
 
@@ -161,5 +164,28 @@ export function getUserBanHistoryError() {
   );
   return {
     type: GET_USER_BAN_HISTORY_ERROR,
+  };
+}
+
+export function getUserPosts(userId) {
+  return {
+    type: GET_USER_POSTS,
+    userId,
+  };
+}
+
+export function getUserPostsSuccess(posts) {
+  return {
+    type: GET_USER_POSTS_SUCCESS,
+    posts,
+  };
+}
+
+export function getUserPostsError() {
+  toast.error(
+    'Ooops! Am intampinat o eroare in preluarea anunuturilor, va rugam sa incercati din nou mai tarziu'
+  );
+  return {
+    type: GET_USER_POSTS_ERROR,
   };
 }

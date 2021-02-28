@@ -8,12 +8,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import { Card, CardActions } from '@material-ui/core';
 // Components
-import Typography from '@material-ui/core/Typography';
 import BanModal from '../../components/BanModal';
 import ConfirmationModal from '../../components/ConfirmationModal';
 import UserInfo from '../../components/UserInfo';
 import CustomButton from '../../components/CustomButton';
 import UserBanHistory from '../../components/UserBanHistory';
+import AdminUserPosts from '../../components/AdminUserPosts';
 // Actions
 import { unbanUser, promoteUser, demoteUser } from './actions';
 // Constants
@@ -103,12 +103,14 @@ function User({ loggedUser }) {
                   <strong>Motiv: </strong>
                   {selectedUser.ban.reason}
                 </p>
-                <CustomButton
-                  handler={handleOpenUnbanModal}
-                  text={'Deblocheaza'}
-                  primary
-                  size="small"
-                />
+                <Box className={classes.unban}>
+                  <CustomButton
+                    handler={handleOpenUnbanModal}
+                    text={'Deblocheaza'}
+                    primary
+                    size="small"
+                  />
+                </Box>
               </Box>
             )}
             <Box className={classes.buttonGroup}>
@@ -148,19 +150,10 @@ function User({ loggedUser }) {
             </Box>
           </CardActions>
         </Card>
+        <AdminUserPosts userId={selectedUser._id} />
       </Box>
 
-      <UserBanHistory user={selectedUser} />
-
-      <Box className={classes.postsHistory}>
-        <Card className={classes.postsCard}>
-          <Typography component="h3">Anunturi utilizator</Typography>
-
-          <Typography component="p">
-            Momentan acest utilizator nu are nici un anunt
-          </Typography>
-        </Card>
-      </Box>
+      <UserBanHistory userId={selectedUser._id} />
 
       {selectedUser._id && (
         <BanModal

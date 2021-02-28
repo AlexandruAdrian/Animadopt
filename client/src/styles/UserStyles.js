@@ -5,21 +5,37 @@ const style = {
     width: '100%',
     height: '100%',
     padding: '70px 10px 20px 10px',
-    '@media (min-width: 850px)': {
-      width: '90%',
-      maxWidth: '1000px',
+    '@media (min-width: 1000px)': {
+      display: 'flex',
+      justifyContent: 'space-between',
+      maxWidth: '1400px',
       margin: '0 auto',
-      position: 'relative',
+    },
+  },
+  user: {
+    maxWidth: '600px',
+    margin: '0 auto',
+    '@media (min-width: 1000px)': {
+      maxWidth: '700px',
+      marginRight: '15px',
+    },
+    '@media (min-width: 1250px)': {
+      maxWidth: '1000px',
     },
   },
   banHistory: {
     width: '100%',
-    marginTop: '10px',
+    maxWidth: '600px',
+    margin: '10px auto 0 auto',
     '& h3': {
       textAlign: 'center',
       color: colors.white,
       backgroundColor: colors.darkPacificBlue,
       padding: '8px',
+    },
+    '@media (min-width: 1000px)': {
+      maxWidth: '400px',
+      margin: '0 auto',
     },
   },
   historyCard: {
@@ -33,7 +49,7 @@ const style = {
   },
   postsHistory: {
     width: '100%',
-    marginTop: '10px',
+    margin: '10px auto 0 auto',
     '& h3': {
       textAlign: 'center',
       color: colors.white,
@@ -50,27 +66,21 @@ const style = {
       paddingBottom: '8px',
     },
   },
-  user: {
-    maxWidth: '360px',
-    margin: '0 auto',
-    '@media (min-width: 850px)': {
-      position: 'absolute',
-      padding: '0 5px',
-      top: '70px',
-      right: '0',
-      width: '360px',
-    },
-  },
   banned: {
     color: 'red',
     fontSize: '14px',
     textAlign: 'left',
     width: '100%',
     paddingTop: '2px',
-
+  },
+  unban: {
+    marginTop: '4px',
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
     '& > button': {
       width: '100%',
-      marginTop: '6px',
+      maxWidth: '300px',
     },
   },
   actions: {
@@ -81,6 +91,7 @@ const style = {
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
+    maxWidth: '300px',
     '& > button': {
       width: '100%',
     },

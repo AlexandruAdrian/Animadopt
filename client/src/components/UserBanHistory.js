@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 // Material UI
 import { makeStyles } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
@@ -13,20 +14,17 @@ import AssignmentLateIcon from '@material-ui/icons/AssignmentLate';
 import FlagIcon from '@material-ui/icons/Flag';
 // Actions
 import { getUserBanHistory } from '../containers/User/actions';
-// Utils
-import { get } from 'lodash';
 // Styles
 import styles from '../styles/UserStyles';
-import moment from 'moment';
 
-function UserBanHistory({ user }) {
+function UserBanHistory({ userId }) {
   const classes = makeStyles(styles)();
   const { banHistory } = useSelector((state) => state.userDetails);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (get(user, '_id')) {
-      dispatch(getUserBanHistory(user._id));
+    if (userId) {
+      dispatch(getUserBanHistory(userId));
     }
   }, [dispatch]);
 
@@ -86,7 +84,11 @@ function UserBanHistory({ user }) {
 }
 
 UserBanHistory.propTypes = {
-  user: PropTypes.object.isRequired,
+  userId: PropTypes.string.isRequired,
+};
+
+UserBanHistory.defaultProps = {
+  userId: '',
 };
 
 export default UserBanHistory;

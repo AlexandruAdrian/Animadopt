@@ -220,6 +220,10 @@ class AdminController {
     return results;
   }
 
+  async getUserPosts(userId) {
+    return await Post.find({ 'postedBy._id': mongoose.Types.ObjectId(userId) });
+  }
+
   async getUserById(userId) {
     let foundUser = await User.findOne({ _id: userId });
 
@@ -331,4 +335,4 @@ class AdminController {
   }
 }
 
-module.exports = new AdminController();
+    module.exports = new AdminController();

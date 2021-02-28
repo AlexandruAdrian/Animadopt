@@ -111,6 +111,23 @@ const adminRoutes = () => {
   );
 
   router.get(
+    "/user/posts/:userId",
+    isAuthorized,
+    isAdminOrOwner,
+    async (req, res, next) => {
+      try {
+        const userPosts = await AdminController.getUserPosts(req.params.userId);
+
+        return res.status(200).json({
+          userPosts,
+        });
+      } catch (err) {
+        next(err);
+      }
+    }
+  )
+
+  router.get(
     "/user/:userId",
     isAuthorized,
     isAdminOrOwner,

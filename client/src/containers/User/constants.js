@@ -30,3 +30,8 @@ export const GET_USER_BAN_HISTORY_SUCCESS =
   'app/containers/User/GET_USER_BAN_HISTORY_SUCCESS';
 export const GET_USER_BAN_HISTORY_ERROR =
   'app/containers/User/GET_USER_BAN_HISTORY_ERROR';
+
+export const GET_USER_POSTS = 'app/containers/User/GET_USER_POSTS';
+export const GET_USER_POSTS_SUCCESS =
+  'app/containers/User/GET_USER_POSTS_SUCCESS';
+export const GET_USER_POSTS_ERROR = 'app/containers/User/GET_USER_POSTS_ERROR';

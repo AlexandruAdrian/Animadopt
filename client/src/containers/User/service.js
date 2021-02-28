@@ -37,3 +37,6 @@ export const demoteUserHttp = ({ userId }) =>
 
 export const getUserBanHistoryHttp = ({ userId }) =>
   axios.get(`${API_ENDPOINT}/admin/user/history/${userId}`, config);
+
+export const getUserPostsHttp = ({ userId }) =>
+  axios.get(`${API_ENDPOINT}/admin/user/posts/${userId}`, config);

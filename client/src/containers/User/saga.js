@@ -8,6 +8,7 @@ import {
   promoteUserHttp,
   demoteUserHttp,
   getUserBanHistoryHttp,
+  getUserPostsHttp,
 } from './service';
 // Actions
 import {
@@ -23,6 +24,8 @@ import {
   demoteUserError,
   getUserBanHistorySuccess,
   getUserBanHistoryError,
+  getUserPostsSuccess,
+  getUserPostsError,
 } from './actions';
 // Constants
 import {
@@ -32,6 +35,7 @@ import {
   PROMOTE_USER,
   DEMOTE_USER,
   GET_USER_BAN_HISTORY,
+  GET_USER_POSTS,
 } from './constants';
 
 function* userForAdminSaga() {
@@ -42,6 +46,7 @@ function* userForAdminSaga() {
     takeLatest(PROMOTE_USER, promoteUserSaga),
     takeLatest(DEMOTE_USER, demoteUserSaga),
     takeLatest(GET_USER_BAN_HISTORY, getUserBanHistorySaga),
+    takeLatest(GET_USER_POSTS, getUserPostsSaga),
   ]);
 }
 
@@ -96,6 +101,15 @@ export function* getUserBanHistorySaga(action) {
     yield put(getUserBanHistorySuccess(data.banHistory));
   } catch (err) {
     yield put(getUserBanHistoryError());
+  }
+}
+
+export function* getUserPostsSaga(action) {
+  try {
+    const { data } = yield call(getUserPostsHttp, action);
+    yield put(getUserPostsSuccess(data.userPosts));
+  } catch (err) {
+    yield put(getUserPostsError());
   }
 }
 
