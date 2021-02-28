@@ -1,24 +1,23 @@
 // System
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 // Material UI
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import { Card, CardActions } from '@material-ui/core';
 // Components
+import Typography from '@material-ui/core/Typography';
 import BanModal from '../../components/BanModal';
 import ConfirmationModal from '../../components/ConfirmationModal';
 import UserInfo from '../../components/UserInfo';
 import CustomButton from '../../components/CustomButton';
+import UserBanHistory from '../../components/UserBanHistory';
 // Actions
 import { unbanUser, promoteUser, demoteUser } from './actions';
 // Constants
-import {
-  USER_ROLE_ADMIN,
-  USER_ROLE_OWNER,
-  USER_ROLE_USER,
-} from '../Dashboard/constants';
+import { USER_ROLE_ADMIN, USER_ROLE_OWNER } from '../Dashboard/constants';
 import {
   UNBAN_CONFIRMATION_MESSAGE,
   PROMOTION_CONFIRMATION_MESSAGE,
@@ -28,7 +27,6 @@ import {
 import style from '../../styles/UserStyles';
 // Utils
 import { has } from 'lodash';
-import moment from 'moment';
 
 function User({ loggedUser }) {
   const classes = makeStyles(style)();
@@ -92,7 +90,7 @@ function User({ loggedUser }) {
   return (
     <Box className={classes.userInfo}>
       <Box className={classes.user}>
-        <Card className={classes.userCard}>
+        <Card>
           <UserInfo user={selectedUser} />
           <CardActions disableSpacing={true} className={classes.actions}>
             {selectedUser.ban && selectedUser.ban.isValid && (
@@ -151,6 +149,19 @@ function User({ loggedUser }) {
           </CardActions>
         </Card>
       </Box>
+
+      <UserBanHistory user={selectedUser} />
+
+      <Box className={classes.postsHistory}>
+        <Card className={classes.postsCard}>
+          <Typography component="h3">Anunturi utilizator</Typography>
+
+          <Typography component="p">
+            Momentan acest utilizator nu are nici un anunt
+          </Typography>
+        </Card>
+      </Box>
+
       {selectedUser._id && (
         <BanModal
           open={openBanModal}

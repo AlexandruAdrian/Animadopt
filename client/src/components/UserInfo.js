@@ -9,8 +9,10 @@ import Typography from '@material-ui/core/Typography';
 import PhoneIcon from '@material-ui/icons/Phone';
 import EmailIcon from '@material-ui/icons/Email';
 import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
+import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 // Styles
 import styles from '../styles/UserInfoStyles';
+import moment from 'moment';
 
 function UserInfo({ user, showRole = true }) {
   const classes = makeStyles(styles)();
@@ -43,6 +45,11 @@ function UserInfo({ user, showRole = true }) {
             {user.role.type}
           </li>
         )}
+        <li>
+          <CalendarTodayIcon fontSize={'small'} />
+          <strong>Inregistrat la: </strong>
+          {moment(user.joinedDate).format('DD/MM/YYYY')}
+        </li>
       </ul>
     </CardContent>
   );

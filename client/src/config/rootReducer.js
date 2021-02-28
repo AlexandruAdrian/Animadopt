@@ -8,6 +8,7 @@ import categoriesReducer from '../containers/Categories/reducer';
 import countiesReducer from '../containers/AddPost/reducer';
 import userPostsReducer from '../containers/PostsPage/reducer';
 import reviewPostsReducer from '../containers/ReviewsPage/reducer';
+import userDetailsReducer from '../containers/User/reducer';
 
 const rootReducer = combineReducers({
   request: requestReducer,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   counties: countiesReducer,
   userPosts: userPostsReducer,
   reviewPosts: reviewPostsReducer,
+  userDetails: userDetailsReducer,
 });
 
 export default rootReducer;

@@ -1,3 +1,5 @@
+import colors from './colors';
+
 const style = {
   userInfo: {
     width: '100%',
@@ -8,6 +10,44 @@ const style = {
       maxWidth: '1000px',
       margin: '0 auto',
       position: 'relative',
+    },
+  },
+  banHistory: {
+    width: '100%',
+    marginTop: '10px',
+    '& h3': {
+      textAlign: 'center',
+      color: colors.white,
+      backgroundColor: colors.darkPacificBlue,
+      padding: '8px',
+    },
+  },
+  historyCard: {
+    '& > p': {
+      marginTop: '10px',
+      fontSize: '14px',
+      color: colors.darkPacificBlue,
+      textAlign: 'center',
+      paddingBottom: '8px',
+    },
+  },
+  postsHistory: {
+    width: '100%',
+    marginTop: '10px',
+    '& h3': {
+      textAlign: 'center',
+      color: colors.white,
+      backgroundColor: colors.darkPacificBlue,
+      padding: '8px',
+    },
+  },
+  postsCard: {
+    '& > p': {
+      marginTop: '10px',
+      fontSize: '14px',
+      color: colors.darkPacificBlue,
+      textAlign: 'center',
+      paddingBottom: '8px',
     },
   },
   user: {
@@ -21,7 +61,6 @@ const style = {
       width: '360px',
     },
   },
-  userCard: {},
   banned: {
     color: 'red',
     fontSize: '14px',
@@ -59,6 +98,39 @@ const style = {
         margin: '0 5px',
       },
     },
+  },
+  bans: {
+    width: '100%',
+    '& > div': {
+      marginTop: '8px',
+      padding: '8px',
+      fontSize: '14px',
+      color: colors.darkPacificBlue,
+    },
+  },
+  banDetails: {
+    '& p': {
+      fontSize: '14px',
+    },
+    '& > div': {
+      display: 'flex',
+      alignItems: 'center',
+      '& > svg': {
+        marginRight: '5px',
+      },
+      '& > strong': {
+        marginRight: '5px',
+      },
+    },
+    '& > div:not(:first-child)': {
+      marginTop: '4px',
+    },
+  },
+  activeBanText: {
+    color: 'green',
+  },
+  inactiveBanText: {
+    color: 'red',
   },
 };
 

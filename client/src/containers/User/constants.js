@@ -24,3 +24,9 @@ export const PROMOTION_CONFIRMATION_MESSAGE =
   'Sunteti sigur ca doriti sa promovati utilizatorul ?';
 export const DEMOTION_CONFIRMATION_MESSAGE =
   'Sunteti sigur ca doriti sa retrogradati utilizatorul ?';
+
+export const GET_USER_BAN_HISTORY = 'app/containers/User/GET_USER_BAN_HISTORY';
+export const GET_USER_BAN_HISTORY_SUCCESS =
+  'app/containers/User/GET_USER_BAN_HISTORY_SUCCESS';
+export const GET_USER_BAN_HISTORY_ERROR =
+  'app/containers/User/GET_USER_BAN_HISTORY_ERROR';

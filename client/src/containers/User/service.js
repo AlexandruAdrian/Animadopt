@@ -5,12 +5,14 @@ import { getLocalStorageItem } from '../../helpers/localStorage';
 
 const API_ENDPOINT = `${process.env.REACT_APP_API_ENDPOINT}/${process.env.REACT_APP_API}/${process.env.REACT_APP_API_V}`;
 
+const config = {
+  headers: {
+    Authorization: `Bearer ${getLocalStorageItem('token')}`,
+  },
+};
+
 export const getUserForAdminHttp = ({ userId }) =>
-  axios.get(`${API_ENDPOINT}/admin/user/${userId}`, {
-    headers: {
-      Authorization: `Bearer ${getLocalStorageItem('token')}`,
-    },
-  });
+  axios.get(`${API_ENDPOINT}/admin/user/${userId}`, config);
 
 export const banUserHttp = ({ startTime, endTime, reason, userId }) => {
   return axios.put(
@@ -20,43 +22,18 @@ export const banUserHttp = ({ startTime, endTime, reason, userId }) => {
       endTime,
       reason,
     },
-    {
-      headers: {
-        Authorization: `Bearer ${getLocalStorageItem('token')}`,
-      },
-    }
+    config
   );
 };
 
 export const unbanUserHttp = ({ userId }) =>
-  axios.put(
-    `${API_ENDPOINT}/admin/unban/${userId}`,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${getLocalStorageItem('token')}`,
-      },
-    }
-  );
+  axios.put(`${API_ENDPOINT}/admin/unban/${userId}`, {}, config);
 
 export const promoteUserHttp = ({ userId }) =>
-  axios.put(
-    `${API_ENDPOINT}/owner/promote/${userId}`,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${getLocalStorageItem('token')}`,
-      },
-    }
-  );
+  axios.put(`${API_ENDPOINT}/owner/promote/${userId}`, {}, config);
 
 export const demoteUserHttp = ({ userId }) =>
-  axios.put(
-    `${API_ENDPOINT}/owner/demote/${userId}`,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${getLocalStorageItem('token')}`,
-      },
-    }
-  );
+  axios.put(`${API_ENDPOINT}/owner/demote/${userId}`, {}, config);
+
+export const getUserBanHistoryHttp = ({ userId }) =>
+  axios.get(`${API_ENDPOINT}/admin/user/history/${userId}`, config);

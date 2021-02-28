@@ -14,6 +14,9 @@ import {
   DEMOTE_USER,
   DEMOTE_USER_SUCCESS,
   DEMOTE_USER_ERROR,
+  GET_USER_BAN_HISTORY,
+  GET_USER_BAN_HISTORY_SUCCESS,
+  GET_USER_BAN_HISTORY_ERROR,
 } from './constants';
 import { toast } from 'react-toastify';
 
@@ -72,11 +75,11 @@ export function unbanUser(userId) {
   };
 }
 
-export function unbanUserSuccess({ message }) {
+export function unbanUserSuccess({ ban, message }) {
   toast.success(message);
   return {
     type: UNBAN_USER_SUCCESS,
-    ban: null,
+    ban,
     message,
   };
 }
@@ -135,5 +138,28 @@ export function demoteUserError() {
   );
   return {
     type: DEMOTE_USER_ERROR,
+  };
+}
+
+export function getUserBanHistory(userId) {
+  return {
+    type: GET_USER_BAN_HISTORY,
+    userId,
+  };
+}
+
+export function getUserBanHistorySuccess(banHistory) {
+  return {
+    type: GET_USER_BAN_HISTORY_SUCCESS,
+    banHistory,
+  };
+}
+
+export function getUserBanHistoryError() {
+  toast.error(
+    'Ooops! Am intampinat o eroare in preluarea istoricului de penalizari, va rugam sa incercati din nou mai tarziu'
+  );
+  return {
+    type: GET_USER_BAN_HISTORY_ERROR,
   };
 }

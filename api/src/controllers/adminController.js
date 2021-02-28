@@ -129,7 +129,7 @@ class AdminController {
       reason: reason,
     });
 
-    ban.save();
+    await ban.save();
 
     return ban;
   }
@@ -143,11 +143,16 @@ class AdminController {
         "User-ul nu a fost gasit"
       );
     }
-    await Ban.deleteOne({ forUserId: foundUser._id });
+
+    const ban = await Ban.findOne({ forUserId: foundUser._id }).sort({ _id: -1}).limit(1);
+    ban.isValid = false;
+    ban.save();
+
+    return ban;
   }
 
   async getUserBanHistory(userId) {
-    return await Ban.find({ forUserId: userId });
+    return await Ban.find({ forUserId: userId }).sort({ endTime: -1});
   }
 
   async getUsers(userId, page, limit, searchTerm, role) {
@@ -200,7 +205,7 @@ class AdminController {
 
     if (tempResults) {
       await asyncForEach(tempResults, async (user) => {
-        const foundBan = await Ban.findOne({ forUserId: user._id });
+        const foundBan = await Ban.findOne({ forUserId: user._id }).sort({ _id: -1}).limit(1);
         const role = await Role.findOne({ _id: user.role_id });
 
         user = user.toJSON();

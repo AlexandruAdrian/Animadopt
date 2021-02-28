@@ -79,9 +79,10 @@ const adminRoutes = () => {
     isAdminOrOwner,
     async (req, res, next) => {
       try {
-        await AdminController.unbanUser(req.params.userId);
+        const ban = await AdminController.unbanUser(req.params.userId);
 
         res.status(200).json({
+          ban,
           message: "User-ul a fost deblocat",
         });
       } catch (err) {

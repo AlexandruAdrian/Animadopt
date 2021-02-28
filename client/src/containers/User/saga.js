@@ -1,12 +1,13 @@
 // System
 import { put, call, all, takeLatest } from 'redux-saga/effects';
-// Service
+// Services
 import {
   getUserForAdminHttp,
   banUserHttp,
   unbanUserHttp,
   promoteUserHttp,
   demoteUserHttp,
+  getUserBanHistoryHttp,
 } from './service';
 // Actions
 import {
@@ -20,6 +21,8 @@ import {
   promoteUserError,
   demoteUserSuccess,
   demoteUserError,
+  getUserBanHistorySuccess,
+  getUserBanHistoryError,
 } from './actions';
 // Constants
 import {
@@ -28,6 +31,7 @@ import {
   UNBAN_USER,
   PROMOTE_USER,
   DEMOTE_USER,
+  GET_USER_BAN_HISTORY,
 } from './constants';
 
 function* userForAdminSaga() {
@@ -37,6 +41,7 @@ function* userForAdminSaga() {
     takeLatest(UNBAN_USER, unbanUserSaga),
     takeLatest(PROMOTE_USER, promoteUserSaga),
     takeLatest(DEMOTE_USER, demoteUserSaga),
+    takeLatest(GET_USER_BAN_HISTORY, getUserBanHistorySaga),
   ]);
 }
 
@@ -82,6 +87,15 @@ export function* demoteUserSaga(action) {
     yield put(demoteUserSuccess(data));
   } catch (err) {
     yield put(demoteUserError());
+  }
+}
+
+export function* getUserBanHistorySaga(action) {
+  try {
+    const { data } = yield call(getUserBanHistoryHttp, action);
+    yield put(getUserBanHistorySuccess(data.banHistory));
+  } catch (err) {
+    yield put(getUserBanHistoryError());
   }
 }
 
