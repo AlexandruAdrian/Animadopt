@@ -10,6 +10,7 @@ const User = require("../models/user/userModel");
 const {
   POST_PICTURES_PATH,
   STATUS_PENDING,
+  STATUS_REJECTED,
 } = require("../models/post/constants");
 // Utilities
 const { difference, pick } = require("lodash");
@@ -53,15 +54,24 @@ class PostController {
     }
 
     // Prevent update of posts that belong to other users
-    if (foundPost.postedBy !== userId) {
+    if (foundPost.postedBy._id.toString() !== userId.toString()) {
       throw new ErrorsFactory("invalid", "InvalidError", "Actiune invalida");
     }
 
-    const picturesPath = this.computePicturesPath(pictures, foundPost._id);
-    const diff = difference(foundPost.pictures, picturesPath);
+    let picturesPath;
+    if (postData.pictures) {
+      if (Array.isArray(postData.pictures)) {
+        picturesPath = postData.pictures;
+      } else {
+        picturesPath = [postData.pictures];
+      }
+    } else {
+      picturesPath = this.computePicturesPath(pictures, foundPost._id);
+    }
 
+    const diff = difference(foundPost.pictures, picturesPath);
     diff.forEach((picture) => {
-      const filename = picture.split("posts\\")[1];
+      const filename = picture.split("posts/")[1];
 
       fs.unlink(`${POST_PICTURES_PATH}/${filename}`, (err) => {
         if (err) {
@@ -77,6 +87,11 @@ class PostController {
     foundPost.category = category;
     foundPost.location = location;
     foundPost.pictures = picturesPath;
+
+    if (foundPost.status === STATUS_REJECTED) {
+      foundPost.status = STATUS_PENDING;
+    }
+
     await foundPost.save();
 
     return foundPost;

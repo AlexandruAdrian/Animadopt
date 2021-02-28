@@ -16,6 +16,9 @@ export const getPostHttp = (postId) =>
 export const deletePostHttp = (postId) =>
   axios.delete(`${API_ENDPOINT}/posts/${postId}`, config);
 
+export const updatePostHttp = ({ postId, postData }) =>
+  axios.put(`${API_ENDPOINT}/posts/${postId}`, postData, config);
+
 export const updatePostStatus = ({ postId, status }) =>
   axios.put(`${API_ENDPOINT}/admin/post/${postId}`, { status }, config);
 

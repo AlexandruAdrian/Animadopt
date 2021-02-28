@@ -8,3 +8,7 @@ export const DELETE_POST_ERROR = 'app/containers/Post/DELETE_POST_ERROR';
 
 export const UPDATE_POST_STATUS = 'app/containers/Post/UPDATE_POST_STATUS';
 export const MARK_AS_ADOPTED = 'app/containers/Post/MARK_AS_ADOPTED';
+
+export const UPDATE_POST = 'app/containers/Post/UPDATE_POST';
+export const UPDATE_POST_SUCCESS = 'app/containers/Post/UPDATE_POST_SUCCESS';
+export const UPDATE_POST_ERROR = 'app/containers/Post/UPDATE_POST_ERROR';

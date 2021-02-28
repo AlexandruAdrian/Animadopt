@@ -65,6 +65,7 @@ const postRoutes = () => {
         );
 
         res.status(200).json({
+          message: 'Anuntul a fost actualizat cu succes',
           post: updatedPost,
         });
       } catch (err) {

@@ -6,6 +6,8 @@ import {
   getPostError,
   deletePostSuccess,
   deletePostError,
+  updatePostSuccess,
+  updatePostError,
 } from './actions';
 // Constants
 import { STATUS_APPROVED, STATUS_REJECTED } from '../PostsPage/constants';
@@ -14,6 +16,7 @@ import {
   DELETE_POST,
   UPDATE_POST_STATUS,
   MARK_AS_ADOPTED,
+  UPDATE_POST,
 } from './constants';
 // Service
 import {
@@ -21,6 +24,7 @@ import {
   deletePostHttp,
   updatePostStatus,
   markAsAdopted,
+  updatePostHttp,
 } from './service';
 import { toast } from 'react-toastify';
 
@@ -30,6 +34,7 @@ function* postSaga() {
     takeLatest(DELETE_POST, deletePostSaga),
     takeLatest(UPDATE_POST_STATUS, updatePostStatusSaga),
     takeLatest(MARK_AS_ADOPTED, markAsAdoptedSaga),
+    takeLatest(UPDATE_POST, updatePostSaga),
   ]);
 }
 
@@ -83,6 +88,17 @@ function* markAsAdoptedSaga(action) {
     toast.error(
       'Ooops! Am intampinat o eroare, va rugam incercati din nou mai tarziu'
     );
+  }
+}
+
+function* updatePostSaga(action) {
+  try {
+    const { data } = yield call(updatePostHttp, action);
+    const { history } = action;
+    yield put(updatePostSuccess(data.updatedPost, data.message));
+    history.push('/dashboard/posts');
+  } catch (err) {
+    yield put(updatePostError());
   }
 }
 

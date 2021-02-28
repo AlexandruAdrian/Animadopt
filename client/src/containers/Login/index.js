@@ -47,7 +47,7 @@ const Login = ({ history }) => {
 
   return (
     <Box className={classes.container}>
-      <Banned banDetails={response} />
+      {response && <Banned banDetails={response} />}
       <Box className={classes.formContainer}>
         <Box className={classes.formWrapper}>
           <Box className={classes.nav}>

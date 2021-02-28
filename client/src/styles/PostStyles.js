@@ -33,6 +33,7 @@ const styles = {
   },
   post: {
     maxWidth: '600px',
+    width: '100%',
     height: 'auto',
     margin: '0 auto',
   },
@@ -102,6 +103,24 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    '& > button': {
+      width: '49%',
+    },
+    '& > button:first-child': {
+      marginRight: '8px',
+    },
+  },
+  editFormContainer: {
+    width: '100%',
+    height: '100%',
+    padding: '20px 10px',
+    margin: '0 auto',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    '@media (min-width: 500px)': {
+      maxWidth: '700px',
+    },
   },
 };
 

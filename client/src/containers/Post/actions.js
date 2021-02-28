@@ -7,6 +7,9 @@ import {
   DELETE_POST_ERROR,
   UPDATE_POST_STATUS,
   MARK_AS_ADOPTED,
+  UPDATE_POST,
+  UPDATE_POST_SUCCESS,
+  UPDATE_POST_ERROR,
 } from './constants';
 import { toast } from 'react-toastify';
 
@@ -70,5 +73,31 @@ export function markAsAdopted(postId, history) {
     type: MARK_AS_ADOPTED,
     postId,
     history,
+  };
+}
+
+export function updatePost(postId, postData, history) {
+  return {
+    type: UPDATE_POST,
+    postId,
+    postData,
+    history,
+  };
+}
+
+export function updatePostSuccess(updatedPost, message) {
+  toast.success(message);
+  return {
+    type: UPDATE_POST_SUCCESS,
+    updatedPost,
+  };
+}
+
+export function updatePostError() {
+  toast.error(
+    'Ooops! Am intampinat o eroare in actualizarea acestui anunt, va rugam sa incercati din nou mai tarziu'
+  );
+  return {
+    type: UPDATE_POST_ERROR,
   };
 }

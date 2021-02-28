@@ -9,6 +9,8 @@ import Typography from '@material-ui/core/Typography';
 // Icons
 import SystemUpdateAltIcon from '@material-ui/icons/SystemUpdateAlt';
 import CloseIcon from '@material-ui/icons/Close';
+// Utils
+import { has } from 'lodash';
 // Styles
 import styles from '../styles/CustomDropzone';
 
@@ -85,23 +87,28 @@ function PostDropzone(props) {
 
       <div className={classes.previewContainer}>
         {addedImages &&
-          addedImages.map((image, index) => (
-            <div className={classes.previewImages} key={index}>
-              <div className={classes.previewImageWrapper}>
-                <img
-                  alt="Preview"
-                  className={classes.previewImage}
-                  src={URL.createObjectURL(image)}
-                />
-                <div className={classes.iconWrapper}>
-                  <CloseIcon
-                    className={classes.previewCloseIcon}
-                    onClick={(e) => handleImageRemover(e, index)}
+          addedImages.map((image, index) => {
+            const src = has(image, 'path')
+              ? URL.createObjectURL(image)
+              : `${process.env.REACT_APP_API_ENDPOINT}/${image}`;
+            return (
+              <div className={classes.previewImages} key={index}>
+                <div className={classes.previewImageWrapper}>
+                  <img
+                    alt="Preview"
+                    className={classes.previewImage}
+                    src={src}
                   />
+                  <div className={classes.iconWrapper}>
+                    <CloseIcon
+                      className={classes.previewCloseIcon}
+                      onClick={(e) => handleImageRemover(e, index)}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
       </div>
     </div>
   );

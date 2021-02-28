@@ -18,7 +18,7 @@ function UserPosts() {
     adopted: true,
     status: true,
   };
-  console.log('user posts: ', posts);
+
   const [query, setQuery] = useState({
     page: 1,
     search: '',
