@@ -21,7 +21,7 @@ const {
 } = require("../models/role/constants");
 
 class AdminController {
-  async updatePostStatus(postId, status, message) {
+  async updatePostStatus(postId, status) {
     const foundPost = await Post.findOne({ _id: postId });
 
     if (!foundPost) {
@@ -47,16 +47,22 @@ class AdminController {
     let notification;
     if (status === STATUS_APPROVED) {
       notification = new Notification({
-        forUserId: foundPost.postedBy,
-        itemId: foundPost._id,
-        message: "Postarea a fost aprobata",
+        forUserId: foundPost.postedBy._id,
+        item: {
+          _id: foundPost._id,
+          title: foundPost.title,
+          status: STATUS_APPROVED,
+        }
       });
       await notification.save();
     } else if (status === STATUS_REJECTED) {
       notification = new Notification({
-        forUserId: foundPost.postedBy,
-        itemId: foundPost._id,
-        message,
+        forUserId: foundPost.postedBy._id,
+        item: {
+          _id: foundPost._id,
+          title: foundPost.title,
+          status: STATUS_REJECTED,
+        }
       });
       await notification.save();
     }
@@ -67,12 +73,15 @@ class AdminController {
     return foundPost;
   }
 
-  async deletePost(postId, message) {
+  async deletePost(postId) {
     const post = await Post.findOne({ _id: postId });
     const notification = new Notification({
-      forUserId: post.postedBy,
-      itemId: post._id,
-      message,
+      forUserId: post.postedBy._id,
+      item: {
+        _id: foundPost._id,
+        title: foundPost.title,
+        status: foundPost.status,
+      }
     });
     await notification.save();
     await post.remove();

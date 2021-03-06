@@ -24,11 +24,11 @@ import styles from '../styles/AddPostStyles';
 function PostForm({ initialValues, submit, buttonText }) {
   const classes = makeStyles(styles)();
   const { categories } = useSelector((state) => state.categories);
-  const { counties } = useSelector((state) => state.counties);
-
+  const { locations } = useSelector((state) => state.dashboard);
+  console.log('categories: ', categories);
   if (!get(initialValues, '_id')) {
     initialValues['category'] = categories[0].category;
-    initialValues['location'] = counties[0].county;
+    initialValues['location'] = locations[0].county;
   }
 
   const {
@@ -183,7 +183,7 @@ function PostForm({ initialValues, submit, buttonText }) {
               selectMenu: classes.selectMenu,
             }}
           >
-            {counties.map((county) => (
+            {locations.map((county) => (
               <MenuItem
                 classes={{
                   root: classes.listItem,

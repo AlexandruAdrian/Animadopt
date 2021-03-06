@@ -16,6 +16,7 @@ const style = {
     maxWidth: '600px',
     margin: '0 auto',
     '@media (min-width: 1000px)': {
+      minWidth: '600px',
       maxWidth: '700px',
       marginRight: '15px',
     },

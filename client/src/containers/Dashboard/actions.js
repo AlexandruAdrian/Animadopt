@@ -10,7 +10,13 @@ import {
   FETCH_DASHBOARD_POSTS,
   FETCH_DASHBOARD_POSTS_SUCCESS,
   FETCH_DASHBOARD_POSTS_ERROR,
+  FETCH_NOTIFICATIONS,
+  FETCH_NOTIFICATIONS_SUCCESS,
+  FETCH_NOTIFICATIONS_ERROR,
   RESET_DASHBOARD,
+  MARK_NOTIFICATION,
+  MARK_NOTIFICATION_SUCCESS,
+  MARK_NOTIFICATION_ERROR,
 } from './constants';
 
 export function getUser() {
@@ -81,5 +87,44 @@ export function fetchDashboardPostsError() {
 export function resetDashboard() {
   return {
     type: RESET_DASHBOARD,
+  };
+}
+
+export function fetchNotifications() {
+  return {
+    type: FETCH_NOTIFICATIONS,
+  };
+}
+
+export function fetchNotificationsSuccess(notifications) {
+  return {
+    type: FETCH_NOTIFICATIONS_SUCCESS,
+    notifications,
+  };
+}
+
+export function fetchNotificationsError() {
+  return {
+    type: FETCH_NOTIFICATIONS_ERROR,
+  };
+}
+
+export function markNotification(notificationId) {
+  return {
+    type: MARK_NOTIFICATION,
+    notificationId,
+  };
+}
+
+export function markNotificationSuccess(notification) {
+  return {
+    type: MARK_NOTIFICATION_SUCCESS,
+    notification,
+  };
+}
+
+export function markNotificationError() {
+  return {
+    type: MARK_NOTIFICATION_ERROR,
   };
 }

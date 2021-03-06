@@ -41,7 +41,7 @@ function* postSaga() {
 function* getPostSaga({ postId }) {
   try {
     const { data } = yield call(getPostHttp, postId);
-    yield put(getPostSuccess(data.post));
+    yield put(getPostSuccess(data));
   } catch (err) {
     yield put(getPostError());
   }

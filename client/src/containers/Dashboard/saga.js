@@ -5,7 +5,8 @@ import {
   getUserHttp,
   getLocationsHttp,
   getDashboardPostsHttp,
-  updatePostStatus,
+  getNotificationsHttp,
+  markNotificationHttp,
 } from './service';
 // Actions
 import {
@@ -14,9 +15,19 @@ import {
   getLocationsSuccess,
   getLocationsError,
   fetchDashboardPostsSuccess,
+  fetchNotificationsSuccess,
+  fetchNotificationsError,
+  markNotificationSuccess,
+  markNotificationError,
 } from './actions';
 // Constants
-import { GET_USER, GET_LOCATIONS, FETCH_DASHBOARD_POSTS } from './constants';
+import {
+  GET_USER,
+  GET_LOCATIONS,
+  FETCH_DASHBOARD_POSTS,
+  FETCH_NOTIFICATIONS,
+  MARK_NOTIFICATION,
+} from './constants';
 // Toastify
 import { toast } from 'react-toastify';
 import { fetchUserPostsError } from '../PostsPage/actions';
@@ -26,6 +37,8 @@ function* dashboardSaga() {
     takeLatest(GET_USER, getUserSaga),
     takeLatest(GET_LOCATIONS, getLocationsSaga),
     takeLatest(FETCH_DASHBOARD_POSTS, getDashboardPostsSaga),
+    takeLatest(FETCH_NOTIFICATIONS, fetchNotificationsSaga),
+    takeLatest(MARK_NOTIFICATION, markNotificationSaga),
   ]);
 }
 
@@ -56,6 +69,24 @@ function* getDashboardPostsSaga(action) {
   } catch (err) {
     toast.error('Ooops! Am intampinat o eroare in preluarea anunturilor');
     yield put(fetchUserPostsError());
+  }
+}
+
+function* fetchNotificationsSaga(action) {
+  try {
+    const { data } = yield call(getNotificationsHttp, action);
+    yield put(fetchNotificationsSuccess(data.notifications));
+  } catch (err) {
+    yield put(fetchNotificationsError());
+  }
+}
+
+function* markNotificationSaga(action) {
+  try {
+    const { data } = yield call(markNotificationHttp, action);
+    yield put(markNotificationSuccess(data.notification));
+  } catch (err) {
+    yield put(markNotificationError());
   }
 }
 

@@ -10,6 +10,10 @@ import {
   FETCH_DASHBOARD_POSTS_SUCCESS,
   FETCH_DASHBOARD_POSTS_ERROR,
   RESET_DASHBOARD,
+  FETCH_NOTIFICATIONS,
+  FETCH_NOTIFICATIONS_SUCCESS,
+  FETCH_NOTIFICATIONS_ERROR,
+  MARK_NOTIFICATION_SUCCESS,
 } from './constants';
 import { GET_POST_SUCCESS } from '../Post/constants';
 import { UPDATE_USER_AVATAR_SUCCESS } from '../Settings/constants';
@@ -19,6 +23,7 @@ const INITIAL_STATE = {
   locations: [],
   selectedPost: {},
   isLoading: false,
+  notifications: [],
   posts: [],
 };
 
@@ -27,6 +32,7 @@ const dashboardReducer = (state = INITIAL_STATE, action) => {
     case GET_USER:
     case GET_LOCATIONS:
     case FETCH_DASHBOARD_POSTS:
+    case FETCH_NOTIFICATIONS:
       return {
         ...state,
         isLoading: true,
@@ -46,6 +52,27 @@ const dashboardReducer = (state = INITIAL_STATE, action) => {
         isLoading: false,
       };
 
+    case FETCH_NOTIFICATIONS_SUCCESS:
+      return {
+        ...state,
+        notifications: action.notifications,
+        isLoading: false,
+      };
+
+    case MARK_NOTIFICATION_SUCCESS:
+      const newNotifications = action.notifications.map((notification) => {
+        if (notification._id === action.notification._id) {
+          return action.notification;
+        }
+
+        return notification;
+      });
+      return {
+        ...state,
+        notifications: newNotifications,
+      };
+
+    case FETCH_NOTIFICATIONS_ERROR:
     case GET_USER_ERROR:
     case GET_LOCATIONS_ERROR:
     case FETCH_DASHBOARD_POSTS_ERROR:

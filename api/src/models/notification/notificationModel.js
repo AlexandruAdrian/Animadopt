@@ -4,8 +4,13 @@ const Schema = mongoose.Schema;
 const NotificationSchema = new Schema({
   forUserId: { type: mongoose.Types.ObjectId, required: true },
   seen: { type: Boolean, default: false },
-  itemId: { type: mongoose.Types.ObjectId },
-  message: { type: String },
+  item: {
+    type: {
+      _id: mongoose.Types.ObjectId,
+      title: String,
+      status: Number,
+    }
+  },
   createdAt: { type: Date, default: Date.now },
 });
 

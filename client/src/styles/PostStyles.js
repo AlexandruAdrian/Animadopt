@@ -26,11 +26,6 @@ const styles = {
       width: '400px',
     },
   },
-  userInfo: {
-    '@media (min-width: 1250px)': {
-      maxHeight: '135px',
-    },
-  },
   post: {
     maxWidth: '600px',
     width: '100%',
@@ -52,6 +47,13 @@ const styles = {
       marginRight: '8px',
     },
   },
+  postTitle: {
+    textAlign: 'center',
+    paddingTop: '24px',
+    '& > h1': {
+      fontSize: '24px',
+    },
+  },
   carousel: {
     '& div, & ul': {
       maxHeight: '400px',
@@ -71,7 +73,7 @@ const styles = {
       marginTop: '60px',
     },
     '@media (min-width: 580px)': {
-      marginTop: '90px',
+      marginTop: '20px',
     },
   },
   listItem: {

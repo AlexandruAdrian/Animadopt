@@ -20,7 +20,6 @@ const adminRoutes = () => {
         const updatedPost = await AdminController.updatePostStatus(
           req.params.postId,
           parseInt(req.body.status),
-          req.body.message
         );
 
         res.status(200).json({
@@ -38,7 +37,7 @@ const adminRoutes = () => {
     isAdminOrOwner,
     async (req, res, next) => {
       try {
-        await AdminController.deletePost(req.params.postId, req.body.message);
+        await AdminController.deletePost(req.params.postId);
 
         return res.status(200).json({
           message: "Postarea a fost stearsa cu succes",

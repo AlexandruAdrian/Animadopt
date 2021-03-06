@@ -32,11 +32,13 @@ function Post({ selectedPost, loggedUser }) {
       {editMode ? (
         <PostEditMode post={selectedPost} />
       ) : (
-        <PostViewMode
-          post={selectedPost}
-          user={loggedUser}
-          setEditMode={setEditMode}
-        />
+        selectedPost && (
+          <PostViewMode
+            post={selectedPost}
+            user={loggedUser}
+            setEditMode={setEditMode}
+          />
+        )
       )}
     </Box>
   );

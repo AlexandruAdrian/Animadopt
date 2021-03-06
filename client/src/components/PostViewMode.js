@@ -91,7 +91,7 @@ function PostViewMode({ post, user, setEditMode }) {
   return (
     <Box className={classes.container}>
       <Box className={classes.userInfoWrapper}>
-        <Paper className={classes.userInfo}>
+        <Paper>
           {get(post, 'postedBy') && (
             <UserInfo showRole={false} user={post.postedBy} />
           )}
@@ -116,7 +116,12 @@ function PostViewMode({ post, user, setEditMode }) {
 
         {isNotAdopted && postBelongsToUser && isApproved && (
           <Paper className={classes.postActions}>
-            <CustomButton text={'Adoptat'} success handler={setAsAdopted} />
+            <CustomButton
+              size={'small'}
+              text={'Adoptat'}
+              success
+              handler={setAsAdopted}
+            />
           </Paper>
         )}
       </Box>
@@ -132,6 +137,12 @@ function PostViewMode({ post, user, setEditMode }) {
           >
             {renderPostPictures()}
           </Carousel>
+        </Box>
+
+        <Box className={classes.postTitle}>
+          <Typography component={'h1'}>
+            <strong>{post.title}</strong>
+          </Typography>
         </Box>
 
         <Box className={classes.generalInformation}>
