@@ -13,6 +13,8 @@ import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 // Styles
 import styles from '../styles/UserInfoStyles';
 import moment from 'moment';
+// Utils
+import { get } from 'lodash';
 
 function UserInfo({ user, showRole = true }) {
   const classes = makeStyles(styles)();
@@ -42,7 +44,7 @@ function UserInfo({ user, showRole = true }) {
           <li>
             <BusinessCenterIcon fontSize="small" />
             <strong>Rol: </strong>
-            {user.role.type}
+            {get(user, 'role.type')}
           </li>
         )}
         <li>

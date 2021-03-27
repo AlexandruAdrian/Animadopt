@@ -23,7 +23,7 @@ const style = {
     color: colors.darkPacificBlue,
     '& a': {
       textDecoration: 'none',
-      color: colors.pacificBlue,
+      color: colors.darkPacificBlue,
       fontWeight: '600',
       '&:hover': {
         textDecoration: 'underline',

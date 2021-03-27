@@ -11,6 +11,7 @@ import CustomStepper from '../../components/CustomStepper';
 import RegisterForm from '../../components/RegisterForm';
 import CustomButton from '../../components/CustomButton';
 import Loading from '../../components/Loading';
+import BackArrow from '../../components/BackArrow';
 // Actions
 import { registerUser } from './actions';
 import { resetRequestState } from '../../utils/request/actions';
@@ -64,6 +65,7 @@ const Register = ({ history }) => {
     validationSchema: registerValidationSchema,
     validateOnMount: true,
     validateOnChange: false,
+    validateOnBlur: false,
     onSubmit: handleSubmit,
   });
 
@@ -81,7 +83,6 @@ const Register = ({ history }) => {
 
   const clearState = () => {
     dispatch(resetRequestState());
-    history.push('/');
   };
 
   const successRegister = () => {
@@ -117,8 +118,9 @@ const Register = ({ history }) => {
             </div>
           </div>
         </div>
+
         <Link to="/login" className={classes.registerSuccessFooter}>
-          <CustomButton text="Autentificare" handler={clearState} primary />
+          <CustomButton text="Autentificare" handler={clearState} dark />
         </Link>
       </>
     );
@@ -134,7 +136,7 @@ const Register = ({ history }) => {
     return (
       <Box className={classes.failWrapper}>
         <Typography component="p">{response.message}</Typography>
-        <CustomButton text="Inregistrare" primary handler={handleClick} />
+        <CustomButton text="Inregistrare" dark handler={handleClick} />
       </Box>
     );
   };
@@ -144,8 +146,9 @@ const Register = ({ history }) => {
   return (
     <Box className={classes.container}>
       <Box className={classes.formContainer}>
+        <BackArrow to={'/'} handler={clearState} />
         <Box className={classes.nav}>
-          <Box className={classes.logo} onClick={clearState}></Box>
+          <Box className={classes.logo} />
         </Box>
 
         {!Object.keys(response).length && !isLoading ? (
@@ -162,6 +165,7 @@ const Register = ({ history }) => {
               handleChange={formik.handleChange}
               handleBlur={formik.handleBlur}
               setFieldValue={formik.setFieldValue}
+              setFieldError={formik.setFieldError}
             />
           </CustomStepper>
         ) : !isLoading && response.success ? (

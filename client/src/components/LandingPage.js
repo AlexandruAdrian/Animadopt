@@ -32,10 +32,10 @@ const LandingPage = () => {
 
           <Box className={classes.buttons}>
             <Link to="/login">
-              <CustomButton text="Autentificare" primary />
+              <CustomButton text="Autentificare" dark />
             </Link>
             <Link to="/register">
-              <CustomButton text="Inregistrare" />
+              <CustomButton text="Inregistrare" secondary />
             </Link>
           </Box>
         </Box>

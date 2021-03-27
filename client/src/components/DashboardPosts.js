@@ -2,10 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // Actions
-import {
-  fetchDashboardPosts,
-  resetDashboard,
-} from '../containers/Dashboard/actions';
+import { fetchDashboardPosts } from '../containers/Dashboard/actions';
 // Constants
 import {
   IS_NOT_ADOPTED,
@@ -39,8 +36,6 @@ function DashboardPosts() {
         location: query.location.join(','),
       })
     );
-
-    return () => dispatch(resetDashboard());
   }, [query]);
 
   return (

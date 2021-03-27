@@ -9,22 +9,19 @@ import {
   FETCH_DASHBOARD_POSTS,
   FETCH_DASHBOARD_POSTS_SUCCESS,
   FETCH_DASHBOARD_POSTS_ERROR,
-  RESET_DASHBOARD,
-  FETCH_NOTIFICATIONS,
-  FETCH_NOTIFICATIONS_SUCCESS,
-  FETCH_NOTIFICATIONS_ERROR,
-  MARK_NOTIFICATION_SUCCESS,
+  SET_NEXT_POSTS_PAGE,
 } from './constants';
 import { GET_POST_SUCCESS } from '../Post/constants';
 import { UPDATE_USER_AVATAR_SUCCESS } from '../Settings/constants';
+import { get } from 'lodash';
 
 const INITIAL_STATE = {
   user: {},
   locations: [],
   selectedPost: {},
   isLoading: false,
-  notifications: [],
   posts: [],
+  nextPostsPage: 0,
 };
 
 const dashboardReducer = (state = INITIAL_STATE, action) => {
@@ -32,7 +29,6 @@ const dashboardReducer = (state = INITIAL_STATE, action) => {
     case GET_USER:
     case GET_LOCATIONS:
     case FETCH_DASHBOARD_POSTS:
-    case FETCH_NOTIFICATIONS:
       return {
         ...state,
         isLoading: true,
@@ -52,27 +48,6 @@ const dashboardReducer = (state = INITIAL_STATE, action) => {
         isLoading: false,
       };
 
-    case FETCH_NOTIFICATIONS_SUCCESS:
-      return {
-        ...state,
-        notifications: action.notifications,
-        isLoading: false,
-      };
-
-    case MARK_NOTIFICATION_SUCCESS:
-      const newNotifications = action.notifications.map((notification) => {
-        if (notification._id === action.notification._id) {
-          return action.notification;
-        }
-
-        return notification;
-      });
-      return {
-        ...state,
-        notifications: newNotifications,
-      };
-
-    case FETCH_NOTIFICATIONS_ERROR:
     case GET_USER_ERROR:
     case GET_LOCATIONS_ERROR:
     case FETCH_DASHBOARD_POSTS_ERROR:
@@ -98,15 +73,22 @@ const dashboardReducer = (state = INITIAL_STATE, action) => {
       };
 
     case FETCH_DASHBOARD_POSTS_SUCCESS:
+      let newPosts = [];
+      if (get(action, 'data.previous')) {
+        newPosts = [...state.posts, ...action.data.results];
+      } else {
+        newPosts = action.data.results;
+      }
+
       return {
         ...state,
-        posts: [...state.posts, ...action.posts],
+        posts: newPosts,
       };
 
-    case RESET_DASHBOARD:
+    case SET_NEXT_POSTS_PAGE:
       return {
         ...state,
-        posts: [],
+        nextPostsPage: action.nextPage,
       };
 
     default:

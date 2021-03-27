@@ -15,8 +15,8 @@ const style = {
   secondary: {
     textTransform: 'capitalize',
     width: '200px',
-    border: `1px solid ${colors.pacificBlue}`,
-    color: colors.pacificBlue,
+    border: `1px solid ${colors.darkPacificBlue}`,
+    color: colors.darkPacificBlue,
   },
   dark: {
     textTransform: 'capitalize',

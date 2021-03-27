@@ -30,11 +30,17 @@ const RegisterForm = ({
   handleChange,
   handleBlur,
   setFieldValue,
+  setFieldError,
 }) => {
   const classes = makeStyles(styles)();
   const [showPassword, setShowPassword] = useState(false);
   const handlePasswordToggle = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleFocus = (e) => {
+    const { name, id } = e.target;
+    setFieldError(name || id, '');
   };
 
   const stepOne = () => {
@@ -51,6 +57,7 @@ const RegisterForm = ({
               value={values.email}
               onChange={handleChange}
               onBlur={handleBlur}
+              onFocus={handleFocus}
               InputProps={{
                 classes: {
                   root: classes.inputRoot,
@@ -81,6 +88,7 @@ const RegisterForm = ({
                 aria-describedby="lastName"
                 value={values.lastName}
                 onChange={handleChange}
+                onFocus={handleFocus}
                 onBlur={handleBlur}
                 InputProps={{
                   classes: {
@@ -117,6 +125,7 @@ const RegisterForm = ({
                 value={values.firstName}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                onFocus={handleFocus}
                 InputProps={{
                   classes: {
                     root: classes.inputRoot,
@@ -153,6 +162,7 @@ const RegisterForm = ({
                 value={values.password}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                onFocus={handleFocus}
                 InputProps={{
                   classes: {
                     root: classes.inputRoot,
@@ -202,6 +212,7 @@ const RegisterForm = ({
                 value={values.passwordConfirmation}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                onFocus={handleFocus}
                 InputProps={{
                   classes: {
                     root: classes.inputRoot,
@@ -227,6 +238,7 @@ const RegisterForm = ({
               value={values.phone}
               onChange={handleChange}
               onBlur={handleBlur}
+              onFocus={handleFocus}
               InputProps={{
                 classes: {
                   root: classes.inputRoot,
@@ -256,16 +268,33 @@ const RegisterForm = ({
               value={values.gender}
               onChange={handleChange}
               onBlur={handleBlur}
+              onFocus={handleFocus}
             >
               <FormControlLabel
                 value="F"
-                control={<Radio size="small" />}
+                control={
+                  <Radio
+                    size="small"
+                    color={'primary'}
+                    classes={{
+                      colorPrimary: classes.genderRadioBtn,
+                    }}
+                  />
+                }
                 label="Feminin"
                 classes={{ label: classes.inputLabelRoot }}
               />
               <FormControlLabel
                 value="M"
-                control={<Radio size="small" />}
+                control={
+                  <Radio
+                    size="small"
+                    color={'primary'}
+                    classes={{
+                      colorPrimary: classes.genderRadioBtn,
+                    }}
+                  />
+                }
                 label="Masculin"
                 classes={{ label: classes.inputLabelRoot }}
               />
@@ -312,6 +341,7 @@ RegisterForm.propTypes = {
   handleChange: PropTypes.func.isRequired,
   handleBlur: PropTypes.func.isRequired,
   setFieldValue: PropTypes.func.isRequired,
+  setFieldError: PropTypes.func.isRequired,
 };
 
 export default RegisterForm;

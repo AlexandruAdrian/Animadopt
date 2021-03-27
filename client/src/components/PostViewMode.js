@@ -1,8 +1,8 @@
 // System
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { useDispatch } from 'react-redux';
 // Material UI
 import Box from '@material-ui/core/Box';
@@ -30,6 +30,7 @@ import {
   deletePost,
   markAsAdopted,
   updatePostStatus,
+  getPost,
 } from '../containers/Post/actions';
 // Constants
 import {
@@ -44,24 +45,33 @@ import {
 // Styles
 import styles from '../styles/PostStyles';
 // Utils
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
 
 function PostViewMode({ post, user, setEditMode }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = makeStyles(styles)();
+  const { id } = useParams();
 
-  const renderPostPictures = () =>
-    get(post, 'pictures') &&
-    post.pictures.map((picture, index) => {
-      return (
-        <img
-          alt={`Anunt imagine ${index + 1}`}
-          src={`${process.env.REACT_APP_API_ENDPOINT}/${picture}`}
-          key={`${post.id}-${index}`}
-        />
-      );
-    });
+  useEffect(() => {
+    if (isEmpty(post)) {
+      dispatch(getPost(id));
+    }
+  }, [post, id]);
+
+  const renderPostPictures = () => {
+    if (!isEmpty(post)) {
+      return post.pictures.map((picture, index) => {
+        return (
+          <img
+            alt={`Anunt imagine ${index + 1}`}
+            src={`${process.env.REACT_APP_API_ENDPOINT}/${picture}`}
+            key={`${post.id}-${index}`}
+          />
+        );
+      });
+    }
+  };
 
   const deletePostHandler = () => {
     dispatch(deletePost(post._id, history));
@@ -79,14 +89,25 @@ function PostViewMode({ post, user, setEditMode }) {
     setEditMode(true);
   };
 
-  const postedBy = post.postedBy.firstName + ' ' + post.postedBy.lastName;
+  let postedBy = '';
+  if (get(post, 'postedBy.firstName') && get(post, 'postedBy.lastName')) {
+    postedBy = post.postedBy.firstName + ' ' + post.postedBy.lastName;
+  }
 
-  const isPending = post.status === STATUS_PENDING;
-  const isApproved = post.status === STATUS_APPROVED;
-  const isAdminOrOwner =
-    user.role.type === USER_ROLE_ADMIN || user.role.type === USER_ROLE_OWNER;
-  const isNotAdopted = !post.isAdopted;
-  const postBelongsToUser = post.postedBy._id === user._id;
+  let isPending;
+  let isApproved;
+  let isAdminOrOwner;
+  let isNotAdopted;
+  let postBelongsToUser;
+
+  if (!isEmpty(post) && !isEmpty(user)) {
+    isPending = post.status === STATUS_PENDING;
+    isApproved = post.status === STATUS_APPROVED;
+    isAdminOrOwner =
+      user.role.type === USER_ROLE_ADMIN || user.role.type === USER_ROLE_OWNER;
+    isNotAdopted = !post.isAdopted;
+    postBelongsToUser = post.postedBy._id === user._id;
+  }
 
   return (
     <Box className={classes.container}>
@@ -204,7 +225,7 @@ function PostViewMode({ post, user, setEditMode }) {
             {!isApproved && (
               <CustomButton
                 text={'Editeaza'}
-                primary
+                dark
                 size={'small'}
                 handler={switchToEditMode}
               />

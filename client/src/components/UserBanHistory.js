@@ -26,7 +26,7 @@ function UserBanHistory({ userId }) {
     if (userId) {
       dispatch(getUserBanHistory(userId));
     }
-  }, [dispatch]);
+  }, [dispatch, userId]);
 
   return (
     <Box className={classes.banHistory}>

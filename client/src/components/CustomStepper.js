@@ -44,12 +44,12 @@ const ColorlibConnector = withStyles({
   },
   active: {
     '& $line': {
-      backgroundImage: 'linear-gradient(135deg, #b3dde5, #41A9BD)',
+      backgroundImage: 'linear-gradient(135deg, #133339, #133339)',
     },
   },
   completed: {
     '& $line': {
-      backgroundImage: 'linear-gradient(135deg, #b3dde5, #41A9BD)',
+      backgroundImage: 'linear-gradient(135deg, #133339, #133339)',
     },
   },
   line: {
@@ -108,7 +108,7 @@ const CustomStepper = (props) => {
           <CustomButton
             handler={handleNext}
             text={activeStep === steps.length - 1 ? 'Gata' : 'Urmatorul'}
-            primary
+            dark
           />
         </div>
       </div>

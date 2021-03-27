@@ -31,7 +31,6 @@ const userPostsReducer = (state = INITIAL_STATE, action) => {
       };
 
     case DELETE_POST_SUCCESS:
-      console.log('state: ', state);
       return {
         isLoading: false,
         posts: state.posts.filter((post) => post._id !== action.postId),

@@ -1,5 +1,6 @@
 // System
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
@@ -15,7 +16,7 @@ import CustomButton from '../../components/CustomButton';
 import UserBanHistory from '../../components/UserBanHistory';
 import AdminUserPosts from '../../components/AdminUserPosts';
 // Actions
-import { unbanUser, promoteUser, demoteUser } from './actions';
+import { unbanUser, promoteUser, demoteUser, fetchUser } from './actions';
 // Constants
 import { USER_ROLE_ADMIN, USER_ROLE_OWNER } from '../Dashboard/constants';
 import {
@@ -26,7 +27,7 @@ import {
 // Style
 import style from '../../styles/UserStyles';
 // Utils
-import { has } from 'lodash';
+import { has, get, isEmpty } from 'lodash';
 
 function User({ loggedUser }) {
   const classes = makeStyles(style)();
@@ -35,6 +36,13 @@ function User({ loggedUser }) {
   const [openBanModal, setOpenBanModal] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState('');
   const { selectedUser } = useSelector((state) => state.users);
+  const { id } = useParams();
+
+  useEffect(() => {
+    if (isEmpty(selectedUser)) {
+      dispatch(fetchUser(id));
+    }
+  }, [selectedUser]);
 
   const handleCloseBanModal = () => {
     setOpenBanModal(false);
@@ -107,7 +115,7 @@ function User({ loggedUser }) {
                   <CustomButton
                     handler={handleOpenUnbanModal}
                     text={'Deblocheaza'}
-                    primary
+                    dark
                     size="small"
                   />
                 </Box>
@@ -115,20 +123,20 @@ function User({ loggedUser }) {
             )}
             <Box className={classes.buttonGroup}>
               {has(loggedUser, 'role') &&
-                loggedUser.role.type === USER_ROLE_OWNER &&
+                get(loggedUser, 'role.type') === USER_ROLE_OWNER &&
                 !selectedUser.ban && (
                   <>
-                    {loggedUser.role.type === USER_ROLE_OWNER &&
-                      selectedUser.role.type !== USER_ROLE_OWNER && (
+                    {get(loggedUser, 'role.type') === USER_ROLE_OWNER &&
+                      get(selectedUser, 'role.type') !== USER_ROLE_OWNER && (
                         <CustomButton
                           handler={handleOpenPromotionModal}
                           text={'Promoveaza'}
-                          primary
+                          dark
                           size={'small'}
                         />
                       )}
-                    {loggedUser.role.type === USER_ROLE_OWNER &&
-                      selectedUser.role.type === USER_ROLE_ADMIN && (
+                    {get(loggedUser, 'role.type') === USER_ROLE_OWNER &&
+                      get(selectedUser, 'role.type') === USER_ROLE_ADMIN && (
                         <CustomButton
                           handler={handleOpenDemotionModal}
                           text={'Retrogradeaza'}
@@ -139,7 +147,7 @@ function User({ loggedUser }) {
                   </>
                 )}
               {(!selectedUser.ban || !selectedUser.ban.isValid) &&
-                selectedUser.role.type !== USER_ROLE_OWNER && (
+                get(selectedUser, 'role.type') !== USER_ROLE_OWNER && (
                   <CustomButton
                     handler={handleOpenBanModal}
                     text={'Blocheaza'}

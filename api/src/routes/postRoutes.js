@@ -189,6 +189,7 @@ const postRoutes = () => {
     query("location").escape(),
     query("status").escape(),
     query("adopted").escape(),
+    query("search").escape(),
     async (req, res, next) => {
       try {
         const page = parseInt(req.query.page);
@@ -197,6 +198,7 @@ const postRoutes = () => {
         let status;
         let title;
         let adopted = false;
+        const searchTerm = req.query.search;
 
         if (req.query.title) {
           title = req.query.title;
@@ -226,7 +228,8 @@ const postRoutes = () => {
           location,
           status,
           adopted,
-          title
+          title,
+          searchTerm
         );
 
         res.status(200).json(results);

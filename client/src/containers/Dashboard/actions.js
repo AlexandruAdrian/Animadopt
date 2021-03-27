@@ -17,6 +17,7 @@ import {
   MARK_NOTIFICATION,
   MARK_NOTIFICATION_SUCCESS,
   MARK_NOTIFICATION_ERROR,
+  SET_NEXT_POSTS_PAGE,
 } from './constants';
 
 export function getUser() {
@@ -71,10 +72,10 @@ export function fetchDashboardPosts(queryParams) {
   };
 }
 
-export function fetchDashboardPostsSuccess(posts) {
+export function fetchDashboardPostsSuccess(data) {
   return {
     type: FETCH_DASHBOARD_POSTS_SUCCESS,
-    posts,
+    data,
   };
 }
 
@@ -84,47 +85,9 @@ export function fetchDashboardPostsError() {
   };
 }
 
-export function resetDashboard() {
+export function setNextPostsPage(nextPage) {
   return {
-    type: RESET_DASHBOARD,
-  };
-}
-
-export function fetchNotifications() {
-  return {
-    type: FETCH_NOTIFICATIONS,
-  };
-}
-
-export function fetchNotificationsSuccess(notifications) {
-  return {
-    type: FETCH_NOTIFICATIONS_SUCCESS,
-    notifications,
-  };
-}
-
-export function fetchNotificationsError() {
-  return {
-    type: FETCH_NOTIFICATIONS_ERROR,
-  };
-}
-
-export function markNotification(notificationId) {
-  return {
-    type: MARK_NOTIFICATION,
-    notificationId,
-  };
-}
-
-export function markNotificationSuccess(notification) {
-  return {
-    type: MARK_NOTIFICATION_SUCCESS,
-    notification,
-  };
-}
-
-export function markNotificationError() {
-  return {
-    type: MARK_NOTIFICATION_ERROR,
+    type: SET_NEXT_POSTS_PAGE,
+    nextPage,
   };
 }

@@ -3,7 +3,7 @@ import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 // Components
 import CustomButton from './CustomButton';
 import UserInfo from './UserInfo';
@@ -17,6 +17,7 @@ import style from '../styles/AdminUserDetailsStyle';
 
 function AdminUserDetails({ user }) {
   const classes = makeStyles(style)();
+  const { id } = useParams();
   const dispatch = useDispatch();
   const history = useHistory();
   moment().locale('ro');
@@ -40,7 +41,7 @@ function AdminUserDetails({ user }) {
           handler={handleUserDetails}
           text={'Detalii utilizator'}
           size="small"
-          primary
+          dark
         />
       </CardActions>
     </Card>

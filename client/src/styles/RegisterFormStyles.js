@@ -35,7 +35,13 @@ const styles = {
   },
   inputLabelRoot: {
     fontSize: '14px',
-    color: 'gray',
+    color: colors.darkPacificBlue,
+  },
+  genderRadioBtn: {
+    color: colors.darkPacificBlue,
+    '&$checked': {
+      color: colors.darkPacificBlue,
+    },
   },
   adornment: {
     color: 'gray',

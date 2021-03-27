@@ -46,6 +46,11 @@ const styles = {
       textDecoration: 'none',
     },
   },
+  noNotifications: {
+    fontSize: '14px',
+    color: colors.darkPacificBlue,
+    padding: '8px',
+  },
   notificationsItem: {
     cursor: 'pointer',
     borderBottom: `1px solid ${colors.offWhite}`,

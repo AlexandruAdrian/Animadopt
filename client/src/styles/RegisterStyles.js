@@ -3,7 +3,7 @@ import logo from '../assets/logo.png';
 
 const styles = {
   container: {
-    backgroundColor: colors.pacificBlue,
+    backgroundColor: colors.darkPacificBlue,
     width: '100%',
     minHeight: '100%',
     display: 'flex',
@@ -21,11 +21,11 @@ const styles = {
     maxHeight: '650px',
     display: 'flex',
     flexDirection: 'column',
-    paddingTop: '10px',
+    paddingTop: '55px',
   },
   nav: {
     width: '100%',
-    height: '40px',
+    height: '50px',
   },
   logo: {
     backgroundImage: `url(${logo})`,

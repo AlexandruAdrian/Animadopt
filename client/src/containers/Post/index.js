@@ -14,6 +14,8 @@ import PostEditMode from '../../components/PostEditMode';
 import { getPost } from './actions';
 // Styles
 import styles from '../../styles/PostStyles';
+// Utils
+import { isEmpty } from 'lodash';
 
 function Post({ selectedPost, loggedUser }) {
   const classes = makeStyles(styles)();
@@ -22,17 +24,17 @@ function Post({ selectedPost, loggedUser }) {
   const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
-    if (!selectedPost) {
+    if (isEmpty(selectedPost)) {
       dispatch(getPost(id));
     }
-  }, [dispatch]);
+  }, [dispatch, id, selectedPost]);
 
   return (
     <Box className={classes.postPage}>
       {editMode ? (
         <PostEditMode post={selectedPost} />
       ) : (
-        selectedPost && (
+        !isEmpty(selectedPost) && (
           <PostViewMode
             post={selectedPost}
             user={loggedUser}

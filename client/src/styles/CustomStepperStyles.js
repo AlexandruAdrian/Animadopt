@@ -27,20 +27,20 @@ const styles = {
     borderRadius: '50%',
   },
   stepperActive: {
-    backgroundColor: colors.pacificBlue,
+    backgroundColor: colors.darkPacificBlue,
     boxShadow: '0 4px 10px 0 rgba(0,0,0,.25)',
   },
   stepperCompleted: {
-    backgroundColor: colors.pacificBlue,
+    backgroundColor: colors.darkPacificBlue,
   },
   stepperLabelRoot: {
     color: 'gray',
   },
   stepperLabelActive: {
-    color: `${colors.pacificBlue} !important`,
+    color: `${colors.darkPacificBlue} !important`,
   },
   stepperLabelCompleted: {
-    color: `${colors.pacificBlue} !important`,
+    color: `${colors.darkPacificBlue} !important`,
   },
   footer: {
     width: '100%',
@@ -51,6 +51,11 @@ const styles = {
     paddingBottom: '10px',
     '& button': {
       width: '120px',
+      '&:hover': {
+        backgroundColor: colors.darkPacificBlue,
+        color: colors.white,
+        transition: 'background-color .5s ease, color .5s ease',
+      },
     },
     '& button:disabled': {
       backgroundColor: 'gray',

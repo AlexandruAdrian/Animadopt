@@ -26,8 +26,10 @@ import PersonIcon from '@material-ui/icons/Person';
 import { setSelectedPost } from '../containers/Dashboard/actions';
 // Styles
 import styles from '../styles/PostPreviewStyles';
+// Utils
+import { get } from 'lodash';
 
-function PostPreview({ post }) {
+function PostPreview({ post, lastPostRef }) {
   const classes = makeStyles(styles)();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -37,10 +39,13 @@ function PostPreview({ post }) {
     history.push(`/dashboard/posts/post/${post._id}`);
   };
 
-  const postedBy = post.postedBy.firstName + ' ' + post.postedBy.lastName;
+  let postedBy = '';
+  if (get(post, 'postedBy.firstName') && get(post, 'postedBy.lastName')) {
+    postedBy = post.postedBy.firstName + ' ' + post.postedBy.lastName;
+  }
 
   return (
-    <Grid item xs={12} md={6} lg={4}>
+    <Grid item xs={12} md={6} lg={4} ref={lastPostRef}>
       <Card
         classes={{
           root: classes.card,
@@ -54,15 +59,17 @@ function PostPreview({ post }) {
             autoFocus={false}
             className={classes.carousel}
           >
-            {post.pictures.map((picture, index) => {
-              return (
-                <img
-                  src={`${process.env.REACT_APP_API_ENDPOINT}/${picture}`}
-                  key={`${post.id}-${index}`}
-                  className={classes.image}
-                />
-              );
-            })}
+            {get(post, 'pictures') &&
+              post.pictures.length &&
+              post.pictures.map((picture, index) => {
+                return (
+                  <img
+                    src={`${process.env.REACT_APP_API_ENDPOINT}/${picture}`}
+                    key={`${post.id}-${index}`}
+                    className={classes.image}
+                  />
+                );
+              })}
           </Carousel>
         </Box>
         <CardActionArea onClick={handlePostClick}>

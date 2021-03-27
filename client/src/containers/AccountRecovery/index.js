@@ -48,7 +48,6 @@ function AccountRecovery(props) {
 
   const handleBack = () => {
     dispatch(resetRequestState());
-    history.push('/');
   };
 
   const classes = makeStyles(style)();
@@ -57,19 +56,20 @@ function AccountRecovery(props) {
     validationSchema: recoverValidatorSchema,
     validateOnMount: true,
     validateOnChange: false,
+    validateOnBlur: false,
     onSubmit: handleSubmit,
   });
 
   return (
     <Box className={classes.container}>
-      <BackArrow to="/login" />
       <Box className={classes.wrapper}>
         {isLoading ? (
           <Loading />
         ) : (
           <Box className={classes.formWrapper}>
+            <BackArrow to="/login" handler={handleBack} />
             <Box className={classes.nav}>
-              <Box className={classes.logo} onClick={handleBack}></Box>
+              <Box className={classes.logo} />
             </Box>
             <form className={classes.form} onSubmit={formik.handleSubmit}>
               <FormControl className={classes.formControl}>
@@ -86,6 +86,7 @@ function AccountRecovery(props) {
                   value={formik.values.email}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
+                  onFocus={() => formik.setFieldError('email', '')}
                   InputProps={{
                     classes: {
                       root: classes.inputRoot,
@@ -106,7 +107,7 @@ function AccountRecovery(props) {
                   }}
                 />
               </FormControl>
-              <CustomButton text="Trimite" type="submit" primary />
+              <CustomButton text="Trimite" type="submit" dark />
               <Typography className={classes.error}>
                 {has(response, 'err') && response.err}
               </Typography>

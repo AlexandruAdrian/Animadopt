@@ -3,7 +3,7 @@ import logo from '../assets/logo.png';
 
 const style = {
   container: {
-    backgroundColor: colors.pacificBlue,
+    backgroundColor: colors.darkPacificBlue,
     width: '100%',
     minHeight: '100%',
     display: 'flex',
@@ -12,6 +12,7 @@ const style = {
     alignItems: 'center',
   },
   formContainer: {
+    position: 'relative',
     borderRadius: '5px',
     backgroundColor: colors.white,
     width: '100%',
@@ -19,14 +20,14 @@ const style = {
     height: '100%',
     maxHeight: '500px',
     display: 'flex',
-    padding: '45px 0 20px 0',
+    padding: '60px 0 20px 0',
     flexDirection: 'column',
     justifyContent: 'center',
+    border: '1px solid black',
   },
   nav: {
     width: '100%',
-    height: '40px',
-    paddingRight: '10px',
+    height: '50px',
   },
   logo: {
     backgroundImage: `url(${logo})`,
@@ -34,37 +35,32 @@ const style = {
     backgroundPosition: 'center center',
     backgroundSize: 'contain',
     height: '100%',
-    cursor: 'pointer',
+    width: '100%',
   },
   formWrapper: {
     width: '80%',
     maxWidth: '260px',
+    height: 'auto',
     alignSelf: 'center',
-    paddingTop: '50px',
   },
   form: {
-    marginTop: '40px',
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
-    maxHeight: '228px',
-    '& > button': {
-      marginTop: '40px',
-      width: '100%',
-    },
+    marginTop: '50px',
+    maxHeight: '200px',
   },
   error: {
     fontSize: '14px',
     minHeight: '45px',
     color: 'red',
     textAlign: 'center',
-    marginTop: '10px',
   },
   utilities: {
     display: 'flex',
     justifyContent: 'space-between',
     flexDirection: 'column',
-    marginTop: 'auto',
+    marginTop: '10px',
     height: '45px',
     '& a': {
       textDecoration: 'none',

@@ -23,9 +23,3 @@ export const getDashboardPostsHttp = ({ queryParams }) =>
       ...queryParams,
     },
   });
-
-export const getNotificationsHttp = () =>
-  axios.get(`${API_ENDPOINT}/notifications`, config);
-
-export const markNotificationHttp = ({ notificationId }) =>
-  axios.put(`${API_ENDPOINT}/notifications/seen/${notificationId}`, {}, config);

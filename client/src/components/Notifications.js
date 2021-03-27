@@ -3,6 +3,7 @@ import React, { useRef, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+import moment from 'moment';
 // Material UI
 import {
   Fade,
@@ -13,15 +14,14 @@ import {
   Paper,
 } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
 import List from '@material-ui/core/List';
 // Icons
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 // Actions
-import {
-  markNotification,
-  setSelectedPost,
-} from '../containers/Dashboard/actions';
+import { setSelectedPost } from '../containers/Dashboard/actions';
+import { markNotification } from '../containers/Notifications/actions';
 // Constants
 import {
   STATUS_APPROVED,
@@ -29,7 +29,6 @@ import {
 } from '../containers/PostsPage/constants';
 // Styles
 import styles from '../styles/Notifications';
-import moment from 'moment';
 
 function Notifications({ isOpen, notifications, openNotifications }) {
   const classes = makeStyles(styles)();
@@ -63,7 +62,7 @@ function Notifications({ isOpen, notifications, openNotifications }) {
   };
 
   useEffect(() => {
-    if (isOpen && notifications.length) {
+    if (isOpen) {
       document.addEventListener('click', closeNotifications);
     }
     return () => {
@@ -83,33 +82,39 @@ function Notifications({ isOpen, notifications, openNotifications }) {
             Notificari
           </Typography>
           <List className={classes.notificationsList}>
-            {notifications.map((notification) => (
-              <ListItem
-                className={
-                  !notification.seen
-                    ? `${classes.notificationsItem} ${classes.unseenNotification}`
-                    : `${classes.notificationsItem}`
-                }
-                onMouseOver={() => handleMouseOver(notification)}
-                onClick={(e) => handleNotificationClick(e, notification)}
-              >
-                <ListItemIcon>
-                  {notification.item.status === STATUS_APPROVED ? (
-                    <CheckIcon className={classes.approved} />
-                  ) : notification.item.status === STATUS_REJECTED ? (
-                    <CloseIcon className={classes.rejected} />
-                  ) : null}
-                </ListItemIcon>
-                <ListItemText
-                  primary={
-                    notification.item.status === STATUS_APPROVED
-                      ? `Anuntul ${notification.item.title} a fost acceptat`
-                      : `Anuntul ${notification.item.title} a fost respins`
+            {notifications.length > 0 ? (
+              notifications.map((notification) => (
+                <ListItem
+                  className={
+                    !notification.seen
+                      ? `${classes.notificationsItem} ${classes.unseenNotification}`
+                      : `${classes.notificationsItem}`
                   }
-                  secondary={moment(notification.createdAt).fromNow()}
-                />
-              </ListItem>
-            ))}
+                  onMouseOver={() => handleMouseOver(notification)}
+                  onClick={(e) => handleNotificationClick(e, notification)}
+                >
+                  <ListItemIcon>
+                    {notification.item.status === STATUS_APPROVED ? (
+                      <CheckIcon className={classes.approved} />
+                    ) : notification.item.status === STATUS_REJECTED ? (
+                      <CloseIcon className={classes.rejected} />
+                    ) : null}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={
+                      notification.item.status === STATUS_APPROVED
+                        ? `Anuntul ${notification.item.title} a fost acceptat`
+                        : `Anuntul ${notification.item.title} a fost respins`
+                    }
+                    secondary={moment(notification.createdAt).fromNow()}
+                  />
+                </ListItem>
+              ))
+            ) : (
+              <Box className={classes.noNotifications}>
+                Momentan nu aveti notificari
+              </Box>
+            )}
           </List>
         </Paper>
       </Fade>

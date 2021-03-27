@@ -127,7 +127,7 @@ class PostController {
     await post.remove();
   }
 
-  async getPosts(page, limit, category, location, status, adopted, title) {
+  async getPosts(page, limit, category, location, status, adopted, title, searchTerm) {
     if (page < 1) {
       throw new ErrorsFactory(
         "invalid",
@@ -141,7 +141,7 @@ class PostController {
 
     const results = {};
 
-    const query = {
+    let query = {
       isAdopted: adopted,
       status: status,
     };
@@ -156,6 +156,16 @@ class PostController {
 
     if (title) {
       query.title = { title: new RegExp(title)};
+    }
+
+    if (searchTerm) {
+      query = {
+        ...query,
+        $or: [
+          { title: new RegExp(searchTerm) },
+          { breed: new RegExp(searchTerm) },
+        ]
+      }
     }
 
     if (endIndex < (await Post.countDocuments(query))) {

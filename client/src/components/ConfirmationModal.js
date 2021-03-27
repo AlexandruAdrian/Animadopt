@@ -38,7 +38,7 @@ function ConfirmationModal({
               text={'Da'}
               handler={confirmationHandler}
               size={'small'}
-              primary
+              dark
             />
           </Box>
         </Box>

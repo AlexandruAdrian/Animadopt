@@ -1,5 +1,5 @@
 // System
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 // Material UI
@@ -32,6 +32,30 @@ import WebFilters from '../../components/WebFilters';
 
 function PostsPage({ posts, query, setQuery, tabs, canAdd }) {
   const classes = makeStyles(styles)();
+  const { nextPostsPage } = useSelector((state) => state.dashboard);
+  const observer = useRef();
+  const lastPostRef = useCallback(
+    (node) => {
+      if (observer.current) {
+        observer.current.disconnect();
+      }
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          console.log('visible');
+          if (nextPostsPage && nextPostsPage > query.page) {
+            setQuery({
+              ...query,
+              page: nextPostsPage,
+            });
+          }
+        }
+      });
+      if (node) {
+        observer.current.observe(node);
+      }
+    },
+    [nextPostsPage]
+  );
 
   const { categories } = useSelector((state) => state.categories);
   const { locations } = useSelector((state) => state.dashboard);
@@ -47,12 +71,14 @@ function PostsPage({ posts, query, setQuery, tabs, canAdd }) {
       setSelectedAdoptionTab(TAB_NOT_ADOPTED);
       setQuery({
         ...query,
+        page: 1,
         adopted: IS_NOT_ADOPTED,
         status: newValue === TAB_REJECTED ? STATUS_REJECTED : STATUS_PENDING,
       });
     } else {
       setQuery({
         ...query,
+        page: 1,
         status: STATUS_APPROVED,
       });
     }
@@ -63,11 +89,13 @@ function PostsPage({ posts, query, setQuery, tabs, canAdd }) {
       setSelectedAdoptionTab(newValue);
       setQuery({
         ...query,
+        page: 1,
         adopted: IS_ADOPTED,
       });
     } else {
       setQuery({
         ...query,
+        page: 1,
         adopted: IS_NOT_ADOPTED,
       });
     }
@@ -79,6 +107,7 @@ function PostsPage({ posts, query, setQuery, tabs, canAdd }) {
       const categories = [...query.category, value];
       setQuery({
         ...query,
+        page: 1,
         category: categories,
       });
     } else {
@@ -87,6 +116,7 @@ function PostsPage({ posts, query, setQuery, tabs, canAdd }) {
       );
       setQuery({
         ...query,
+        page: 1,
         category: filteredCategories,
       });
     }
@@ -98,6 +128,7 @@ function PostsPage({ posts, query, setQuery, tabs, canAdd }) {
       const locations = [...query.location, value];
       setQuery({
         ...query,
+        page: 1,
         location: locations,
       });
     } else {
@@ -106,6 +137,7 @@ function PostsPage({ posts, query, setQuery, tabs, canAdd }) {
       );
       setQuery({
         ...query,
+        page: 1,
         location: filteredLocations,
       });
     }
@@ -114,6 +146,7 @@ function PostsPage({ posts, query, setQuery, tabs, canAdd }) {
   function handleSearchTerm(e) {
     setQuery({
       ...query,
+      page: 1,
       search: e.target.value,
     });
   }
@@ -163,7 +196,7 @@ function PostsPage({ posts, query, setQuery, tabs, canAdd }) {
           {canAdd && <MobileAddPostButton />}
 
           {/* Results */}
-          <Posts posts={posts} />
+          <Posts posts={posts} lastPostRef={lastPostRef} />
         </Grid>
       </Box>
       <WebFilters

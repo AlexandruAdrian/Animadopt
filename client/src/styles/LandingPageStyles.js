@@ -65,14 +65,14 @@ const styles = {
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: colors.pacificBlue,
+      backgroundColor: colors.darkPacificBlue,
       width: '70%',
     },
   },
   promo: {
     padding: '0 10px',
     marginTop: '20px',
-    color: colors.pacificBlue,
+    color: colors.darkPacificBlue,
     textAlign: 'center',
     '& > h1': {
       fontSize: '14px',
@@ -107,6 +107,11 @@ const styles = {
     },
     '& > a > button': {
       marginLeft: '10px',
+    },
+    '& > a:nth-child(2) > button:hover': {
+      backgroundColor: colors.darkPacificBlue,
+      color: colors.white,
+      transition: 'background-color .5s ease, color .5s ease',
     },
   },
 };

@@ -11,8 +11,9 @@ import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import EmailIcon from '@material-ui/icons/Email';
 // styles
 import styles from '../styles/LoginFormStyle';
+import CustomButton from './CustomButton';
 
-const LoginForm = ({ values, handleChange }) => {
+const LoginForm = ({ values, handleChange, handleSubmit, resetErrors }) => {
   const classes = makeStyles(styles)();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -21,14 +22,15 @@ const LoginForm = ({ values, handleChange }) => {
   };
 
   return (
-    <>
-      <FormControl>
+    <form onSubmit={handleSubmit} className={classes.form}>
+      <FormControl fullWidth>
         <TextField
           id="email"
           label="Email"
           aria-describedby="email"
           value={values.email}
           onChange={handleChange}
+          onFocus={resetErrors}
           InputProps={{
             classes: {
               root: classes.inputRoot,
@@ -47,7 +49,7 @@ const LoginForm = ({ values, handleChange }) => {
         />
       </FormControl>
 
-      <FormControl style={{ marginTop: '5px' }}>
+      <FormControl style={{ marginTop: '5px' }} fullWidth>
         <TextField
           id="password"
           type={showPassword ? 'text' : 'password'}
@@ -55,6 +57,7 @@ const LoginForm = ({ values, handleChange }) => {
           aria-describedby="password"
           value={values.password}
           onChange={handleChange}
+          onFocus={resetErrors}
           InputLabelProps={{
             classes: {
               root: classes.inputLabelRoot,
@@ -84,7 +87,8 @@ const LoginForm = ({ values, handleChange }) => {
           }}
         />
       </FormControl>
-    </>
+      <CustomButton text="Autentificare" type="submit" dark />
+    </form>
   );
 };
 

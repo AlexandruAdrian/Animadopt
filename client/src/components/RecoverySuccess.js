@@ -30,7 +30,7 @@ function RecoverySuccess({ message }) {
       <Box className={classes.wrapper}>
         <Typography component="p">{message}</Typography>
         <Box className={classes.buttonWrapper}>
-          <CustomButton text={'Autentificare'} handler={clickHandler} primary />
+          <CustomButton text={'Autentificare'} handler={clickHandler} dark />
         </Box>
       </Box>
     </Box>

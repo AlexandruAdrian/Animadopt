@@ -1,8 +1,8 @@
 // System
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useFormik } from 'formik';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 // Material UI
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -16,19 +16,26 @@ import CustomButton from './CustomButton';
 import PostDropzone from './PostDropzone';
 // Validations
 import addPostValidationSchema from '../validators/addPostValidator';
+// Actions
+import { fetchCategories } from '../containers/Categories/actions';
 // Utils
 import { get } from 'lodash';
 // Styles
 import styles from '../styles/AddPostStyles';
 
 function PostForm({ initialValues, submit, buttonText }) {
+  const dispatch = useDispatch();
   const classes = makeStyles(styles)();
   const { categories } = useSelector((state) => state.categories);
   const { locations } = useSelector((state) => state.dashboard);
-  console.log('categories: ', categories);
+
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [categories]);
+
   if (!get(initialValues, '_id')) {
-    initialValues['category'] = categories[0].category;
-    initialValues['location'] = locations[0].county;
+    initialValues['category'] = categories.length ? categories[0].category : '';
+    initialValues['location'] = locations.length ? locations[0].county : '';
   }
 
   const {
@@ -145,6 +152,7 @@ function PostForm({ initialValues, submit, buttonText }) {
             name="category"
             labelId="category-label"
             aria-describedby="Category"
+            error={!!(touched.category && errors.category)}
             onChange={handleChange}
             onFocus={handleFocus}
             value={values.category}
@@ -179,6 +187,7 @@ function PostForm({ initialValues, submit, buttonText }) {
             onChange={handleChange}
             onFocus={handleFocus}
             value={values.location}
+            error={!!(touched.location && errors.location)}
             classes={{
               selectMenu: classes.selectMenu,
             }}

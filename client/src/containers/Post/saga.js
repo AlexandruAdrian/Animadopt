@@ -41,6 +41,7 @@ function* postSaga() {
 function* getPostSaga({ postId }) {
   try {
     const { data } = yield call(getPostHttp, postId);
+    console.log('data: ', data);
     yield put(getPostSuccess(data));
   } catch (err) {
     yield put(getPostError());
@@ -50,8 +51,6 @@ function* getPostSaga({ postId }) {
 function* deletePostSaga({ postId, history }) {
   try {
     const { data } = yield call(deletePostHttp, postId);
-    console.log('data: ', data);
-    console.log('history: ', history);
     yield put(deletePostSuccess(data));
     history.push('/dashboard/posts');
   } catch (err) {

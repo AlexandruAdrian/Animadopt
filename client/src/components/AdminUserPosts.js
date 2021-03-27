@@ -23,7 +23,7 @@ function AdminUserPosts({ userId }) {
     if (userId) {
       dispatch(getUserPosts(userId));
     }
-  }, [dispatch]);
+  }, [dispatch, userId]);
 
   return (
     <Box className={classes.postsHistory}>

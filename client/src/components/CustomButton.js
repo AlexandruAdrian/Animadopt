@@ -19,9 +19,7 @@ function CustomButton({
   const classes = makeStyles(styles)();
   let buttonStyle;
 
-  if (primary) {
-    buttonStyle = classes.primary;
-  } else if (dark) {
+  if (dark) {
     buttonStyle = classes.dark;
   } else if (danger) {
     buttonStyle = classes.danger;
