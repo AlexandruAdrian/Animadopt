@@ -26,13 +26,19 @@ function ReviewsPage() {
   });
 
   useEffect(() => {
-    dispatch(
-      getReviewPosts({
-        ...query,
-        category: query.category.join(','),
-        location: query.location.join(','),
-      })
-    );
+    const searchAfterTyping = setTimeout(() => {
+      dispatch(
+        getReviewPosts({
+          ...query,
+          category: query.category.join(','),
+          location: query.location.join(','),
+        })
+      );
+    }, 500);
+
+    return () => {
+      clearTimeout(searchAfterTyping);
+    };
   }, [query]);
 
   return (

@@ -141,7 +141,7 @@ function CategoryModal({ open, onClose, editMode }) {
           {editMode && (
             <>
               <CustomButton
-                primary
+                dark
                 text={'Editeaza'}
                 handler={handleUpdateCategory}
                 size={'small'}

@@ -4,9 +4,10 @@ import PropTypes from 'prop-types';
 // Components
 import PostPreview from './PostPreview';
 import Grid from '@material-ui/core/Grid';
+// Utils
+import { isEqual } from 'lodash';
 
-function Posts({ posts, lastPostRef }) {
-  console.log('posts: ', posts);
+const Posts = ({ posts, lastPostRef }) => {
   return (
     <Grid item container xs={12} spacing={1} style={{ margin: '0 auto' }}>
       {posts.length > 0 &&
@@ -25,10 +26,17 @@ function Posts({ posts, lastPostRef }) {
         })}
     </Grid>
   );
-}
+};
 
 Posts.propTypes = {
   posts: PropTypes.array.isRequired,
 };
 
-export default Posts;
+function arePropsTheSame(prevProps, nextProps) {
+  const { posts: oldPosts, lastPostRef: oldPostRef } = prevProps;
+  const { posts: newPosts, lastPostRef: newPostRef } = nextProps;
+
+  return isEqual(oldPosts, newPosts) && isEqual(oldPostRef, newPostRef);
+}
+
+export default React.memo(Posts, arePropsTheSame);

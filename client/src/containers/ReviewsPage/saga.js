@@ -14,7 +14,6 @@ function* reviewPostsSaga() {
 function* getReviewPostsSaga(action) {
   try {
     const { data } = yield call(getReviewPostsHttp, action);
-    console.log('data: ', data);
     yield put(getReviewPostsSuccess(data.results));
   } catch (err) {
     console.log('err: ', err);

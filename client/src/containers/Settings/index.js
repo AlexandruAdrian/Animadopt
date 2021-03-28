@@ -58,9 +58,14 @@ function Settings({ user }) {
   const passwordForm = useFormik({
     initialValues: PASSWORD_INITIAL_STATE,
     validationSchema: passChangeValidationSchema,
-    validateOnBlur: true,
+    validateOnBlur: false,
     onSubmit: handlePasswordSubmit,
   });
+
+  const handleFocus = (e) => {
+    const { name, id } = e.target;
+    passwordForm.setFieldError(name || id, '');
+  };
 
   function handleAvatarSubmit() {
     const avatarFormData = new FormData();
@@ -174,6 +179,7 @@ function Settings({ user }) {
                   value={passwordForm.values.oldPassword}
                   onChange={passwordForm.handleChange}
                   onBlur={passwordForm.handleBlur}
+                  onFocus={handleFocus}
                   InputProps={{
                     classes: {
                       root: classes.inputRoot,
@@ -208,6 +214,7 @@ function Settings({ user }) {
                   value={passwordForm.values.password}
                   onChange={passwordForm.handleChange}
                   onBlur={passwordForm.handleBlur}
+                  onFocus={handleFocus}
                   InputProps={{
                     classes: {
                       root: classes.inputRoot,
@@ -259,6 +266,7 @@ function Settings({ user }) {
                   value={passwordForm.values.passwordConfirmation}
                   onChange={passwordForm.handleChange}
                   onBlur={passwordForm.handleBlur}
+                  onFocus={handleFocus}
                   InputProps={{
                     classes: {
                       root: classes.inputRoot,

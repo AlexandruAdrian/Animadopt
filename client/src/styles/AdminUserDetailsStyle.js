@@ -15,6 +15,12 @@ const style = {
       marginTop: '10px',
     },
   },
+  userCard: {
+    minHeight: '280px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
   banned: {
     fontSize: '14px',
     color: 'red',

@@ -9,7 +9,7 @@ const style = {
       maxWidth: '500px',
     },
     '@media (min-width: 960px)': {
-      maxWidth: '1000px',
+      maxWidth: '1200px',
     },
   },
 };

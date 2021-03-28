@@ -20,6 +20,7 @@ import Post from '../Post';
 import DashboardPosts from '../../components/DashboardPosts';
 // Actions
 import { getUser, getLocations } from './actions';
+import { fetchCategories } from '../Categories/actions';
 import { resetRequestState } from '../../utils/request/actions';
 // Styles
 import style from '../../styles/DashboardStyle';
@@ -35,6 +36,7 @@ function Dashboard() {
     dispatch(getUser());
     dispatch(getLocations());
     dispatch(resetRequestState());
+    dispatch(fetchCategories());
   }, [dispatch]);
 
   return isLoggedIn ? (

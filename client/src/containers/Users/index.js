@@ -61,7 +61,13 @@ function Users() {
   }, [selectedTab]);
 
   useEffect(() => {
-    dispatch(getUsers(query));
+    const searchAfterTyping = setTimeout(() => {
+      dispatch(getUsers(query));
+    }, 500);
+
+    return () => {
+      clearTimeout(searchAfterTyping);
+    };
   }, [query]);
 
   return (

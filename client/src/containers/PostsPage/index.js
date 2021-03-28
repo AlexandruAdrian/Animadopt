@@ -41,7 +41,6 @@ function PostsPage({ posts, query, setQuery, tabs, canAdd }) {
       }
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
-          console.log('visible');
           if (nextPostsPage && nextPostsPage > query.page) {
             setQuery({
               ...query,
@@ -193,18 +192,20 @@ function PostsPage({ posts, query, setQuery, tabs, canAdd }) {
             />
           </Grid>
 
-          {canAdd && <MobileAddPostButton />}
+          {canAdd && categories && locations ? <MobileAddPostButton /> : null}
 
           {/* Results */}
           <Posts posts={posts} lastPostRef={lastPostRef} />
         </Grid>
       </Box>
-      <WebFilters
-        categories={categories}
-        locations={locations}
-        onCategoryChange={onCategoryChange}
-        onLocationChange={onLocationChange}
-      />
+      {categories && locations ? (
+        <WebFilters
+          categories={categories}
+          locations={locations}
+          onCategoryChange={onCategoryChange}
+          onLocationChange={onLocationChange}
+        />
+      ) : null}
     </Box>
   );
 }
