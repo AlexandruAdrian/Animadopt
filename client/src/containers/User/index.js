@@ -124,7 +124,7 @@ function User({ loggedUser }) {
             <Box className={classes.buttonGroup}>
               {has(loggedUser, 'role') &&
                 get(loggedUser, 'role.type') === USER_ROLE_OWNER &&
-                !selectedUser.ban && (
+                (!selectedUser.ban || !selectedUser.ban.isValid) && (
                   <>
                     {get(loggedUser, 'role.type') === USER_ROLE_OWNER &&
                       get(selectedUser, 'role.type') !== USER_ROLE_OWNER && (
