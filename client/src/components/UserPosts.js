@@ -13,7 +13,9 @@ import {
 
 function UserPosts() {
   const dispatch = useDispatch();
-  const { posts, isLoading } = useSelector((state) => state.userPosts);
+  const { posts, isLoading, nextPostsPage } = useSelector(
+    (state) => state.userPosts
+  );
   const tabs = {
     adopted: true,
     status: true,
@@ -45,6 +47,7 @@ function UserPosts() {
       setQuery={setQuery}
       tabs={tabs}
       canAdd={true}
+      nextPostsPage={nextPostsPage}
     />
   );
 }

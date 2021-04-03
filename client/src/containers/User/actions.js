@@ -20,6 +20,7 @@ import {
   GET_USER_POSTS,
   GET_USER_POSTS_SUCCESS,
   GET_USER_POSTS_ERROR,
+  SET_NEXT_POSTS_PAGE,
 } from './constants';
 import { toast } from 'react-toastify';
 
@@ -187,5 +188,12 @@ export function getUserPostsError() {
   );
   return {
     type: GET_USER_POSTS_ERROR,
+  };
+}
+
+export function setNextPostsPage(nextPage) {
+  return {
+    type: SET_NEXT_POSTS_PAGE,
+    nextPage,
   };
 }

@@ -48,6 +48,7 @@ function ReviewsPage() {
       setQuery={setQuery}
       tabs={tabs}
       canAdd={false}
+      nextPostsPage={1}
     />
   );
 }

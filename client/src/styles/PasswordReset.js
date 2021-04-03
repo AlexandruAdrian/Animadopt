@@ -1,6 +1,7 @@
 import colors from './colors';
 import registerFormStyles from './RegisterFormStyles';
 import accountRecoveryStyles from './AccountRecoveryStyle';
+import logo from '../assets/logo.png';
 
 const style = {
   container: {
@@ -8,6 +9,7 @@ const style = {
     alignItems: 'center',
   },
   wrapper: {
+    position: 'relative',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -15,17 +17,28 @@ const style = {
     borderRadius: '5px',
     width: '100%',
     maxWidth: '450px',
-    height: '300px',
-    padding: '25px 20px 15px',
+    height: '370px',
+  },
+  logoWrapper: {
+    width: '100%',
+    height: '50px',
+  },
+  logo: {
+    backgroundImage: `url(${logo})`,
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center center',
+    backgroundSize: 'contain',
+    height: '100%',
+    width: '100%',
   },
   formContainer: {
-    ...accountRecoveryStyles.formWrapper,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
+    width: '90%',
+    height: '100%',
+    padding: '50px 0 20px 0',
   },
   form: {
     display: 'flex',
+    marginTop: '30px',
     flexDirection: 'column',
     width: '100%',
     alignItems: 'center',
@@ -57,6 +70,7 @@ const style = {
     color: colors.darkPacificBlue,
     fontSize: '14px',
     textAlign: 'center',
+    padding: '0 5px',
     '& a': {
       textDecoration: 'none',
       fontWeight: '600',

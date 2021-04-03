@@ -23,7 +23,7 @@ const style = {
       },
       '&:hover': {
         backgroundColor: colors.darkPacificBlue,
-        transition: '.4s ease-in-out',
+        transition: 'background-color .3s ease',
       },
       '& p, & span': {
         fontSize: '14px',
@@ -38,7 +38,7 @@ const style = {
     },
     '&:hover svg, &:hover p, &:hover span': {
       color: colors.white,
-      transition: '.4s ease-in-out',
+      transition: 'color .3s ease',
     },
   },
   icon: {

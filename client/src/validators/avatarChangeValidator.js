@@ -8,9 +8,9 @@ const avatarValidationSchema = Yup.object().shape({
     .test('fileSize', 'Dimensiunea este prea mare', (value) => {
       return value && value.size <= FILE_SIZE;
     })
-    .test('fileFormat', 'Formatul este invalid', (value) =>
-      SUPPORTED_FORMATS.includes(value.type)
-    ),
+    .test('fileFormat', 'Formatul este invalid', (value) => {
+      return SUPPORTED_FORMATS.includes(value.type);
+    }),
 });
 
 export default avatarValidationSchema;

@@ -309,8 +309,12 @@ class UserController {
     }
 
     const filePath = file.path.split("public\\")[1];
+
     if (!foundUser.avatar.includes("placeholders")) {
-      const filename = foundUser.avatar.split("avatars\\")[1];
+      let filename = foundUser.avatar.split("avatars\\")[1];
+      if (!filename) {
+        filename = foundUser.avatar.split("avatars/")[1];
+      }
 
       fs.unlink(`${AVATAR_PICTURES_PATH}/${filename}`, (err) => {
         if (err) {
@@ -366,7 +370,6 @@ class UserController {
 
     await user.delete();
   }
-
 }
 
 module.exports = new UserController();

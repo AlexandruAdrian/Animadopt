@@ -20,7 +20,14 @@ class PostController {
   async createPost(pictures, postData, userId) {
     let user = await User.findOne({ _id: userId });
     user = user.toJSON();
-    user = pick(user, ['avatar', 'firstName', 'lastName', 'phone', 'email', '_id']);
+    user = pick(user, [
+      "avatar",
+      "firstName",
+      "lastName",
+      "phone",
+      "email",
+      "_id",
+    ]);
 
     const newPost = new Post({
       postedBy: user,
@@ -71,7 +78,10 @@ class PostController {
 
     const diff = difference(foundPost.pictures, picturesPath);
     diff.forEach((picture) => {
-      const filename = picture.split("posts/")[1];
+      let filename = picture.split("posts/")[1];
+      if (!filename) {
+        filename = picture.split("posts\\")[1];
+      }
 
       fs.unlink(`${POST_PICTURES_PATH}/${filename}`, (err) => {
         if (err) {
@@ -127,7 +137,16 @@ class PostController {
     await post.remove();
   }
 
-  async getPosts(page, limit, category, location, status, adopted, title, searchTerm) {
+  async getPosts(
+    page,
+    limit,
+    category,
+    location,
+    status,
+    adopted,
+    title,
+    searchTerm
+  ) {
     if (page < 1) {
       throw new ErrorsFactory(
         "invalid",
@@ -155,7 +174,7 @@ class PostController {
     }
 
     if (title) {
-      query.title = { title: new RegExp(title)};
+      query.title = { title: new RegExp(title) };
     }
 
     if (searchTerm) {
@@ -164,8 +183,8 @@ class PostController {
         $or: [
           { title: new RegExp(searchTerm) },
           { breed: new RegExp(searchTerm) },
-        ]
-      }
+        ],
+      };
     }
 
     if (endIndex < (await Post.countDocuments(query))) {
@@ -208,7 +227,16 @@ class PostController {
     return await Post.countDocuments({});
   }
 
-  async fetchUserPosts(userId, page, limit, adopted, status, category, location, searchTerm) {
+  async fetchUserPosts(
+    userId,
+    page,
+    limit,
+    adopted,
+    status,
+    category,
+    location,
+    searchTerm
+  ) {
     if (page < 1) {
       throw new ErrorsFactory(
         "invalid",
@@ -225,10 +253,10 @@ class PostController {
     };
 
     let query = {
-      'postedBy._id': mongoose.Types.ObjectId(userId),
+      "postedBy._id": mongoose.Types.ObjectId(userId),
       isAdopted: adopted,
       status: status,
-    }
+    };
 
     if (category) {
       query.category = { $in: category };
@@ -244,8 +272,8 @@ class PostController {
         $or: [
           { title: new RegExp(searchTerm) },
           { breed: new RegExp(searchTerm) },
-        ]
-      }
+        ],
+      };
     }
 
     if (endIndex < (await Post.countDocuments(query))) {
@@ -284,7 +312,10 @@ class PostController {
 
       const splitPath = picture.path.split("post-");
       const relativePath = splitPath[0].split("public\\")[1];
-      const newPath = `${relativePath}${postId}-${splitFileName[1]}`.replace(/\\/g, "/");
+      const newPath = `${relativePath}${postId}-${splitFileName[1]}`.replace(
+        /\\/g,
+        "/"
+      );
 
       picturesPath.push(newPath);
     });

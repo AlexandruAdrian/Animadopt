@@ -13,7 +13,8 @@ import PostsPage from '../containers/PostsPage';
 
 function DashboardPosts() {
   const dispatch = useDispatch();
-  const { posts } = useSelector((state) => state.dashboard);
+  const { posts, nextPostsPage } = useSelector((state) => state.dashboard);
+
   const [query, setQuery] = useState({
     page: 1,
     search: '',
@@ -51,6 +52,7 @@ function DashboardPosts() {
       setQuery={setQuery}
       tabs={tabs}
       canAdd={false}
+      nextPostsPage={nextPostsPage}
     />
   );
 }

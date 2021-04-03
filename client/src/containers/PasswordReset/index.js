@@ -52,6 +52,7 @@ function PasswordReset() {
     validationSchema: resetPassValidator,
     validateOnMount: true,
     validateOnChange: false,
+    validateOnBlur: false,
     onSubmit: handleSubmit,
   });
 
@@ -63,10 +64,15 @@ function PasswordReset() {
     dispatch(resetRequestState());
   };
 
+  const handleFocus = (e) => {
+    const { name, id } = e.target;
+    formik.setFieldError(name || id, '');
+  };
+
   return (
     <Box className={classes.container}>
-      <BackArrow to="/login" />
       <Box className={classes.wrapper}>
+        <BackArrow to="/login" />
         {isLoading ? (
           <Loading />
         ) : has(response, 'message') ? (
@@ -80,6 +86,10 @@ function PasswordReset() {
           </Box>
         ) : (
           <Box className={classes.formContainer}>
+            <Box className={classes.logoWrapper}>
+              <Box className={classes.logo} />
+            </Box>
+
             <form className={classes.form} onSubmit={formik.handleSubmit}>
               <FormControl className={classes.formControl}>
                 <TextField
@@ -94,6 +104,7 @@ function PasswordReset() {
                   value={formik.values.password}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
+                  onFocus={handleFocus}
                   type={showPassword ? 'text' : 'password'}
                   InputProps={{
                     classes: {
@@ -144,6 +155,7 @@ function PasswordReset() {
                   value={formik.values.passwordConfirmation}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
+                  onFocus={handleFocus}
                   InputProps={{
                     classes: {
                       root: classes.inputRoot,
@@ -156,7 +168,7 @@ function PasswordReset() {
                   }}
                 />
               </FormControl>
-              <CustomButton text="Trimite" primary type="submit" />
+              <CustomButton text="Trimite" dark type="submit" />
             </form>
             {has(response, 'err') && (
               <Box className={classes.error}>{response.err}</Box>

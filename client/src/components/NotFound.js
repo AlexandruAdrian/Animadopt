@@ -24,7 +24,7 @@ function NotFound() {
         Oops! Se pare ca te-ai pierdut, click pe buton pentru a te intoarce
         acasa
       </Typography>
-      <CustomButton text={'Acasa'} primary handler={handleClick} />
+      <CustomButton text={'Acasa'} dark handler={handleClick} />
     </Box>
   );
 }

@@ -23,7 +23,6 @@ const style = {
     padding: '60px 0 20px 0',
     flexDirection: 'column',
     justifyContent: 'center',
-    border: '1px solid black',
   },
   nav: {
     width: '100%',

@@ -18,6 +18,9 @@ export const DEMOTE_USER = 'app/containers/User/DEMOTE_USER';
 export const DEMOTE_USER_SUCCESS = 'app/containers/User/DEMOTE_USER_SUCCESS';
 export const DEMOTE_USER_ERROR = 'app/containers/User/DEMOTE_USER_ERROR';
 
+export const SET_NEXT_POSTS_PAGE =
+  'app/containers/UserPosts/SET_NEXT_POSTS_PAGE';
+
 export const UNBAN_CONFIRMATION_MESSAGE =
   'Sunteti sigur ca doriti sa deblocati utilizatorul ?';
 export const PROMOTION_CONFIRMATION_MESSAGE =

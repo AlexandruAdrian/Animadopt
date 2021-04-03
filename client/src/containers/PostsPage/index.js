@@ -30,9 +30,9 @@ import {
 import styles from '../../styles/PostsPageStyles';
 import WebFilters from '../../components/WebFilters';
 
-function PostsPage({ posts, query, setQuery, tabs, canAdd }) {
+function PostsPage({ posts, query, setQuery, tabs, canAdd, nextPostsPage }) {
   const classes = makeStyles(styles)();
-  const { nextPostsPage } = useSelector((state) => state.dashboard);
+
   const observer = useRef();
   const lastPostRef = useCallback(
     (node) => {
