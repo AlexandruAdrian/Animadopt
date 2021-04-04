@@ -83,11 +83,13 @@ class PostController {
         filename = picture.split("posts\\")[1];
       }
 
-      fs.unlink(`${POST_PICTURES_PATH}/${filename}`, (err) => {
-        if (err) {
-          throw new ErrorsFactory("notfound", "NotFound", "File not found.");
-        }
-      });
+      if (filename) {
+        fs.unlink(`${POST_PICTURES_PATH}/${filename}`, (err) => {
+          if (err) {
+            throw new ErrorsFactory("notfound", "NotFound", "File not found.");
+          }
+        });
+      }
     });
 
     const { title, description, breed, category, location } = postData;
