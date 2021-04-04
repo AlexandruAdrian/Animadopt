@@ -18,10 +18,10 @@ const style = {
   wrapper: {
     width: '100%',
     maxWidth: '500px',
-    height: '100%',
-    maxHeight: '300px',
+    maxHeight: 'calc(100% - 150px)',
+    overflowY: 'auto',
     borderRadius: '5px',
-    padding: '10px',
+    padding: '10px 20px 30px',
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: colors.white,

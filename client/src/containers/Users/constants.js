@@ -5,3 +5,4 @@ export const GET_USERS_ERROR = 'app/containers/Users/GET_USERS_ERROR';
 export const RESET_USERS_STATE = 'app/containers/Users/RESET_USERS_STATE';
 
 export const SET_SELECTED_USER = 'app/containers/Users/SET_SELECTED_USER';
+export const SET_NEXT_USERS_PAGE = 'app/containers/Users/SET_NEXT_USERS_PAGE';

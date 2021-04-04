@@ -9,10 +9,13 @@ import {
   DELETE_POST_SUCCESS,
   DELETE_POST_ERROR,
 } from '../Post/constants';
+import { SET_NEXT_POSTS_PAGE } from '../User/constants';
+import { get } from 'lodash';
 
 const INITIAL_STATE = {
   posts: [],
   isLoading: false,
+  nextPostsPage: 0,
 };
 
 const userPostsReducer = (state = INITIAL_STATE, action) => {
@@ -25,8 +28,15 @@ const userPostsReducer = (state = INITIAL_STATE, action) => {
       };
 
     case FETCH_USER_POSTS_SUCCESS:
+      let newPosts = [];
+      if (get(action, 'data.previous')) {
+        newPosts = [...state.posts, ...action.data.results];
+      } else {
+        newPosts = action.data.results;
+      }
       return {
-        posts: action.posts,
+        ...state,
+        posts: newPosts,
         isLoading: false,
       };
 
@@ -41,6 +51,11 @@ const userPostsReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         isLoading: false,
+      };
+    case SET_NEXT_POSTS_PAGE:
+      return {
+        ...state,
+        nextPostsPage: action.nextPage,
       };
 
     default:

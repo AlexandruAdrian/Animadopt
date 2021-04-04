@@ -17,7 +17,7 @@ function* userPostsSaga() {
 function* getUserPostsSaga(action) {
   try {
     const { data } = yield call(getUserPostsHttp, action);
-    yield put(fetchUserPostsSuccess(data.results));
+    yield put(fetchUserPostsSuccess(data));
     if (get(data, 'next.page')) {
       yield put(setNextPostsPage(data.next.page));
     } else {

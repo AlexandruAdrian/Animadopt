@@ -1,3 +1,5 @@
+import colors from './colors';
+
 const styles = {
   postsPage: {
     width: '100%',
@@ -24,6 +26,13 @@ const styles = {
     '@media (min-width: 1300px)': {
       display: 'none',
     },
+  },
+  noPosts: {
+    color: colors.darkPacificBlue,
+    width: '100%',
+    textAlign: 'center',
+    fontSize: '20px',
+    marginTop: '40px',
   },
 };
 

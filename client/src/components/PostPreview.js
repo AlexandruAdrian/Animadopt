@@ -16,6 +16,7 @@ import List from '@material-ui/core/List';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
+import Fade from '@material-ui/core/Fade';
 // Icons
 import PetsIcon from '@material-ui/icons/Pets';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
@@ -46,85 +47,90 @@ function PostPreview({ post, lastPostRef }) {
 
   return (
     <Grid item xs={12} md={6} lg={4} ref={lastPostRef}>
-      <Card
-        classes={{
-          root: classes.card,
-        }}
-      >
-        <Box className={classes.header}>
-          <Carousel
-            showThumbs={false}
-            showStatus={false}
-            autoPlay={false}
-            autoFocus={false}
-            className={classes.carousel}
-          >
-            {get(post, 'pictures') &&
-              post.pictures.length &&
-              post.pictures.map((picture, index) => {
-                return (
-                  <img
-                    src={`${process.env.REACT_APP_API_ENDPOINT}/${picture}`}
-                    key={`${post.id}-${index}`}
-                    className={classes.image}
+      <Fade in={true}>
+        <Card
+          classes={{
+            root: classes.card,
+          }}
+        >
+          <Box className={classes.header}>
+            <Carousel
+              showThumbs={false}
+              showStatus={false}
+              autoPlay={false}
+              autoFocus={false}
+              className={classes.carousel}
+            >
+              {get(post, 'pictures') &&
+                post.pictures.length &&
+                post.pictures.map((picture, index) => {
+                  return (
+                    <img
+                      src={`${process.env.REACT_APP_API_ENDPOINT}/${picture}`}
+                      key={`${post.id}-${index}`}
+                      className={classes.image}
+                    />
+                  );
+                })}
+            </Carousel>
+          </Box>
+          <CardActionArea onClick={handlePostClick}>
+            <CardContent>
+              <Typography component="p" className={classes.title}>
+                {post.title}
+              </Typography>
+
+              <List className={classes.detailList}>
+                <ListItem className={classes.listItem}>
+                  <ListItemIcon>
+                    <PetsIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={'Rasa'} secondary={post.breed} />
+                </ListItem>
+
+                <ListItem className={classes.listItem}>
+                  <ListItemIcon>
+                    <CategoryIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={'Categoria'}
+                    secondary={post.category}
                   />
-                );
-              })}
-          </Carousel>
-        </Box>
-        <CardActionArea onClick={handlePostClick}>
-          <CardContent>
-            <Typography component="p" className={classes.title}>
-              {post.title}
-            </Typography>
+                </ListItem>
 
-            <List className={classes.detailList}>
-              <ListItem className={classes.listItem}>
-                <ListItemIcon>
-                  <PetsIcon />
-                </ListItemIcon>
-                <ListItemText primary={'Rasa'} secondary={post.breed} />
-              </ListItem>
+                <ListItem className={classes.listItem}>
+                  <ListItemIcon>
+                    <LocationOnIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={'Localitatea'}
+                    secondary={post.location}
+                  />
+                </ListItem>
+              </List>
 
-              <ListItem className={classes.listItem}>
-                <ListItemIcon>
-                  <CategoryIcon />
-                </ListItemIcon>
-                <ListItemText primary={'Categoria'} secondary={post.category} />
-              </ListItem>
+              <List className={classes.footerList}>
+                <ListItem className={classes.listItem}>
+                  <ListItemIcon>
+                    <ScheduleIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={'Postat'}
+                    secondary={moment(post.postedAt).fromNow()}
+                  />
+                </ListItem>
 
-              <ListItem className={classes.listItem}>
-                <ListItemIcon>
-                  <LocationOnIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary={'Localitatea'}
-                  secondary={post.location}
-                />
-              </ListItem>
-            </List>
-
-            <List className={classes.footerList}>
-              <ListItem className={classes.listItem}>
-                <ListItemIcon>
-                  <ScheduleIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary={'Postat'}
-                  secondary={moment(post.postedAt).fromNow()}
-                />
-              </ListItem>
-
-              <ListItem className={classes.listItem}>
-                <ListItemIcon>
-                  <PersonIcon />
-                </ListItemIcon>
-                <ListItemText primary={'Postat de'} secondary={postedBy} />
-              </ListItem>
-            </List>
-          </CardContent>
-        </CardActionArea>
-      </Card>
+                <ListItem className={classes.listItem}>
+                  <ListItemIcon>
+                    <PersonIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={'Postat de'} secondary={postedBy} />
+                </ListItem>
+              </List>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      </Fade>
     </Grid>
   );
 }

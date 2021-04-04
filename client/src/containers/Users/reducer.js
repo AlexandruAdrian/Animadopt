@@ -4,6 +4,7 @@ import {
   GET_USERS_ERROR,
   SET_SELECTED_USER,
   RESET_USERS_STATE,
+  SET_NEXT_USERS_PAGE,
 } from './constants';
 import {
   BAN_USER,
@@ -19,13 +20,15 @@ import {
   DEMOTE_USER_SUCCESS,
   DEMOTE_USER_ERROR,
 } from '../User/constants';
-
 import { FETCH_USER_SUCCESS } from '../User/constants';
+// Utils
+import { get } from 'lodash';
 
 const INITIAL_STATE = {
   users: [],
   selectedUser: {},
   isLoading: false,
+  nextUsersPage: 0,
 };
 
 const usersReducer = (state = INITIAL_STATE, action) => {
@@ -42,8 +45,16 @@ const usersReducer = (state = INITIAL_STATE, action) => {
     }
 
     case GET_USERS_SUCCESS: {
+      let newUsers = [];
+      if (get(action, 'data.previous')) {
+        newUsers = [...state.users, ...action.data.results];
+      } else {
+        newUsers = action.data.results;
+      }
+
       return {
-        users: action.users,
+        ...state,
+        users: newUsers,
         isLoading: false,
       };
     }
@@ -85,6 +96,12 @@ const usersReducer = (state = INITIAL_STATE, action) => {
 
     case RESET_USERS_STATE:
       return INITIAL_STATE;
+
+    case SET_NEXT_USERS_PAGE:
+      return {
+        ...state,
+        nextUsersPage: action.nextPage,
+      };
 
     default:
       return state;

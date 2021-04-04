@@ -14,10 +14,10 @@ export function fetchUserPosts(queryParams) {
   };
 }
 
-export function fetchUserPostsSuccess(posts) {
+export function fetchUserPostsSuccess(data) {
   return {
     type: FETCH_USER_POSTS_SUCCESS,
-    posts,
+    data,
   };
 }
 

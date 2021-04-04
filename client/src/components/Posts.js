@@ -1,29 +1,30 @@
 // System
 import React from 'react';
 import PropTypes from 'prop-types';
+import Grid from '@material-ui/core/Grid';
 // Components
 import PostPreview from './PostPreview';
-import Grid from '@material-ui/core/Grid';
 // Utils
 import { isEqual } from 'lodash';
 
 const Posts = ({ posts, lastPostRef }) => {
   return (
     <Grid item container xs={12} spacing={1} style={{ margin: '0 auto' }}>
-      {posts.length > 0 &&
-        posts.map((post, index) => {
-          if (posts.length === index + 1) {
-            return (
-              <PostPreview
-                post={post}
-                key={post._id}
-                lastPostRef={lastPostRef}
-              />
-            );
-          } else {
-            return <PostPreview post={post} key={post._id} />;
-          }
-        })}
+      {posts.length > 0
+        ? posts.map((post, index) => {
+            if (posts.length === index + 1) {
+              return (
+                <PostPreview
+                  post={post}
+                  key={post._id}
+                  lastPostRef={lastPostRef}
+                />
+              );
+            } else {
+              return <PostPreview post={post} key={post._id} />;
+            }
+          })
+        : null}
     </Grid>
   );
 };

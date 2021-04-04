@@ -5,6 +5,7 @@ import {
   GET_USERS_ERROR,
   SET_SELECTED_USER,
   RESET_USERS_STATE,
+  SET_NEXT_USERS_PAGE,
 } from './constants';
 // Tostify
 import { toast } from 'react-toastify';
@@ -19,10 +20,10 @@ export function getUsers({ page, searchTerm, role, userId }) {
   };
 }
 
-export function getUsersSuccess(users) {
+export function getUsersSuccess(data) {
   return {
     type: GET_USERS_SUCCESS,
-    users,
+    data,
   };
 }
 
@@ -45,5 +46,12 @@ export function setSelectedUser(user) {
 export function resetUsersState() {
   return {
     type: RESET_USERS_STATE,
+  };
+}
+
+export function setNextUsersPage(nextPage) {
+  return {
+    type: SET_NEXT_USERS_PAGE,
+    nextPage,
   };
 }

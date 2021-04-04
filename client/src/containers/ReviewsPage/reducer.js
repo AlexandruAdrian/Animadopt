@@ -3,11 +3,15 @@ import {
   GET_REVIEW_POSTS,
   GET_REVIEW_POSTS_SUCCESS,
   GET_REVIEW_POSTS_ERROR,
+  SET_NEXT_POSTS_PAGE,
 } from './constants';
+// Utils
+import { get } from 'lodash';
 
 const INITIAL_STATE = {
   posts: [],
   isLoading: false,
+  nextPostsPage: 0,
 };
 
 const reviewPostsReducer = (state = INITIAL_STATE, action) => {
@@ -19,8 +23,16 @@ const reviewPostsReducer = (state = INITIAL_STATE, action) => {
       };
 
     case GET_REVIEW_POSTS_SUCCESS:
+      let newPosts = [];
+      if (get(action, 'data.previous')) {
+        newPosts = [...state.posts, ...action.data.results];
+      } else {
+        newPosts = action.data.results;
+      }
+
       return {
-        posts: action.posts,
+        ...state,
+        posts: newPosts,
         isLoading: false,
       };
 
@@ -28,6 +40,12 @@ const reviewPostsReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         isLoading: false,
+      };
+
+    case SET_NEXT_POSTS_PAGE:
+      return {
+        ...state,
+        nextPostsPage: action.nextPage,
       };
 
     default:

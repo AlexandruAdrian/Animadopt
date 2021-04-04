@@ -10,7 +10,9 @@ import { IS_NOT_ADOPTED, STATUS_PENDING } from '../PostsPage/constants';
 
 function ReviewsPage() {
   const dispatch = useDispatch();
-  const { posts, isLoading } = useSelector((state) => state.reviewPosts);
+  const { posts, isLoading, nextPostsPage } = useSelector(
+    (state) => state.reviewPosts
+  );
   const tabs = {
     status: false,
     adopted: false,
@@ -48,7 +50,7 @@ function ReviewsPage() {
       setQuery={setQuery}
       tabs={tabs}
       canAdd={false}
-      nextPostsPage={1}
+      nextPostsPage={nextPostsPage}
     />
   );
 }

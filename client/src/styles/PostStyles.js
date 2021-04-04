@@ -91,6 +91,7 @@ const styles = {
   },
   description: {
     padding: '0 10px 10px',
+    wordWrap: 'break-word',
     '& > h2': {
       color: colors.darkPacificBlue,
     },

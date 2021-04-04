@@ -20,7 +20,6 @@ function UserPosts() {
     adopted: true,
     status: true,
   };
-
   const [query, setQuery] = useState({
     page: 1,
     search: '',

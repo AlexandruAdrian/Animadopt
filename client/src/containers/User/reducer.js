@@ -3,7 +3,6 @@ import {
   BAN_USER_SUCCESS,
   UNBAN_USER_SUCCESS,
   GET_USER_POSTS_SUCCESS,
-  SET_NEXT_POSTS_PAGE,
 } from './constants';
 
 const INITIAL_STATE = {
@@ -41,11 +40,6 @@ const userDetailsReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         userPosts: action.posts,
-      };
-    case SET_NEXT_POSTS_PAGE:
-      return {
-        ...state,
-        nextPostsPage: action.nextPage,
       };
     default:
       return state;

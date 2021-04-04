@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 // Material UI
 import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 // Components
@@ -32,7 +33,6 @@ import WebFilters from '../../components/WebFilters';
 
 function PostsPage({ posts, query, setQuery, tabs, canAdd, nextPostsPage }) {
   const classes = makeStyles(styles)();
-
   const observer = useRef();
   const lastPostRef = useCallback(
     (node) => {
@@ -89,7 +89,7 @@ function PostsPage({ posts, query, setQuery, tabs, canAdd, nextPostsPage }) {
       setQuery({
         ...query,
         page: 1,
-        adopted: IS_ADOPTED,
+        adopted: selectedAdoptionTab,
       });
     } else {
       setQuery({
@@ -196,6 +196,11 @@ function PostsPage({ posts, query, setQuery, tabs, canAdd, nextPostsPage }) {
 
           {/* Results */}
           <Posts posts={posts} lastPostRef={lastPostRef} />
+          {posts < 1 && (
+            <Typography component={'p'} className={classes.noPosts}>
+              {'Momentan nu exista nici un anunt.'}
+            </Typography>
+          )}
         </Grid>
       </Box>
       {categories && locations ? (

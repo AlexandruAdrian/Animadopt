@@ -1,5 +1,5 @@
 // System
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 // Components
 import TabPicker from '../../components/TabPicker';
@@ -26,13 +26,38 @@ import style from '../../styles/UsersStyle';
 function Users() {
   const classes = makeStyles(style)();
   const dispatch = useDispatch();
-  const { users, isLoading } = useSelector((state) => state.users);
+  const { users, isLoading, nextUsersPage } = useSelector(
+    (state) => state.users
+  );
+  const observer = useRef();
   const [selectedTab, setSelectedTab] = useState(TAB_USER);
   const [query, setQuery] = useState({
     page: 1,
     searchTerm: '',
     role: USER_ROLE_USER,
   });
+
+  const lastUserRef = useCallback(
+    (node) => {
+      if (observer.current) {
+        observer.current.disconnect();
+      }
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          if (nextUsersPage && nextUsersPage > query.page) {
+            setQuery({
+              ...query,
+              page: nextUsersPage,
+            });
+          }
+        }
+      });
+      if (node) {
+        observer.current.observe(node);
+      }
+    },
+    [nextUsersPage]
+  );
 
   function handleSearchTerm(e) {
     setQuery({
@@ -89,11 +114,21 @@ function Users() {
           />
         </Grid>
 
-        {users.map((user) => (
-          <Grid item xs={12} md={6} lg={4} key={user._id}>
-            <AdminUserDetails user={user} />
-          </Grid>
-        ))}
+        {users.map((user, index) => {
+          if (users.length === index + 1) {
+            return (
+              <Grid item xs={12} md={6} lg={4} key={user._id}>
+                <AdminUserDetails user={user} lastUserRef={lastUserRef} />
+              </Grid>
+            );
+          }
+
+          return (
+            <Grid item xs={12} md={6} lg={4} key={user._id}>
+              <AdminUserDetails user={user} />
+            </Grid>
+          );
+        })}
       </Grid>
     </Box>
   );

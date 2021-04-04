@@ -29,6 +29,8 @@ import {
 } from '../containers/PostsPage/constants';
 // Styles
 import styles from '../styles/Notifications';
+// Utils
+import { get } from 'lodash';
 
 function Notifications({ isOpen, notifications, openNotifications }) {
   const classes = makeStyles(styles)();
@@ -57,8 +59,10 @@ function Notifications({ isOpen, notifications, openNotifications }) {
     e.preventDefault();
     e.stopPropagation();
     openNotifications(false);
-    dispatch(setSelectedPost(null));
-    history.push(`/dashboard/posts/post/${notification.item._id}`);
+    if (get(notification, 'item', false)) {
+      dispatch(setSelectedPost(null));
+      history.push(`/dashboard/posts/post/${notification.item._id}`);
+    }
   };
 
   useEffect(() => {
@@ -83,33 +87,57 @@ function Notifications({ isOpen, notifications, openNotifications }) {
           </Typography>
           <List className={classes.notificationsList}>
             {notifications.length > 0 ? (
-              notifications.map((notification) => (
-                <ListItem
-                  className={
-                    !notification.seen
-                      ? `${classes.notificationsItem} ${classes.unseenNotification}`
-                      : `${classes.notificationsItem}`
-                  }
-                  onMouseOver={() => handleMouseOver(notification)}
-                  onClick={(e) => handleNotificationClick(e, notification)}
-                >
-                  <ListItemIcon>
-                    {notification.item.status === STATUS_APPROVED ? (
-                      <CheckIcon className={classes.approved} />
-                    ) : notification.item.status === STATUS_REJECTED ? (
-                      <CloseIcon className={classes.rejected} />
-                    ) : null}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      notification.item.status === STATUS_APPROVED
-                        ? `Anuntul ${notification.item.title} a fost acceptat`
-                        : `Anuntul ${notification.item.title} a fost respins`
+              notifications.map((notification) => {
+                return get(notification, 'item', false) ? (
+                  <ListItem
+                    className={
+                      !notification.seen
+                        ? `${classes.notificationsItem} ${classes.unseenNotification}`
+                        : `${classes.notificationsItem}`
                     }
-                    secondary={moment(notification.createdAt).fromNow()}
-                  />
-                </ListItem>
-              ))
+                    onMouseOver={() => handleMouseOver(notification)}
+                    onClick={(e) => handleNotificationClick(e, notification)}
+                  >
+                    <ListItemIcon>
+                      {notification.item.status === STATUS_APPROVED ? (
+                        <CheckIcon className={classes.approved} />
+                      ) : notification.item.status === STATUS_REJECTED ? (
+                        <CloseIcon className={classes.rejected} />
+                      ) : null}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={
+                        notification.item.status === STATUS_APPROVED
+                          ? `Anuntul ${notification.item.title} a fost acceptat`
+                          : `Anuntul ${notification.item.title} a fost respins`
+                      }
+                      secondary={moment(notification.createdAt).fromNow()}
+                    />
+                  </ListItem>
+                ) : (
+                  <ListItem
+                    className={
+                      !notification.seen
+                        ? `${classes.notificationsItem} ${classes.unseenNotification}`
+                        : `${classes.notificationsItem}`
+                    }
+                    onMouseOver={() => handleMouseOver(notification)}
+                    onClick={(e) => handleNotificationClick(e, notification)}
+                  >
+                    <ListItemIcon>
+                      {notification.status === STATUS_APPROVED ? (
+                        <CheckIcon className={classes.approved} />
+                      ) : notification.status === STATUS_REJECTED ? (
+                        <CloseIcon className={classes.rejected} />
+                      ) : null}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={notification.message}
+                      secondary={moment(notification.createdAt).fromNow()}
+                    />
+                  </ListItem>
+                );
+              })
             ) : (
               <Box className={classes.noNotifications}>
                 Momentan nu aveti notificari

@@ -83,6 +83,7 @@ const dashboardReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         posts: newPosts,
+        isLoading: false,
       };
 
     case SET_NEXT_POSTS_PAGE:

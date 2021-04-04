@@ -13,7 +13,9 @@ import PostsPage from '../containers/PostsPage';
 
 function DashboardPosts() {
   const dispatch = useDispatch();
-  const { posts, nextPostsPage } = useSelector((state) => state.dashboard);
+  const { posts, nextPostsPage, isLoading } = useSelector(
+    (state) => state.dashboard
+  );
 
   const [query, setQuery] = useState({
     page: 1,
