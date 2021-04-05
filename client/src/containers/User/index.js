@@ -42,7 +42,7 @@ function User({ loggedUser }) {
     if (isEmpty(selectedUser)) {
       dispatch(fetchUser(id));
     }
-  }, [selectedUser]);
+  }, [selectedUser, dispatch, id]);
 
   const handleCloseBanModal = () => {
     setOpenBanModal(false);

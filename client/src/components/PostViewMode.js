@@ -57,7 +57,7 @@ function PostViewMode({ post, user, setEditMode }) {
     if (isEmpty(post)) {
       dispatch(getPost(id));
     }
-  }, [post, id]);
+  }, [post, id, dispatch]);
 
   const renderPostPictures = () => {
     if (!isEmpty(post)) {

@@ -21,7 +21,6 @@ import {
   TAB_APPROVED,
   TAB_PENDING,
   TAB_REJECTED,
-  IS_ADOPTED,
   IS_NOT_ADOPTED,
   STATUS_APPROVED,
   STATUS_PENDING,
@@ -39,6 +38,7 @@ function PostsPage({ posts, query, setQuery, tabs, canAdd, nextPostsPage }) {
       if (observer.current) {
         observer.current.disconnect();
       }
+
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
           if (nextPostsPage && nextPostsPage > query.page) {
@@ -53,7 +53,7 @@ function PostsPage({ posts, query, setQuery, tabs, canAdd, nextPostsPage }) {
         observer.current.observe(node);
       }
     },
-    [nextPostsPage]
+    [nextPostsPage, query, setQuery]
   );
 
   const { categories } = useSelector((state) => state.categories);

@@ -13,9 +13,7 @@ import {
 
 function UserPosts() {
   const dispatch = useDispatch();
-  const { posts, isLoading, nextPostsPage } = useSelector(
-    (state) => state.userPosts
-  );
+  const { posts, nextPostsPage } = useSelector((state) => state.userPosts);
   const tabs = {
     adopted: true,
     status: true,
@@ -37,7 +35,7 @@ function UserPosts() {
         location: query.location.join(','),
       })
     );
-  }, [query]);
+  }, [query, dispatch]);
 
   return (
     <PostsPage

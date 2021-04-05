@@ -46,7 +46,7 @@ function Notifications({ isOpen, notifications, openNotifications }) {
         openNotifications(false);
       }
     },
-    [notificationsRef]
+    [notificationsRef, openNOtifications]
   );
 
   const handleMouseOver = (notification) => {
@@ -72,7 +72,7 @@ function Notifications({ isOpen, notifications, openNotifications }) {
     return () => {
       document.removeEventListener('click', closeNotifications);
     };
-  }, [closeNotifications]);
+  }, [closeNotifications, isOpen]);
 
   return (
     isOpen && (

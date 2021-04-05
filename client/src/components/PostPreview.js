@@ -69,6 +69,7 @@ function PostPreview({ post, lastPostRef }) {
                       src={`${process.env.REACT_APP_API_ENDPOINT}/${picture}`}
                       key={`${post.id}-${index}`}
                       className={classes.image}
+                      alt={'post image'}
                     />
                   );
                 })}

@@ -1,29 +1,30 @@
 const User = require("../../models/user/userModel");
 const Role = require("../../models/role/roleModel");
 const { fakeUsers, defaultRoles } = require("./data");
+const asyncForEach = require("../../utilities/asyncForEach");
 
-function seedUsersAndRoles() {
+async function seedUsersAndRoles() {
   console.log("** Creating fake users and roles");
   let ownerRole, adminRole, userRole;
-  Role.countDocuments({}, (err, count) => {
+  await Role.countDocuments({}, async (err, count) => {
     try {
       if (count <= 0) {
         ownerRole = new Role(defaultRoles[0]);
         adminRole = new Role(defaultRoles[1]);
         userRole = new Role(defaultRoles[2]);
-        ownerRole.save();
-        adminRole.save();
-        userRole.save();
+        await ownerRole.save();
+        await adminRole.save();
+        await userRole.save();
       }
     } catch (err) {
       console.log("Failed to seed roles: ", err);
     }
   });
 
-  User.countDocuments({}, (err, count) => {
+  await User.countDocuments({}, async (err, count) => {
     try {
       if (count <= 0) {
-        fakeUsers.forEach((fakeUser, index) => {
+        await asyncForEach(fakeUsers, (fakeUser, index) => {
           if (index === 0) {
             fakeUser["role_id"] = ownerRole._id;
           } else if (index === 1 || index === 2) {

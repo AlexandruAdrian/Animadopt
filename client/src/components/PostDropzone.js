@@ -60,6 +60,8 @@ function PostDropzone(props) {
       if (index !== imgIndex) {
         return img;
       }
+
+      return;
     });
 
     setFieldValue('pictures', filteredImages);

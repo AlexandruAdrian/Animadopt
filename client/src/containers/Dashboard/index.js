@@ -1,5 +1,5 @@
 // System
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Redirect, Route, useRouteMatch } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 // Material UI

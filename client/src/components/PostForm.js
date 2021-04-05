@@ -31,7 +31,7 @@ function PostForm({ initialValues, submit, buttonText }) {
 
   useEffect(() => {
     dispatch(fetchCategories());
-  }, [categories]);
+  }, [categories, dispatch]);
 
   if (!get(initialValues, '_id')) {
     initialValues['category'] = categories.length ? categories[0].category : '';

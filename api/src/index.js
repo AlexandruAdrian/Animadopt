@@ -23,7 +23,7 @@ const app = express();
 
     initMiddlewares(app);
     initRoutes(app);
-    initSeeding();
+    await initSeeding();
     initServices();
     app.use(errorHandler);
 

@@ -1,4 +1,3 @@
-import colors from './colors';
 import settingsStyle from './SettingsStyle';
 
 const style = {

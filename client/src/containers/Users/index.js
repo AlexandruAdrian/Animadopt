@@ -26,9 +26,7 @@ import style from '../../styles/UsersStyle';
 function Users() {
   const classes = makeStyles(style)();
   const dispatch = useDispatch();
-  const { users, isLoading, nextUsersPage } = useSelector(
-    (state) => state.users
-  );
+  const { users, nextUsersPage } = useSelector((state) => state.users);
   const observer = useRef();
   const [selectedTab, setSelectedTab] = useState(TAB_USER);
   const [query, setQuery] = useState({
@@ -56,7 +54,7 @@ function Users() {
         observer.current.observe(node);
       }
     },
-    [nextUsersPage]
+    [nextUsersPage, query]
   );
 
   function handleSearchTerm(e) {
@@ -83,17 +81,17 @@ function Users() {
       ...query,
       role,
     });
-  }, [selectedTab]);
+  }, [selectedTab, query]);
 
   useEffect(() => {
     const searchAfterTyping = setTimeout(() => {
       dispatch(getUsers(query));
-    }, 500);
+    }, 1000);
 
     return () => {
       clearTimeout(searchAfterTyping);
     };
-  }, [query]);
+  }, [query, dispatch]);
 
   return (
     <Box className={classes.container}>

@@ -22,7 +22,7 @@ function AddPost() {
 
   useEffect(() => {
     return () => dispatch(resetRequestState());
-  }, []);
+  }, [dispatch]);
 
   const INITIAL_VALUES = {
     pictures: [],

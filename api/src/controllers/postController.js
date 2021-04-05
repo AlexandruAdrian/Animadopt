@@ -139,16 +139,7 @@ class PostController {
     await post.remove();
   }
 
-  async getPosts(
-    page,
-    limit,
-    category,
-    location,
-    status,
-    adopted,
-    title,
-    searchTerm
-  ) {
+  async getPosts(page, limit, category, location, status, adopted, searchTerm) {
     if (page < 1) {
       throw new ErrorsFactory(
         "invalid",
@@ -173,10 +164,6 @@ class PostController {
 
     if (location) {
       query.location = { $in: location };
-    }
-
-    if (title) {
-      query.title = { title: new RegExp(title) };
     }
 
     if (searchTerm) {

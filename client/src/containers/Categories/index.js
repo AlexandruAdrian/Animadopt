@@ -20,7 +20,7 @@ function Categories() {
   const dispatch = useDispatch();
   const [modalOpen, setModalOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const { categories, isLoading } = useSelector((state) => state.categories);
+  const { categories } = useSelector((state) => state.categories);
 
   const handleCloseModal = () => {
     setModalOpen(false);
@@ -42,7 +42,7 @@ function Categories() {
 
   useEffect(() => {
     dispatch(fetchCategories());
-  }, []);
+  }, [dispatch]);
 
   return (
     <Box className={classes.container}>

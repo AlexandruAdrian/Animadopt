@@ -10,9 +10,7 @@ import { IS_NOT_ADOPTED, STATUS_PENDING } from '../PostsPage/constants';
 
 function ReviewsPage() {
   const dispatch = useDispatch();
-  const { posts, isLoading, nextPostsPage } = useSelector(
-    (state) => state.reviewPosts
-  );
+  const { posts, nextPostsPage } = useSelector((state) => state.reviewPosts);
   const tabs = {
     status: false,
     adopted: false,
@@ -36,12 +34,12 @@ function ReviewsPage() {
           location: query.location.join(','),
         })
       );
-    }, 500);
+    }, 1000);
 
     return () => {
       clearTimeout(searchAfterTyping);
     };
-  }, [query]);
+  }, [query, dispatch]);
 
   return (
     <PostsPage

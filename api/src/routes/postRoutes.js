@@ -65,7 +65,7 @@ const postRoutes = () => {
         );
 
         res.status(200).json({
-          message: 'Anuntul a fost actualizat cu succes',
+          message: "Anuntul a fost actualizat cu succes",
           post: updatedPost,
         });
       } catch (err) {
@@ -90,7 +90,7 @@ const postRoutes = () => {
 
       res.status(200).json({
         postId: req.params.postId,
-        message: "Postarea a fost stearsa cu succes"
+        message: "Postarea a fost stearsa cu succes",
       });
     } catch (err) {
       next(err);
@@ -113,7 +113,6 @@ const postRoutes = () => {
       }
     }
   );
-
 
   router.get("/p/counties", isAuthorized, async (req, res, next) => {
     try {
@@ -177,7 +176,8 @@ const postRoutes = () => {
       } catch (err) {
         next(err);
       }
-    });
+    }
+  );
 
   router.get(
     "/",
@@ -196,13 +196,8 @@ const postRoutes = () => {
         let category;
         let location;
         let status;
-        let title;
         let adopted = false;
         const searchTerm = req.query.search;
-
-        if (req.query.title) {
-          title = req.query.title;
-        }
 
         if (req.query.category) {
           category = req.query.category.split(",");
@@ -228,7 +223,6 @@ const postRoutes = () => {
           location,
           status,
           adopted,
-          title,
           searchTerm
         );
 

@@ -13,9 +13,7 @@ import PostsPage from '../containers/PostsPage';
 
 function DashboardPosts() {
   const dispatch = useDispatch();
-  const { posts, nextPostsPage, isLoading } = useSelector(
-    (state) => state.dashboard
-  );
+  const { posts, nextPostsPage } = useSelector((state) => state.dashboard);
 
   const [query, setQuery] = useState({
     page: 1,
@@ -32,20 +30,16 @@ function DashboardPosts() {
   };
 
   useEffect(() => {
-    const searchAfterTyping = setTimeout(() => {
-      dispatch(
-        fetchDashboardPosts({
-          ...query,
-          category: query.category.join(','),
-          location: query.location.join(','),
-        })
-      );
-    }, 500);
+    dispatch(
+      fetchDashboardPosts({
+        ...query,
+        category: query.category.join(','),
+        location: query.location.join(','),
+      })
+    );
+  }, [query, dispatch]);
 
-    return () => {
-      clearTimeout(searchAfterTyping);
-    };
-  }, [query]);
+  console.log('query: ', query);
 
   return (
     <PostsPage

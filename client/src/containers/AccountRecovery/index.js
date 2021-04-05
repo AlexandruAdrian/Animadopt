@@ -1,7 +1,6 @@
 // System
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
 import PropTypes from 'prop-types';
 import { useFormik } from 'formik';
 // Material UI
@@ -31,7 +30,6 @@ import style from '../../styles/AccountRecoveryStyle';
 function AccountRecovery(props) {
   const INITIAL_VALUES = { email: '' };
   const dispatch = useDispatch();
-  const history = useHistory();
   const { response, isLoading } = useSelector((state) => state.request);
 
   useEffect(() => {
