@@ -142,11 +142,11 @@ function PostsPage({ posts, query, setQuery, tabs, canAdd, nextPostsPage }) {
     }
   };
 
-  function handleSearchTerm(e) {
+  function handleSearchTerm(value) {
     setQuery({
       ...query,
       page: 1,
-      search: e.target.value,
+      search: value,
     });
   }
 

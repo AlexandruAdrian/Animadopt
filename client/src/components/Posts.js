@@ -6,8 +6,6 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 // Components
 import PostPreview from './PostPreview';
-// Utils
-import { isEqual } from 'lodash';
 // Style
 import style from '../styles/PostsStyles';
 
@@ -39,11 +37,4 @@ Posts.propTypes = {
   posts: PropTypes.array.isRequired,
 };
 
-function arePropsTheSame(prevProps, nextProps) {
-  const { posts: oldPosts, lastPostRef: oldPostRef } = prevProps;
-  const { posts: newPosts, lastPostRef: newPostRef } = nextProps;
-
-  return isEqual(oldPosts, newPosts) && isEqual(oldPostRef, newPostRef);
-}
-
-export default React.memo(Posts, arePropsTheSame);
+export default Posts;

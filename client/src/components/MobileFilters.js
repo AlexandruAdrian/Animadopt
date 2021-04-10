@@ -19,48 +19,42 @@ import styles from '../styles/MobileFiltersStyles';
 // Utils
 import { isEqual } from 'lodash';
 
-const MobileFilters = React.memo(
-  ({ locations, categories, onCategoryChange, onLocationChange }) => {
-    const classes = makeStyles(styles)();
+const MobileFilters = ({
+  locations,
+  categories,
+  onCategoryChange,
+  onLocationChange,
+}) => {
+  const classes = makeStyles(styles)();
 
-    return (
-      <Card>
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="filters-control"
-            id="filters"
-            classes={{
-              root: classes.summary,
-            }}
-          >
-            <TuneIcon />
-            <Typography component="p">Filtre</Typography>
-          </AccordionSummary>
-          <AccordionDetails classes={{ root: classes.details }}>
-            <FilterCategories
-              categories={categories}
-              onCategoryChange={onCategoryChange}
-            />
-            <FilterLocations
-              locations={locations}
-              onLocationChange={onLocationChange}
-            />
-          </AccordionDetails>
-        </Accordion>
-      </Card>
-    );
-  },
-  (prevProps, nextProps) => {
-    const { categories: oldCategories, locations: oldLocations } = prevProps;
-    const { categories: newCategories, locations: newLocations } = nextProps;
-
-    return (
-      isEqual(oldCategories, newCategories) &&
-      isEqual(oldLocations, newLocations)
-    );
-  }
-);
+  return (
+    <Card>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="filters-control"
+          id="filters"
+          classes={{
+            root: classes.summary,
+          }}
+        >
+          <TuneIcon />
+          <Typography component="p">Filtre</Typography>
+        </AccordionSummary>
+        <AccordionDetails classes={{ root: classes.details }}>
+          <FilterCategories
+            categories={categories}
+            onCategoryChange={onCategoryChange}
+          />
+          <FilterLocations
+            locations={locations}
+            onLocationChange={onLocationChange}
+          />
+        </AccordionDetails>
+      </Accordion>
+    </Card>
+  );
+};
 
 MobileFilters.propTypes = {
   categories: PropTypes.array.isRequired,

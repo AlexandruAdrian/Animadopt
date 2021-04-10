@@ -37,9 +37,7 @@ function DashboardPosts() {
         location: query.location.join(','),
       })
     );
-  }, [query, dispatch]);
-
-  console.log('query: ', query);
+  }, [query]);
 
   return (
     <PostsPage

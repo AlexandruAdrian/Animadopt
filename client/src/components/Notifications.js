@@ -46,7 +46,7 @@ function Notifications({ isOpen, notifications, openNotifications }) {
         openNotifications(false);
       }
     },
-    [notificationsRef, openNOtifications]
+    [notificationsRef, openNotifications]
   );
 
   const handleMouseOver = (notification) => {

@@ -1,5 +1,5 @@
 // React
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 // Material UI
 import { makeStyles } from '@material-ui/core/styles';
@@ -12,6 +12,29 @@ import styles from '../styles/SearchBarStyles';
 
 function SearchBar({ value, handler, placeholder }) {
   const classes = makeStyles(styles)();
+  const [searchInput, setSearchInput] = useState('');
+  const ENTER_KEY = 13;
+
+  useEffect(() => {
+    if (value) {
+      setSearchInput(value);
+    }
+  }, [value]);
+
+  const handleSearchInput = (e) => {
+    setSearchInput(e.target.value);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.keyCode === ENTER_KEY) {
+      e.preventDefault();
+      handler(searchInput);
+    }
+  };
+
+  const handleBlur = (e) => {
+    handler(searchInput);
+  };
 
   return (
     <Card className={classes.card}>
@@ -19,8 +42,10 @@ function SearchBar({ value, handler, placeholder }) {
         <TextField
           id="searchTerm"
           aria-describedby="Search"
-          value={value}
-          onChange={handler}
+          value={searchInput}
+          onChange={handleSearchInput}
+          onKeyDown={handleKeyDown}
+          onBlur={handleBlur}
           InputProps={{
             classes: {
               root: classes.inputRoot,

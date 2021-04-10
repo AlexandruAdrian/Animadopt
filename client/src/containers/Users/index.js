@@ -57,10 +57,10 @@ function Users() {
     [nextUsersPage, query]
   );
 
-  function handleSearchTerm(e) {
+  function handleSearchTerm(value) {
     setQuery({
       ...query,
-      searchTerm: e.target.value,
+      searchTerm: value,
     });
   }
 
@@ -81,17 +81,11 @@ function Users() {
       ...query,
       role,
     });
-  }, [selectedTab, query]);
+  }, [selectedTab]);
 
   useEffect(() => {
-    const searchAfterTyping = setTimeout(() => {
-      dispatch(getUsers(query));
-    }, 1000);
-
-    return () => {
-      clearTimeout(searchAfterTyping);
-    };
-  }, [query, dispatch]);
+    dispatch(getUsers(query));
+  }, [query]);
 
   return (
     <Box className={classes.container}>
