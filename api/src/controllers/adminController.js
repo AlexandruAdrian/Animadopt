@@ -188,12 +188,13 @@ class AdminController {
     };
 
     if (searchTerm) {
+      const pattern = new RegExp(searchTerm, 'i');
       query = {
         ...query,
         $or: [
-          { firstName: new RegExp(searchTerm) },
-          { lastName: new RegExp(searchTerm) },
-          { email: new RegExp(searchTerm) },
+          { firstName: pattern },
+          { lastName: pattern },
+          { email: pattern },
         ],
       };
     }
@@ -210,7 +211,7 @@ class AdminController {
       };
     }
 
-    const tempResults = await User.find(query).limit(limit).skip(startIndex);
+    const tempResults = await User.find(query).skip(startIndex).limit(limit);
 
     if (tempResults) {
       await asyncForEach(tempResults, async (user) => {

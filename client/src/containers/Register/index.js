@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -6,6 +6,9 @@ import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
+// Context
+import { Redirect } from 'react-router';
+import { AuthContext } from '../../context/authContext';
 // Components
 import CustomStepper from '../../components/CustomStepper';
 import RegisterForm from '../../components/RegisterForm';
@@ -25,6 +28,9 @@ const Register = ({ history }) => {
   const dispatch = useDispatch();
   const { response, isLoading } = useSelector((state) => state.request);
   const [activeStep, setActiveStep] = useState(0);
+
+  const { isLoggedIn } = useContext(AuthContext);
+
   const INITIAL_VALUES = {
     email: '',
     firstName: '',
@@ -143,7 +149,7 @@ const Register = ({ history }) => {
 
   const handleBack = () => setActiveStep(activeStep - 1);
 
-  return (
+  return !isLoggedIn ? (
     <Box className={classes.container}>
       <Box className={classes.formContainer}>
         <BackArrow to={'/'} handler={clearState} />
@@ -177,6 +183,8 @@ const Register = ({ history }) => {
         )}
       </Box>
     </Box>
+  ) : (
+    <Redirect to="/dashboard" />
   );
 };
 

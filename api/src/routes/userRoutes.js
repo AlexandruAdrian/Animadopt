@@ -150,6 +150,17 @@ const userRoutes = () => {
     }
   );
 
+  router.get("/:id", isAuthorized, async (req, res, next) => {
+    try {
+      const userId = req.params.id;
+      const user = await UserController.getUserById(userId);
+
+      res.status(200).json({ user });
+    } catch (err) {
+      res.json({ err: err.message }).status(err.status);
+    }
+  });
+
   router.put(
     "/change-password",
     isAuthorized,
@@ -161,26 +172,15 @@ const userRoutes = () => {
         await UserController.changePassword(userId, oldPassword, newPassword);
 
         res
+          .status(200)
           .json({
             message: "Parola a fost actualizata cu succes",
           })
-          .status(200);
       } catch (err) {
         res.sendStatus(400);
       }
     }
   );
-
-  router.get("/:id", isAuthorized, async (req, res, next) => {
-    try {
-      const userId = req.params.id;
-      const user = await UserController.getUserById(userId);
-
-      res.json({ user }).status(200);
-    } catch (err) {
-      res.json({ err: err.message }).status(err.status);
-    }
-  });
 
   router.get("/", isAuthorized, async (req, res, next) => {
     try {

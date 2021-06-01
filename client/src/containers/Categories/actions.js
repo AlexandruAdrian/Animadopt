@@ -29,9 +29,6 @@ export function fetchCategoriesSuccess(categories) {
 }
 
 export function fetchCategoriesError() {
-  toast.error(
-    'Ooops! Am intampinat o eroare in preluarea categoriilor, va rugam incercati din nou mai tarziu'
-  );
   return {
     type: FETCH_CATEGORIES_ERROR,
   };

@@ -6,7 +6,6 @@ const PostController = require("../controllers/postController");
 const isAuthorized = require("../middlewares/authorization");
 const isBanned = require("../middlewares/isBanned");
 const upload = require("../middlewares/multer");
-const resize = require("../middlewares/resize");
 // Validators
 const { query } = require("express-validator");
 const validate = require("../validators/index");
@@ -20,7 +19,6 @@ const postRoutes = () => {
     isAuthorized,
     isBanned,
     upload.array("pictures", 5),
-    // resize,
     validate(validatePost()),
     async (req, res, next) => {
       try {

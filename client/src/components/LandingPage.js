@@ -1,8 +1,11 @@
 // System
-import React from 'react';
+import React, { useContext } from 'react';
 // Components
+import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import CustomButton from './CustomButton';
+// Context
+import { AuthContext } from '../context/authContext';
 // Material UI
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -13,7 +16,9 @@ import styles from '../styles/LandingPageStyles';
 const LandingPage = () => {
   const classes = makeStyles(styles)();
 
-  return (
+  const { isLoggedIn } = useContext(AuthContext);
+
+  return !isLoggedIn ? (
     <div className={classes.container}>
       <Box className={classes.logoPets}>
         <div className={classes.pets} />
@@ -41,6 +46,8 @@ const LandingPage = () => {
         </Box>
       </Box>
     </div>
+  ) : (
+    <Redirect to="/dashboard" />
   );
 };
 

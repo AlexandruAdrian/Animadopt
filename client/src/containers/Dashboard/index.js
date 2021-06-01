@@ -66,7 +66,7 @@ function Dashboard() {
       />
     </Box>
   ) : (
-    <Redirect to="/login" />
+    <Redirect to="/" />
   );
 }
 

@@ -167,11 +167,13 @@ class PostController {
     }
 
     if (searchTerm) {
+      const pattern = new RegExp(searchTerm, "i");
+
       query = {
         ...query,
         $or: [
-          { title: new RegExp(searchTerm) },
-          { breed: new RegExp(searchTerm) },
+          { title: pattern },
+          { breed: pattern },
         ],
       };
     }
@@ -188,7 +190,9 @@ class PostController {
       };
     }
 
-    results.results = await Post.find(query).limit(limit).skip(startIndex);
+    results.results = await Post.find(query).sort({
+      postedAt: -1
+    }).skip(startIndex).limit(limit);
 
     return results;
   }
@@ -256,11 +260,12 @@ class PostController {
     }
 
     if (searchTerm) {
+      const pattern = new RegExp(searchTerm, "i");
       query = {
         ...query,
         $or: [
-          { title: new RegExp(searchTerm) },
-          { breed: new RegExp(searchTerm) },
+          { title: pattern },
+          { breed: pattern },
         ],
       };
     }
@@ -277,7 +282,9 @@ class PostController {
       };
     }
 
-    results.results = await Post.find(query).limit(limit).skip(startIndex);
+    results.results = await Post.find(query).sort({
+      postedAt: -1
+    }).skip(startIndex).limit(limit);
     return results;
   }
 

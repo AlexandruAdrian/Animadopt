@@ -1,8 +1,10 @@
 // System
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import PropType from 'prop-types';
 import { useHistory, useRouteMatch } from 'react-router';
+// Context
+import { AuthContext } from '../context/authContext';
 // Material UI
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -34,8 +36,10 @@ function SideMenu({ open, onClose, user }) {
   const classes = makeStyles(styles)();
   const history = useHistory();
   const { path } = useRouteMatch();
+  const { setIsLoggedIn } = useContext(AuthContext);
 
   const handleLogOut = () => {
+    setIsLoggedIn(false);
     localStorage.removeItem('token');
     history.push('/');
   };

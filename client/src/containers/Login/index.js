@@ -1,14 +1,17 @@
 // System
-import React from 'react';
+import React, { useContext } from 'react';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { get } from 'lodash';
+// Context
+import { AuthContext } from '../../context/authContext';
 // Material UI
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 // Components
+import { Redirect } from 'react-router';
 import LoginForm from '../../components/LoginForm';
 import Banned from '../../components/Banned';
 import BackArrow from '../../components/BackArrow';
@@ -22,6 +25,7 @@ const Login = () => {
   const classes = makeStyles(styles)();
   const dispatch = useDispatch();
   const { response } = useSelector((state) => state.request);
+  const { isLoggedIn } = useContext(AuthContext);
 
   const INITIAL_VALUES = {
     email: '',
@@ -50,7 +54,7 @@ const Login = () => {
     dispatch(resetRequestState());
   };
 
-  return (
+  return !isLoggedIn ? (
     <Box className={classes.container}>
       {response && <Banned banDetails={response} />}
       <Box className={classes.formContainer}>
@@ -83,6 +87,8 @@ const Login = () => {
         </Box>
       </Box>
     </Box>
+  ) : (
+    <Redirect to="/dashboard" />
   );
 };
 
