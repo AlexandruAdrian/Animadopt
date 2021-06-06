@@ -33,8 +33,8 @@ function ConfirmationPage() {
           <Typography component="h1">
             {response.message}
             {', '}
-            <Link to={'/'}>{'click aici'}</Link>
-            {` pentru a fi redirectionat catre pagina principala`}
+            <Link to={'/login'}>{'click aici'}</Link>
+            {` pentru a fi redirectionat catre pagina de autentificare`}
           </Typography>
         ) : null}
         {isLoading && <Loading />}

@@ -16,8 +16,6 @@ import FilterCategories from './FilterCategories';
 import FilterLocations from './FilterLocations';
 // Styles
 import styles from '../styles/MobileFiltersStyles';
-// Utils
-import { isEqual } from 'lodash';
 
 const MobileFilters = ({
   locations,

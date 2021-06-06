@@ -15,7 +15,7 @@ export const FETCH_DASHBOARD_POSTS_SUCCESS =
 export const FETCH_DASHBOARD_POSTS_ERROR =
   'app/containers/Dashboard/FETCH_DASHBOARD_POSTS_ERROR';
 
-export const USER_ROLE_OWNER = 'Owner';
+export const USER_ROLE_OWNER = 'Super Admin';
 export const USER_ROLE_ADMIN = 'Admin';
 export const USER_ROLE_USER = 'User';
 

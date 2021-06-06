@@ -1,4 +1,4 @@
-const USER_ROLE_OWNER = 'Owner';
+const USER_ROLE_OWNER = 'Super Admin';
 const USER_ROLE_ADMIN = 'Admin';
 const USER_ROLE_USER = 'User';
 

@@ -39,7 +39,7 @@ function PostDropzone(props) {
     isDragAccept,
     isDragReject,
   } = useDropzone({
-    accept: 'image/jpeg, image/png',
+    accept: 'image/jpeg, image/jpg, image/png, /' / '',
     onDrop,
     maxSize: MAX_SIZE,
     multiple: true,

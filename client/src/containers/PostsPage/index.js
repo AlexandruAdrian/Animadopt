@@ -198,7 +198,7 @@ function PostsPage({ posts, query, setQuery, tabs, canAdd, nextPostsPage }) {
           <Posts posts={posts} lastPostRef={lastPostRef} />
           {posts < 1 && (
             <Typography component={'p'} className={classes.noPosts}>
-              {'Momentan nu exista nici un anunt.'}
+              {/*{'Momentan nu exista nici un anunt.'}*/}
             </Typography>
           )}
         </Grid>

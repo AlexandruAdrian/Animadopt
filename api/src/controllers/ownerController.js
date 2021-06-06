@@ -39,7 +39,7 @@ class OwnerController {
         notification = new Notification({
           forUserId: foundUser._id,
           message:
-            "Ati fost promovat la rolul de Admin, va rugam sa va relogati",
+            "Ati fost promovat la rolul de Admin",
           status: STATUS_APPROVED,
         });
         foundUser.role_id = adminRole._id;
@@ -50,7 +50,7 @@ class OwnerController {
         notification = new Notification({
           forUserId: foundUser._id,
           message:
-            "Ati fost promovat la rolul de Owner, va rugam sa va relogati",
+            "Ati fost promovat la rolul de Super Admin",
           status: STATUS_APPROVED,
         });
         break;
@@ -96,7 +96,7 @@ class OwnerController {
         notification = new Notification({
           forUserId: foundUser._id,
           message:
-            "Ati fost retrogradat la rolul de Admin, va rugam sa va relogati",
+            "Ati fost retrogradat la rolul de Admin",
           status: STATUS_REJECTED,
         });
         break;
@@ -106,7 +106,7 @@ class OwnerController {
         notification = new Notification({
           forUserId: foundUser._id,
           message:
-            "Ati fost retrogradat la rolul de User, va rugam sa va relogati",
+            "Ati fost retrogradat la rolul de User",
           status: STATUS_REJECTED,
         });
         break;

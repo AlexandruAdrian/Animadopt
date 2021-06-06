@@ -18,7 +18,7 @@ async function seedPosts() {
   const posts = [];
   if ((await Post.countDocuments({})) <= 0) {
     users.forEach((user) => {
-      for (let i = 0; i < 45; i++) {
+      for (let i = 0; i < 2; i++) {
         const randomCategory = Math.floor(Math.random() * 5);
         const randomCounty = Math.floor(Math.random() * 42);
         posts.push({
